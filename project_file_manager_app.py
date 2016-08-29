@@ -1886,12 +1886,12 @@ class main_gui(QWidget):
         self.create_design_tab_widgets[lineEdit].setMaximumWidth(177)   
         self.create_design_tab_widgets[lineEdit].setPlaceholderText('Type a new name here...')            
         self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.select_texts(self.create_design_tab_widgets[lineEdit]))
-        self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.create_design_tab_widgets[button1].setFlat(False))
+        self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.create_design_tab_widgets[button1].setEnabled(True))
         
         self.create_design_tab_widgets[button1] = QPushButton('Create {0} Folder'.format(design_type))
         self.create_design_tab_widgets[button1].setMinimumWidth(177)
         self.create_design_tab_widgets[button1].setMaximumWidth(177)  
-        self.create_design_tab_widgets[button1].setFlat(True)        
+        self.create_design_tab_widgets[button1].setEnabled(False)        
         #self.create_design_tab_widgets[button1].clicked.connect(lambda: self.create_design_tab_widgets[button1].setDown(True) )
 
         self.create_design_tab_widgets[button2] = QPushButton('Open in File Explorer')
@@ -2064,12 +2064,12 @@ class main_gui(QWidget):
             self.create_asset_tab_widgets[lineEdit1].setMaximumWidth(width_value)             
             self.create_asset_tab_widgets[lineEdit1].setPlaceholderText('Type a new name...')   
             self.create_asset_tab_widgets[lineEdit1].returnPressed.connect(lambda: self.select_texts(self.create_asset_tab_widgets[lineEdit1]))
-            self.create_asset_tab_widgets[lineEdit1].returnPressed.connect(lambda: self.create_asset_tab_widgets[button1].setFlat(False))         
+            self.create_asset_tab_widgets[lineEdit1].returnPressed.connect(lambda: self.create_asset_tab_widgets[button1].setEnabled(True))         
             
             self.create_asset_tab_widgets[button1] = QPushButton('Create Folder')
             self.create_asset_tab_widgets[button1].setMinimumWidth(width_value)
             self.create_asset_tab_widgets[button1].setMaximumWidth(width_value) 
-            self.create_asset_tab_widgets[button1].setFlat(True)      
+            self.create_asset_tab_widgets[button1].setEnabled(False)      
 
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[lineEdit1])
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button1])                  
