@@ -1628,6 +1628,38 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'].clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
         self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'].clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
         
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], True, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4', False]))
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], False, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'], True))
+        self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'], True, self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4', False]))
+        self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'], False,self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4'], True))
+        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_CHARACTER_button2'], True, self.create_asset_tab_widgets['2_RIG_CHARACTER_button4'], False))
+        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_CHARACTER_button2'], False, self.create_asset_tab_widgets['2_RIG_CHARACTER_button4'], True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'], True, self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'], False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'], False, self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'], True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'], True, self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'], False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'], False, self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'], True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'], True, self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'], False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'], False, self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'], True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'], True, self.create_asset_tab_widgets['1_MODEL_PROPS_button4'], False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'], False, self.create_asset_tab_widgets['1_MODEL_PROPS_button4'], True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'], True, self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'], False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'], False, self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'], True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'], True, self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'], False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'], False, self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'], True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'], True, self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'], False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'], False, self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'], True, self.create_asset_tab_widgets['1_MODEL_PROPS_button4'], False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'], False, self.create_asset_tab_widgets['1_MODEL_PROPS_button4'], True))
+        self.create_asset_tab_widgets['PROPS_SHADER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], True, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'], False))
+        self.create_asset_tab_widgets['PROPS_SHADER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], False, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'], True))
+        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_PROPS_button2'], True, self.create_asset_tab_widgets['2_RIG_PROPS_button4'], False))
+        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_PROPS_button2'], False, self.create_asset_tab_widgets['2_RIG_PROPS_button4'], True))
+        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2'], True, self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'], False))
+        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2'], False, self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'], True))
+        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'], True, self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'], False))
+        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'], False, self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'], True))
+
+
         # create elements for SHOT section
         self.shot_categories = ['Model', 'Layout', 'Animation', 'Lighting', 'VFX', 'Rendering']
         
@@ -1662,6 +1694,19 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets['Model_button5'].clicked.connect(lambda: self.set_active(self.create_shot_tab_widgets, 'Model'))
         self.create_shot_tab_widgets['Rendering_button5'].clicked.connect(lambda: self.set_active(self.create_shot_tab_widgets, 'Rendering'))
         self.create_shot_tab_widgets['VFX_button5'].clicked.connect(lambda: self.set_active(self.create_shot_tab_widgets, 'VFX'))
+
+        self.create_shot_tab_widgets['Animation_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'], True, self.create_shot_tab_widgets['Animation_button5'], False))
+        self.create_shot_tab_widgets['Animation_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'], False, self.create_shot_tab_widgets['Animation_button5'], True))
+        self.create_shot_tab_widgets['Layout_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'], True, self.create_shot_tab_widgets['Layout_button5'], False))
+        self.create_shot_tab_widgets['Layout_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'], False, self.create_shot_tab_widgets['Layout_button5'], True))
+        self.create_shot_tab_widgets['Lighting_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'], True, self.create_shot_tab_widgets['Lighting_button5'], False))
+        self.create_shot_tab_widgets['Lighting_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'], False, self.create_shot_tab_widgets['Lighting_button5'], True))
+        self.create_shot_tab_widgets['Model_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Model_button4'], True, self.create_shot_tab_widgets['Model_button5'], False))
+        self.create_shot_tab_widgets['Model_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Model_button4'], False, self.create_shot_tab_widgets['Model_button5'], True))
+        self.create_shot_tab_widgets['Rendering_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'], True, self.create_shot_tab_widgets['Rendering_button5'], False))
+        self.create_shot_tab_widgets['Rendering_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'], False, self.create_shot_tab_widgets['Rendering_button5'], True))
+        self.create_shot_tab_widgets['VFX_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'], True, self.create_shot_tab_widgets['VFX_button5'], False))
+        self.create_shot_tab_widgets['VFX_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'], False, self.create_shot_tab_widgets['VFX_button5'], True))
 
         pprint(self.create_shot_tab_widgets)
         # show the version information 
@@ -1916,9 +1961,7 @@ class main_gui(QWidget):
             self.create_asset_tab_widgets[section+'_'+treeView2].setSelectionBehavior(QAbstractItemView.SelectRows)
             self.create_asset_tab_widgets[section+'_'+model2] = QStandardItemModel()
             self.create_asset_tab_widgets[section+'_'+model2].setHorizontalHeaderLabels(['>>> File <<<'.upper()])
-            self.create_asset_tab_widgets[section+'_'+treeView2].setModel(self.create_asset_tab_widgets[section+'_'+model2])    
-            self.create_asset_tab_widgets[section+'_'+treeView2].clicked.connect(self.create_asset_tab_widgets[button2].setFlat(False) )
-            self.create_asset_tab_widgets[section+'_'+treeView2].clicked.connect(self.create_asset_tab_widgets[button4].setFlat(True) )    
+            self.create_asset_tab_widgets[section+'_'+treeView2].setModel(self.create_asset_tab_widgets[section+'_'+model2])             
 
             self.history_widget = QTreeWidget()
             self.history_widget.setFixedHeight((high_value-30)/len(section_names))
@@ -1929,9 +1972,7 @@ class main_gui(QWidget):
             self.create_asset_tab_widgets[section+'_'+treeView3].setSelectionBehavior(QAbstractItemView.SelectRows)
             self.create_asset_tab_widgets[section+'_'+model3] = QStandardItemModel()
             self.create_asset_tab_widgets[section+'_'+model3].setHorizontalHeaderLabels(['>>> History <<<'.upper()])
-            self.create_asset_tab_widgets[section+'_'+treeView3].setModel(self.create_asset_tab_widgets[section+'_'+model3])               
-            self.create_asset_tab_widgets[section+'_'+treeView3].clicked.connect(self.create_asset_tab_widgets[button2].setFlat(True) )
-            self.create_asset_tab_widgets[section+'_'+treeView3].clicked.connect(self.create_asset_tab_widgets[button4].setFlat(False) )
+            self.create_asset_tab_widgets[section+'_'+treeView3].setModel(self.create_asset_tab_widgets[section+'_'+model3])                           
             
             self.sub_file_layout.addWidget(self.folder_widget)
             self.sub_file_layout.addWidget(self.file_widget)
@@ -1966,7 +2007,7 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets[button2] = QPushButton('Create New Variation')
         self.create_asset_tab_widgets[button2].setMinimumWidth(width_value)
         self.create_asset_tab_widgets[button2].setMaximumWidth(width_value)
-        self.create_asset_tab_widgets[button2].setFlat(True)      
+        self.create_asset_tab_widgets[button2].setEnabled(False)       
 
         #self.create_asset_tab_widgets[button3] = QPushButton('Open in File Explorer')
         #self.create_asset_tab_widgets[button3].setMinimumWidth(width_value)
@@ -1975,7 +2016,7 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets[button4] = QPushButton('Set Active')
         self.create_asset_tab_widgets[button4].setMinimumWidth(width_value)
         self.create_asset_tab_widgets[button4].setMaximumWidth(width_value)  
-        self.create_asset_tab_widgets[button4].setFlat(True)                
+        self.create_asset_tab_widgets[button4].setEnabled(False)                 
         
         self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button2])
         self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button4])
@@ -2079,9 +2120,11 @@ class main_gui(QWidget):
 
         self.create_shot_tab_widgets[button4] = QPushButton('Create New Variation')
         self.create_shot_tab_widgets[button4].setFixedWidth(170)
+        self.create_shot_tab_widgets[button4].setEnabled(False)
              
         self.create_shot_tab_widgets[button5] = QPushButton('Set Active')
-        self.create_shot_tab_widgets[button5].setFixedWidth(170)        
+        self.create_shot_tab_widgets[button5].setFixedWidth(170)   
+        self.create_shot_tab_widgets[button5].setEnabled(False)     
                  
         self.shot_type_tab_layout.addWidget(self.shot_type_folder_widget )
         self.shot_type_tab_layout.addWidget(self.shot_type_file_widget)
@@ -2999,6 +3042,14 @@ class main_gui(QWidget):
                 print 'zzzzzzzzzzz : done!!!'
                 break           
 
+    def sel_file_activate_button_fx(self, create_new_variation_button, switcher1, set_active_button, switcher2):
+        
+        #create_new_variation_button.setFlat(switcher1)
+        create_new_variation_button.setEnabled(switcher1)
+
+        #set_active_button.setFlat(switcher2)
+        set_active_button.setEnabled(switcher2)
+    
 
 # ======================================
 # ======= some backend functions =======
