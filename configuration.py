@@ -7,7 +7,7 @@ destination_render = {'__render_template':[]}
 design = {'Characters':destination_char,'Environments':destination_env,'Props':destination_props}
 concept_design = {'Concept_Design':design}
 
-Playblasts = {'Playblasts':['Finals_mov','Layouts_mov']}
+Playblasts = {'Playblasts':['Finals_MOV','Layouts_MOV']}
 
 Templates = {'Characters':destination_char,'Environments':destination_env, 'Rendering':destination_render}
 Templates = {'Templates':Templates}

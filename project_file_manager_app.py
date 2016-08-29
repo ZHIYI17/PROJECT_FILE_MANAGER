@@ -25,7 +25,7 @@ if current_python_file_directory not in sys.path:
 import configuration
 reload(configuration)
 
-VLC_PLAYER = r'C:/vlc-2.2.4-win64/vlc.exe'
+VLC_PLAYER = r'C:/Applications/vlc-2.2.4-win64/vlc.exe'
 img_exts = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp']
 vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 
@@ -38,7 +38,6 @@ class CG_Project(object):
     - create structural folders for the project
     - can dynamtically add new scene-shot folders for all the shot-based directories
     """
-
     def __init__(self, project_name, dict_amount):
         self.project_name = project_name
         self.project_directory = project_manager_gui.select_drive_combo_box.currentText() + self.project_name + '/'
@@ -82,6 +81,7 @@ class CG_Project(object):
                                                 'light_':       'self.get_lighting_shot_dir()',
                                                 'render_':      'self.get_rendering_shot_dir()',
                                                 'geo_':         'self.get_geo_shot_dir()' }
+
 
     def directories_for_shots(self):
         '''
@@ -291,19 +291,18 @@ class CG_Project(object):
         - this function returns a list of directories that hold scene-shot hierarchical folders
         - it works for the project that parts of the scene-shot folders have been created
         '''
-        print 'g1'
         no_shot_dirs = configuration.no_shot_folders
         directories = []
 
         for paths, dirs, files in os.walk(self.project_directory):
             paths = unix_format(paths)
-            print 'g2'
+            
             if paths.split('/')[-2] not in no_shot_dirs and paths.split('/')[-2][:2] != '__' :
-                print 'g3'
+                
                 if os.listdir(paths) != [] and os.listdir(paths)[0][:6] == 'SCENE_' :
-                    print 'g4'
+                    
                     directories.append(paths)
-        pprint (directories)
+        
         return directories
 
 
@@ -544,6 +543,7 @@ class CG_Project(object):
             if dir.split('/')[2] == 'LIGHTING' and dir.split('/')[3] == 'Templates' and dir.split('/')[4] == 'Rendering':
                 return dir 
 
+
     def get_char_dirs(self, *char_name):
         '''
         - this function returns a list of associated dirs for all characters.
@@ -570,7 +570,8 @@ class CG_Project(object):
                     dir += char_folder + '/'
                     char_dir.append(dir)
                 else:
-                    print dir + char_folder + '/ is not existed' 
+                    #print dir + char_folder + '/ is not existed' 
+                    pass
             return char_dir
         else:
             return all_char_dirs 
@@ -627,7 +628,8 @@ class CG_Project(object):
                     dir += props_folder + '/'
                     props_dir.append(dir)
                 else:
-                    print dir + props_folder + '/ is not existed' 
+                    #print dir + props_folder + '/ is not existed' 
+                    pass
             return props_dir
         else:
             return all_props_dirs 
@@ -682,7 +684,8 @@ class CG_Project(object):
                     dir += com_folder + '/'
                     com_dir.append(dir)
                 else:
-                    print dir + com_folder + '/ is not existed' 
+                    #print dir + com_folder + '/ is not existed' 
+                    pass
             return com_dir
         else:
             return all_com_dirs 
@@ -736,7 +739,8 @@ class CG_Project(object):
                     dir += env_folder + '/'
                     env_dir.append(dir)
                 else:
-                    print dir + env_folder + '/ is not existed' 
+                    #print dir + env_folder + '/ is not existed' 
+                    pass
             return env_dir
         else:
             return all_env_dirs 
@@ -846,6 +850,36 @@ class CG_Project(object):
         return shot_dir
              
 
+    def get_anim_playblast_dir(self):
+        '''
+        - returns a directory for the Animation Playblasts movie file
+        '''
+        all_shots_dirs = self.get_directories_for_shots_attr
+        
+        shot_dir = ''
+        
+        for dir in all_shots_dirs:
+            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Playblasts'and dir.split('/')[4] == 'Finals_MOV':
+                shot_dir = dir
+        
+        return shot_dir
+
+
+    def get_layout_playblast_dir(self):
+        '''
+        - returns a directory for the Animation Playblasts movie file
+        '''
+        all_shots_dirs = self.get_directories_for_shots_attr
+        
+        shot_dir = ''
+        
+        for dir in all_shots_dirs:
+            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Playblasts'and dir.split('/')[4] == 'Layouts_MOV':
+                shot_dir = dir
+        
+        return shot_dir
+
+
     def get_layout_shot_file_dir(self, scn_number, shot_number): 
         '''
         - returns a directory for the given scene-shot Maya layout file
@@ -905,6 +939,7 @@ class CG_Project(object):
         
         return shot_dir
 
+
     def get_lighting_shot_file_dir(self, scn_number, shot_number): 
         '''
         - returns a directory for the given scene-shot Maya lighting file
@@ -918,6 +953,7 @@ class CG_Project(object):
                 shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
          
         return shot_dir 
+
 
     def get_lighting_shot_dir(self): 
         '''
@@ -948,6 +984,7 @@ class CG_Project(object):
          
         return shot_dir 
 
+
     def get_rendering_shot_dir(self): 
         '''
         - returns a directory for the Maya rendering file
@@ -977,6 +1014,7 @@ class CG_Project(object):
          
         return shot_dir      
 
+
     def get_geo_shot_dir(self): 
         '''
         - returns a directory for the shot-based Maya model file
@@ -1005,6 +1043,7 @@ class CG_Project(object):
                 shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
          
         return shot_dir 
+
 
     def get_vfx_shot_dir(self): 
         '''
@@ -1120,11 +1159,13 @@ class CG_Project(object):
         '''
         return self.project_directory + '2D/Concept_Design/Characters/'
 
+
     def get_props_design_dir(self):
         '''
         - return a paths for props design directory
         '''
         return self.project_directory + '2D/Concept_Design/Props/'
+
 
     def get_env_design_dir(self):
         '''
@@ -1132,11 +1173,13 @@ class CG_Project(object):
         '''
         return self.project_directory + '2D/Concept_Design/Environments/'
 
+
     def get_2d_continuities_dir(self):
         '''
         - return a paths for 2D continuities directory
         '''
         return self.project_directory + '2D/Continuities/'                
+
 
     def make_char_design_folder(self, char_name):
         '''
@@ -1146,6 +1189,7 @@ class CG_Project(object):
         make_folders(parent_dir,char_name)
         self.add_hidden_folders(unix_format(parent_dir) + char_name) 
 
+
     def make_props_design_folder(self, props_name):
         '''
         - create a props folder in 2D design 
@@ -1153,6 +1197,7 @@ class CG_Project(object):
         parent_dir = self.get_props_design_dir() 
         make_folders(parent_dir,props_name) 
         self.add_hidden_folders(unix_format(parent_dir) + props_name) 
+
 
     def make_environment_design_folder(self, environment_name):
         '''
@@ -1162,6 +1207,7 @@ class CG_Project(object):
         make_folders(parent_dir,environment_name)  
         self.add_hidden_folders(unix_format(parent_dir) + environment_name) 
 
+
     def make_continuities_folder(self, folder_name):
         '''
         - create a 2D continuities folder in 2D design 
@@ -1169,6 +1215,7 @@ class CG_Project(object):
         parent_dir = self.get_2d_continuities_dir() 
         make_folders(parent_dir,folder_name)   
         self.add_hidden_folders(unix_format(parent_dir) + folder_name)
+
 
     def make_hidden_folders(self, folder_name):
         '''
@@ -1183,7 +1230,6 @@ class CG_Project(object):
             path = unix_format(path)
             if path.split('/')[-2][:2] == '__' and path.split('/')[-2][:3] != '___':
                 dirs_for_hidden_folders.append(path) 
-
         
         # create the 'backup' folders in collected dirs above
 
@@ -1199,6 +1245,7 @@ class CG_Project(object):
                 # SetFileAttributesW(unicode(folder_dir), 2) ----> hide the folder
                 # SetFileAttributesW(unicode(folder_dir), 1) ----> unhide the folder
                 ctypes.windll.kernel32.SetFileAttributesW(unicode(folder_dir), 2)
+
 
     def add_hidden_folders(self, parent_directory):
         '''
@@ -1247,12 +1294,12 @@ class CG_Project(object):
         return dst_file
 
 
+
 class CG_Project_Edit(CG_Project):
     """
     - Edit projects that created by class CG_Project()
     - can dynamtically add new scene-shot folders for all the shot-based directories
     """
-
     def __init__(self, drive, project_name):        
         self.project_name = project_name
         self.project_directory = unix_format(drive + self.project_name)   
@@ -1303,6 +1350,8 @@ class CG_Project_Edit(CG_Project):
                     pass 
         else:
             return {}
+
+
 
 # ========================================
 # ======= the implementation of UI =======
@@ -1493,7 +1542,9 @@ class main_gui(QWidget):
 
                                                 'Model':                        'self.current_project.get_geo_shot_dir()',
                                                 'Layout':                       'self.current_project.get_layout_shot_dir()',
+                                                'Layout_MOV':                   'self.current_project.get_layout_playblast_dir()',
                                                 'Animation':                    'self.current_project.get_anim_shot_dir()',
+                                                'Animation_MOV':                'self.current_project.get_anim_playblast_dir()',
                                                 'Anim_Cache':                   'self.current_project.get_anim_cache_shot_dir()',
                                                 'Lighting':                     'self.current_project.get_lighting_shot_dir()',
                                                 'VFX':                          'self.current_project.get_vfx_shot_dir()',
@@ -1725,7 +1776,7 @@ class main_gui(QWidget):
 
 
         # create elements for SHOT section
-        self.shot_categories = ['Model', 'Layout', 'Animation', 'Anim_Cache', 'Lighting', 'VFX', 'VFX_Cache', 'Rendering']
+        self.shot_categories = ['Model', 'Layout', 'Layout_MOV', 'Animation', 'Animation_MOV', 'Anim_Cache', 'Lighting', 'VFX', 'VFX_Cache', 'Rendering']
         
         for single_shot_tab in self.shot_categories:            
             treeView1 = single_shot_tab + '_treeView1'
@@ -1776,9 +1827,9 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets['VFX_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], True, self.create_shot_tab_widgets['VFX_Cache_button5'], False))
         self.create_shot_tab_widgets['VFX_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], False, self.create_shot_tab_widgets['VFX_Cache_button5'], True))
 
-        pprint(self.create_shot_tab_widgets)
+        #pprint(self.create_shot_tab_widgets)
+
         # show the version information 
-        
         self.about_app_widget = QWidget()
         self.about_app_widget.setFixedHeight(30)
         self.about_app_widget.setFixedWidth(1077)
@@ -1812,12 +1863,14 @@ class main_gui(QWidget):
 
         self.refresh_shot_tabs_dict = {   0:        'self.populate_items_in_shot_tab("Model")',
                                           1:        'self.populate_items_in_shot_tab("Layout")',
-                                          2:        'self.populate_items_in_shot_tab("Animation")',
-                                          3:        'self.populate_items_in_shot_tab("Anim_Cache")',    
-                                          4:        'self.populate_items_in_shot_tab("Lighting")',
-                                          5:        'self.populate_items_in_shot_tab("VFX")',
-                                          6:        'self.populate_items_in_shot_tab("VFX_Cache")',
-                                          7:        'self.populate_items_in_shot_tab("Rendering")' }
+                                          2:        'self.populate_items_in_shot_tab("Layout_MOV")',
+                                          3:        'self.populate_items_in_shot_tab("Animation")',
+                                          4:        'self.populate_items_in_shot_tab("Animation_MOV")',
+                                          5:        'self.populate_items_in_shot_tab("Anim_Cache")',    
+                                          6:        'self.populate_items_in_shot_tab("Lighting")',
+                                          7:        'self.populate_items_in_shot_tab("VFX")',
+                                          8:        'self.populate_items_in_shot_tab("VFX_Cache")',
+                                          9:        'self.populate_items_in_shot_tab("Rendering")' }
         
         self.refresh_asset_tabs_dict = {  (0,0):    'self.populate_asset_model_char_tab()',
                                           (0,1):    'self.populate_asset_model_component_tab()',
@@ -1838,9 +1891,11 @@ class main_gui(QWidget):
 
         self.current_project = None
 
+
     def eval_get_current_project(self):        
         self.current_project = self.get_current_project()
         return self.current_project
+
 
     # ===============================================================
     # ======= implemment the 'template' of the 2D-Drawing Tab =======
@@ -1909,9 +1964,11 @@ class main_gui(QWidget):
 
         self.design_type_tab_layout.addWidget(self.design_type_utilities_widget )  
 
+
     # ===============================================================
     # ======= implemment the 'template' of the 3D-Asset Tab =========
     # ===============================================================
+
     def asset_buttons_widgets(self, asset_types, parent_widget_layout, type_layout):
     
         # create layout for top butotns
@@ -1998,6 +2055,7 @@ class main_gui(QWidget):
         
         return self.map_sub_buttons_widgets
         
+
     def asset_file_section(self, treeView1, model1, treeView2, model2, treeView3, model3, parent_layout, section_names, high_value):
     
         self.asset_file_widget = QWidget()
@@ -2116,8 +2174,9 @@ class main_gui(QWidget):
             
 
     # ==========================================================
-    # ======= implemment the 'template' of the Shots Tab =======
+    # ======= implemment the 'template' of the Shots Tab =======    
     # ==========================================================
+
     def create_shot_tab(self, shot_type, parent_tab_widget, treeView1, model1, treeView2, model2, treeView3, model3, line_edit1, line_edit2, button1, button2, button3, button4, button5):    
         self.shot_type_tab = QWidget()
         self.shot_type_tab.setFixedHeight(770)
@@ -2240,8 +2299,6 @@ class main_gui(QWidget):
                 button.setText('[ ' + text + ' ]')  
                 button.setDefault(True)
 
-
-
         
     def select_texts(self, line_edit):
         line_edit.selectAll()
@@ -2260,7 +2317,7 @@ class main_gui(QWidget):
 
 
     def list_available_projects(self):
-        print 'list1'
+        
         self.list_to_verify = configuration.Departments.keys()
         self.list_to_verify.sort()
 
@@ -2287,21 +2344,23 @@ class main_gui(QWidget):
                             self.projects.append(folder)
                 except WindowsError :
                     pass
-        print 'list2'
+        
         return self.projects           
 
+
     def update_combo_box_list(self):
-        print 'u1'
+        
         self.current_project_combo_box.clear()
-        print 'u2'
+        
         projects = self.list_available_projects()
-        print 'u3'
+        
         try:
-            print 'u4'
+            
             self.current_project_combo_box.addItems(projects)
-            print 'u5'
+            
         except TypeError:
             pass
+
 
     def set_to_newly_created_project(self):
         self.update_combo_box_list()
@@ -2314,7 +2373,6 @@ class main_gui(QWidget):
         self.current_project = None
         drive = self.select_drive_combo_box.currentText() 
         project_name = self.current_project_combo_box.currentText()
-        print 'get current proj fun: {}'.format(project_name)
         
         if project_name != '':
             return CG_Project_Edit(drive, project_name)     
@@ -2412,54 +2470,55 @@ class main_gui(QWidget):
         except UnboundLocalError, WindowsError:
             pass                                                            
 
+
     def populate_hierarchical_folders_into_qtreeview(self, folder_type, widget_dict, parent_directory):
-        print 'p1'
+        
         treeView1 = folder_type + '_treeView1'
         model1 = folder_type + '_model1'
 
         try:            
             widget_dict[model1].clear()                    
             widget_dict[model1].setHorizontalHeaderLabels(['>>> {} <<<'.format(folder_type).upper()])  
-            print 'p2'
+            
             try:
                 if os.path.isdir(parent_directory):
-                    print 'p3'
+                    
                     for folder in os.listdir(parent_directory):
-                        print 'p4'
+                       
                         
                         item = QStandardItem(remove_double_under_scores(folder))
-                        print 'p5'
+                  
                         item.setIcon(widget_dict[treeView1].style().standardIcon(QStyle.SP_DirIcon))
-                        print 'p6'
+                     
                         item.setEditable(False)
-                        print 'p7'
+                   
                         sub_dir = unix_format(os.path.join(parent_directory, folder))
-                        print 'p8'
+                   
                         if os.path.isdir(sub_dir):
                             
                             sub_folders = os.listdir(sub_dir)
-                            print 'p9: sub_folders: {}'.format(sub_folders)
+                        
                             for sub_folder in sub_folders: 
-                                print 'p10'
+                              
                                 #  filter out those hidden '___Backup' folders
                                 test_dir = unix_format(os.path.join(sub_dir, sub_folder))
-                                print 'p11'
+                             
                                 if os.path.isdir(test_dir) and not(folder_is_hidden(test_dir)):  
-                                    print 'p12'                                                             
+                                                                                             
                                     sub_item = QStandardItem(remove_double_under_scores(sub_folder)) 
-                                    print 'p13'
+                                
                                     sub_item.setIcon(widget_dict[treeView1].style().standardIcon(QStyle.SP_DirIcon))
                                     sub_item.setEditable(False)
-                                    print 'p14'
+                             
                                     item.appendRow([sub_item])                        
-                                    print 'p15'
+                              
                         widget_dict[model1].appendRow([item])     
-                        print 'p16'
+                   
             except TypeError:
                 pass                                      
-            print 'p17'
+       
             widget_dict[treeView1].clicked.connect(lambda: self.populate_files_into_qtreeview(folder_type, widget_dict, parent_directory))
-            print 'p18'
+  
         except UnboundLocalError, WindowsError:
             pass  
 
@@ -2581,6 +2640,7 @@ class main_gui(QWidget):
 
         return  widget_dict[treeView1].selectedIndexes()[0].row()
 
+
     def get_all_root_item_indexes(self, folder_type, widget_dict):
         '''
         returns a list of indexes of all root level items 
@@ -2680,7 +2740,6 @@ class main_gui(QWidget):
         - widget_dict are those 'self.create_shot_tab_widgets', 'self.create_design_tab_widgets' and 'self.create_asset_tab_widgets'
         - file_type specifies the maya file or history file, only passes '2d', maya' or 'history' for this argument    
         '''
-        print 'given parent directory:  {}'.format(parent_directory)
         try:
             selected_file = ''
             selected_folder = self.get_selected_hierarchical_folder(folder_type, widget_dict)
@@ -2691,7 +2750,7 @@ class main_gui(QWidget):
 
                 sel_file_directory = unix_format(parent_directory) + selected_folder + '/' + selected_file
                 if os.path.isfile(sel_file_directory):
-                    print 'zzzzzzz:    ' + str(sel_file_directory)
+               
                     return sel_file_directory
                       
             elif file_type == 'history':
@@ -2699,8 +2758,8 @@ class main_gui(QWidget):
                 selected_file += self.get_selected_history_file(folder_type, widget_dict)
 
                 sel_file_directory = unix_format(parent_directory) + selected_folder + '/___backup/' + selected_file
+
                 if os.path.isfile(sel_file_directory):
-                    print 'zzzzzzz:    ' + str( sel_file_directory)
                     return sel_file_directory
 
         except IndexError:
@@ -2734,6 +2793,7 @@ class main_gui(QWidget):
                                         
         except WindowsError:  
             pass
+
 
     def populate_items_in_design_tab(self, design_type):
 
@@ -2807,7 +2867,6 @@ class main_gui(QWidget):
                                     'Environment_Design': 'self.open_file_in_explorer_design_tab',
                                     '2D_Continuities': 'self.open_file_in_explorer_design_tab' }
 
-        
         open_file_explorer = eval(design_categories_dict.get(design_category))
         try:
             return open_file_explorer(design_category, eval(self.folder_type_directories_dict[design_category]))
@@ -2818,22 +2877,20 @@ class main_gui(QWidget):
     def populate_items_in_shot_tab(self, folder_type):
 
         #current_project = self.get_current_project()
-        print '1'
+   
         if self.current_project == None:
             return
 
         else:
-            print '3'
             try:
-                print '4'
+          
                 shot_directory = self.folder_type_directories_dict.get(folder_type)
-                print '5'
-                print 'shot_directory: {}'.format(shot_directory)
-                print 'eval: {}'.format(eval(shot_directory))
+    
                 self.populate_hierarchical_folders_into_qtreeview(folder_type, self.create_shot_tab_widgets, eval(shot_directory))
-                print '6'
+       
             except WindowsError, AttributeError:
                 return 
+
 
     def populate_items_in_shot_tabs(self):
         self.populate_items_in_shot_tab('Model')
@@ -2859,6 +2916,7 @@ class main_gui(QWidget):
             except WindowsError, AttributeError:
                 return
 
+
     def populate_items_in_asset_tabs(self):
         self.populate_items_in_asset_tab('CHARACTER_SHADER')
         self.populate_items_in_asset_tab('COMPONENT_SHADER')
@@ -2881,63 +2939,76 @@ class main_gui(QWidget):
         self.populate_items_in_asset_tab('TEMPLATE_CHARACTER')
         self.populate_items_in_asset_tab('TEMPLATE_ENVIRONMENT')
 
+
     def populate_asset_shader_tab(self):
         self.populate_items_in_asset_tab('CHARACTER_SHADER')
         self.populate_items_in_asset_tab('COMPONENT_SHADER')
         self.populate_items_in_asset_tab('PROPS_SHADER')
+
 
     def populate_asset_texture_tab(self):
         self.populate_items_in_asset_tab('CHARACTER_TEXTURE')
         self.populate_items_in_asset_tab('COMPONENT_TEXTURE')
         self.populate_items_in_asset_tab('PROPS_TEXTURE')
 
+
     def populate_asset_rig_char_tab(self):
         self.populate_items_in_asset_tab('RIGGED_CHARACTER')
         self.populate_items_in_asset_tab('DEFORMED_CHARACTER')
+
 
     def populate_asset_rig_props_tab(self):
         self.populate_items_in_asset_tab('RIGGED_PROPS')
         self.populate_items_in_asset_tab('DEFORMED_PROPS')
 
+
     def populate_asset_model_char_tab(self):
         self.populate_items_in_asset_tab('HIGH-RESOLUTION_CHARACTER')
         self.populate_items_in_asset_tab('LOW-RESOLUTION_CHARACTER')
+
 
     def populate_asset_model_props_tab(self):
         self.populate_items_in_asset_tab('HIGH-RESOLUTION_PROPS')
         self.populate_items_in_asset_tab('LOW-RESOLUTION_PROPS')
 
+
     def populate_asset_model_environment_tab(self):
         self.populate_items_in_asset_tab('HIGH-RESOLUTION_ENVIRONMENT')
         self.populate_items_in_asset_tab('LOW-RESOLUTION_ENVIRONMENT')
+
 
     def populate_asset_model_component_tab(self):
         self.populate_items_in_asset_tab('HIGH-RESOLUTION_COMPONENT')
         self.populate_items_in_asset_tab('LOW-RESOLUTION_COMPONENT')
 
+
     def get_main_stacked_layout_current_index(self):
-        #print 'main ' + str(self.main_stacked_layout.currentIndex())
+     
         return int(self.main_stacked_layout.currentIndex())
 
+
     def get_design_tabs_current_index(self):
-        print 'design ' + str(self.design_widget.currentIndex())
+     
         return int(self.design_widget.currentIndex())
 
+
     def get_shots_tabs_current_index(self):
-        print 'shot ' + str(self.shot_widget.currentIndex())
+ 
         return int(self.shot_widget.currentIndex())
+
     
     def get_asset_stacked_layout_current_index(self):
         asset_type_buttons_stacked_layout = self.asset_widget.findChild(QStackedLayout)
         asset_type_index = asset_type_buttons_stacked_layout.currentIndex()
         asset_sub_type_index = asset_type_buttons_stacked_layout.currentWidget().findChild(QStackedLayout).currentIndex()
-        print 'asset ' + str(asset_type_index) + ' ' + str(asset_sub_type_index)
+   
         return (asset_type_index, asset_sub_type_index)
+
         
     def refresh_current_ui(self):   
-        print 'begin'
+     
         exec( eval( self.refresh_ui_dict.get( self.get_main_stacked_layout_current_index() ) ) )        
-        print 'end?'
+     
     
     def refresh_tabwidget(self, tab_widget):
  
@@ -2989,24 +3060,20 @@ class main_gui(QWidget):
         for folder_type in folder_types:
             
             temp_dir = (self.folder_type_directories_dict.get(folder_type))
-            print '1 --- temp dir: {}'.format(temp_dir)
+          
 
             sel_file_directory = self.get_selected_file_dir(folder_type, 'maya', widget_dict, eval(temp_dir))
-            print '2 --- sel_file_directory: {}'.format(sel_file_directory)
+   
 
             if sel_file_directory != None:
 
                 parent_directory = self.extract_directory_name_extension(sel_file_directory, 0) + '___backup/'
-                print '3 --- parent_directory: {}'.format(parent_directory)
 
                 name = self.extract_directory_name_extension(sel_file_directory, 1)
-                print '4 --- name: {}'.format(name) 
                 
                 new_file_name = self.current_project.make_file_version(parent_directory, name)
-                print '5 --- new_file_name: {}'.format(new_file_name)
 
                 new_file_directory = parent_directory + new_file_name + self.extract_directory_name_extension(sel_file_directory, 2)
-                print '6 --- new_file_directory: {}'.format(new_file_directory)
 
                 shutil.copy(sel_file_directory, new_file_directory)
 
@@ -3037,7 +3104,6 @@ class main_gui(QWidget):
 
         except KeyError:
             return None
-
 
 
     def refresh_history_qtreeview(self, folder_type, widget_dict, parent_directory):
@@ -3077,40 +3143,32 @@ class main_gui(QWidget):
         '''
         for folder_type in folder_types:
 
-            #sel_file = self.get_selected_history_file(folder_type, widget_dict)
-            #print ' -------- sel_file: {}'.format(sel_file)
-
-            temp_dir = (self.folder_type_directories_dict.get(folder_type)) 
-            print '1 --- temp dir: {}'.format(temp_dir)            
+            temp_dir = (self.folder_type_directories_dict.get(folder_type))        
 
             sel_file_directory = self.get_selected_file_dir( folder_type, 'history', widget_dict, eval(temp_dir) )
-            print '2 --- sel_file_directory: {}'.format(sel_file_directory)
 
             if sel_file_directory != None:
 
-                directory = self.extract_directory_name_extension(sel_file_directory, 0)
-                print '3 --- directory: {}'.format(directory)         
+                directory = self.extract_directory_name_extension(sel_file_directory, 0)    
 
                 parent_directory = ''
                 if '/___backup/' in directory or '/___backup' in directory:
                     parent_directory += directory.replace('___backup/' , '')
 
                 name_with_version = self.extract_directory_name_extension(sel_file_directory, 1)
-                print '---- name with version: {}'.format(name_with_version)
 
                 name = name_with_version.split('_v-')[0]
-                print '---- name: {}'.format(name)
-
+ 
                 new_file_directory = unix_format(parent_directory) + name + self.extract_directory_name_extension(sel_file_directory, 2)
-                print '---- final: {}'.format(new_file_directory)
 
                 src_file_directory = new_file_directory
 
                 os.remove(src_file_directory)
 
                 shutil.copy(sel_file_directory, new_file_directory)
-                print 'zzzzzzzzzzz : done!!!'
+     
                 break           
+
 
     def sel_file_activate_button_fx(self, create_new_variation_button, switcher1, set_active_button, switcher2):
     
@@ -3169,6 +3227,7 @@ def get_drives_letters():
          listdrivesout, err=listdrives.communicate()
          for idx,drive in enumerate(filter(None,listdrivesout)):
              listdrivesout[idx]=drive.split()[2]         
+
 
 def convert_digit_strings_to_int_list(input_strings):
     '''
@@ -3248,17 +3307,20 @@ def folder_is_hidden(dir):
         else:
             return False
     
+
 def add_double_under_scores(folder_name):
     if folder_name[:2] != '__':
         return '__' + folder_name
     else:
         return folder_name
 
+
 def remove_double_under_scores(folder_name):
     if folder_name[:2] == '__':
         return folder_name.split('__')[-1]
     else:
         return folder_name
+
 
 def open_image_file(img_file):
     '''
@@ -3271,6 +3333,7 @@ def open_image_file(img_file):
     except WindowsError:
         pass 
 
+
 def open_video_file(vid_file):
     '''
     - vid_file must represent a full directory of the file, e.g. c:/folder/vid_file.mov
@@ -3281,6 +3344,7 @@ def open_video_file(vid_file):
         subprocess.Popen([VLC_PLAYER, windows_format(vid_file)])
     except WindowsError:
         pass
+
 
 def add_maya_reference_file_mel(src_file, dst_file):
     '''
@@ -3304,8 +3368,6 @@ def add_maya_reference_file_mel(src_file, dst_file):
     maya_file = open(dst_file, 'w')
     maya_file.write(contents)
     maya_file.close()
-
-
 
 
 project_manager_app = QApplication(sys.argv)         
