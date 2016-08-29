@@ -1812,6 +1812,10 @@ class main_gui(QWidget):
 
         self.create_shot_tab_widgets['Animation_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'], True, self.create_shot_tab_widgets['Animation_button5'], False))
         self.create_shot_tab_widgets['Animation_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'], False, self.create_shot_tab_widgets['Animation_button5'], True))
+        self.create_shot_tab_widgets['Layout_MOV_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button4'], False, self.create_shot_tab_widgets['Layout_MOV_button5'], False))
+        self.create_shot_tab_widgets['Layout_MOV_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button4'], False, self.create_shot_tab_widgets['Layout_MOV_button5'], False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button4'], False, self.create_shot_tab_widgets['Animation_MOV_button5'], False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button4'], False, self.create_shot_tab_widgets['Animation_MOV_button5'], False))        
         self.create_shot_tab_widgets['Layout_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'], True, self.create_shot_tab_widgets['Layout_button5'], False))
         self.create_shot_tab_widgets['Layout_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'], False, self.create_shot_tab_widgets['Layout_button5'], True))
         self.create_shot_tab_widgets['Lighting_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'], True, self.create_shot_tab_widgets['Lighting_button5'], False))
@@ -1822,12 +1826,18 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets['Rendering_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'], False, self.create_shot_tab_widgets['Rendering_button5'], True))
         self.create_shot_tab_widgets['VFX_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'], True, self.create_shot_tab_widgets['VFX_button5'], False))
         self.create_shot_tab_widgets['VFX_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'], False, self.create_shot_tab_widgets['VFX_button5'], True))
-        self.create_shot_tab_widgets['Anim_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'], True, self.create_shot_tab_widgets['Anim_Cache_button5'], False))
-        self.create_shot_tab_widgets['Anim_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'], False, self.create_shot_tab_widgets['Anim_Cache_button5'], True))
-        self.create_shot_tab_widgets['VFX_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], True, self.create_shot_tab_widgets['VFX_Cache_button5'], False))
-        self.create_shot_tab_widgets['VFX_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], False, self.create_shot_tab_widgets['VFX_Cache_button5'], True))
+        
+        self.create_shot_tab_widgets['Anim_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'], False, self.create_shot_tab_widgets['Anim_Cache_button5'], False))
+        self.create_shot_tab_widgets['Anim_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'], False, self.create_shot_tab_widgets['Anim_Cache_button5'], False))
+        self.create_shot_tab_widgets['VFX_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], False, self.create_shot_tab_widgets['VFX_Cache_button5'], False))
+        self.create_shot_tab_widgets['VFX_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], False, self.create_shot_tab_widgets['VFX_Cache_button5'], False))
 
-        #pprint(self.create_shot_tab_widgets)
+        self.create_shot_tab_widgets['Layout_MOV_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button1'], False, self.create_shot_tab_widgets['Layout_MOV_button3'], False))
+        self.create_shot_tab_widgets['Layout_MOV_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button1'], False, self.create_shot_tab_widgets['Layout_MOV_button3'], False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'], False, self.create_shot_tab_widgets['Animation_MOV_button3'], False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'], False, self.create_shot_tab_widgets['Animation_MOV_button3'], False))        
+
+        pprint(self.create_shot_tab_widgets)
 
         # show the version information 
         self.about_app_widget = QWidget()
