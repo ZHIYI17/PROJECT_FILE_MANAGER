@@ -257,6 +257,7 @@ class CG_Project(object):
         except AttributeError:
             pass
 
+
     def add_scene_shot_folders(self, new_dict_amount):
         '''
         - this function adds new scene-shots folders for directories_for_shots
@@ -273,6 +274,7 @@ class CG_Project(object):
             self.make_backup_folders()
         except AttributeError:
             pass 
+
 
     def exec_once_when_init(in_class_method):
         @wraps(in_class_method)
@@ -301,6 +303,7 @@ class CG_Project(object):
                 if os.listdir(paths) != [] and os.listdir(paths)[0][:6] == 'SCENE_' :
                     print 'g4'
                     directories.append(paths)
+        pprint (directories)
         return directories
 
 
@@ -873,6 +876,35 @@ class CG_Project(object):
         return shot_dir         
          
 
+    def get_anim_cache_shot_file_dir(self, scn_number, shot_number): 
+        '''
+        - returns a directory for the given scene-shot Maya animation file
+        '''
+        all_shots_dirs = self.get_directories_for_shots_attr
+        
+        shot_dir = ''
+        
+        for dir in all_shots_dirs:
+            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Cached':
+                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
+         
+        return shot_dir
+
+
+    def get_anim_cache_shot_dir(self): 
+        '''
+        - returns a directory for the Maya animation file
+        '''
+        all_shots_dirs = self.get_directories_for_shots_attr
+        
+        shot_dir = ''
+        
+        for dir in all_shots_dirs:
+            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Cached':
+                shot_dir = dir
+        
+        return shot_dir
+
     def get_lighting_shot_file_dir(self, scn_number, shot_number): 
         '''
         - returns a directory for the given scene-shot Maya lighting file
@@ -988,8 +1020,38 @@ class CG_Project(object):
          
         return shot_dir         
 
+
+    def get_vfx_cache_shot_file_dir(self, scn_number, shot_number): 
+        '''
+        - returns a directory for the given scene-shot Maya vfx file
+        '''
+        all_shots_dirs = self.get_directories_for_shots_attr
         
-    def make_shot_file(self, type, scn_number, shot_number):
+        shot_dir = ''
+        
+        for dir in all_shots_dirs:
+            if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'Cached': 
+                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
+         
+        return shot_dir 
+
+
+    def get_vfx_cache_shot_dir(self): 
+        '''
+        - returns a directory for the Maya vfx file
+        '''
+        all_shots_dirs = self.get_directories_for_shots_attr
+        
+        shot_dir = ''
+        
+        for dir in all_shots_dirs:
+            if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'Cached': 
+                shot_dir += dir 
+         
+        return shot_dir   
+
+        
+    def make_maya_shot_file(self, type, scn_number, shot_number):
         '''
         - returns a proper Maya file name and directory for the given scene and shot number.
         - type is string type, only accepts 'layout', 'anim', 'lighting', 'rendering', 'geo', 'vfx'
@@ -1432,8 +1494,10 @@ class main_gui(QWidget):
                                                 'Model':                        'self.current_project.get_geo_shot_dir()',
                                                 'Layout':                       'self.current_project.get_layout_shot_dir()',
                                                 'Animation':                    'self.current_project.get_anim_shot_dir()',
+                                                'Anim_Cache':                   'self.current_project.get_anim_cache_shot_dir()',
                                                 'Lighting':                     'self.current_project.get_lighting_shot_dir()',
                                                 'VFX':                          'self.current_project.get_vfx_shot_dir()',
+                                                'VFX_Cache':                    'self.current_project.get_vfx_cache_shot_dir()',
                                                 'Rendering':                    'self.current_project.get_rendering_shot_dir()',
 
                                                 'CHARACTER_SHADER':             'self.current_project.get_char_shader_dir()', 
@@ -1601,7 +1665,7 @@ class main_gui(QWidget):
                     button6 = '4_TEMPLATES_' + sub_type + '_button6'
                     self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False)    
 
-        pprint(self.create_asset_tab_widgets)
+        #pprint(self.create_asset_tab_widgets)
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1'].clicked.connect(lambda: self.create_folder_button('1_MODEL_CHARACTER', self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button1'].clicked.connect(lambda: self.create_folder_button('1_MODEL_PROPS', self.create_asset_tab_widgets))
@@ -1661,7 +1725,7 @@ class main_gui(QWidget):
 
 
         # create elements for SHOT section
-        self.shot_categories = ['Model', 'Layout', 'Animation', 'Lighting', 'VFX', 'Rendering']
+        self.shot_categories = ['Model', 'Layout', 'Animation', 'Anim_Cache', 'Lighting', 'VFX', 'VFX_Cache', 'Rendering']
         
         for single_shot_tab in self.shot_categories:            
             treeView1 = single_shot_tab + '_treeView1'
@@ -1707,6 +1771,10 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets['Rendering_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'], False, self.create_shot_tab_widgets['Rendering_button5'], True))
         self.create_shot_tab_widgets['VFX_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'], True, self.create_shot_tab_widgets['VFX_button5'], False))
         self.create_shot_tab_widgets['VFX_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'], False, self.create_shot_tab_widgets['VFX_button5'], True))
+        self.create_shot_tab_widgets['Anim_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'], True, self.create_shot_tab_widgets['Anim_Cache_button5'], False))
+        self.create_shot_tab_widgets['Anim_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'], False, self.create_shot_tab_widgets['Anim_Cache_button5'], True))
+        self.create_shot_tab_widgets['VFX_Cache_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], True, self.create_shot_tab_widgets['VFX_Cache_button5'], False))
+        self.create_shot_tab_widgets['VFX_Cache_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'], False, self.create_shot_tab_widgets['VFX_Cache_button5'], True))
 
         pprint(self.create_shot_tab_widgets)
         # show the version information 
@@ -1745,9 +1813,11 @@ class main_gui(QWidget):
         self.refresh_shot_tabs_dict = {   0:        'self.populate_items_in_shot_tab("Model")',
                                           1:        'self.populate_items_in_shot_tab("Layout")',
                                           2:        'self.populate_items_in_shot_tab("Animation")',
-                                          3:        'self.populate_items_in_shot_tab("Lighting")',
-                                          4:        'self.populate_items_in_shot_tab("VFX")',
-                                          5:        'self.populate_items_in_shot_tab("Rendering")' }
+                                          3:        'self.populate_items_in_shot_tab("Anim_Cache")',    
+                                          4:        'self.populate_items_in_shot_tab("Lighting")',
+                                          5:        'self.populate_items_in_shot_tab("VFX")',
+                                          6:        'self.populate_items_in_shot_tab("VFX_Cache")',
+                                          7:        'self.populate_items_in_shot_tab("Rendering")' }
         
         self.refresh_asset_tabs_dict = {  (0,0):    'self.populate_asset_model_char_tab()',
                                           (0,1):    'self.populate_asset_model_component_tab()',
@@ -3043,11 +3113,8 @@ class main_gui(QWidget):
                 break           
 
     def sel_file_activate_button_fx(self, create_new_variation_button, switcher1, set_active_button, switcher2):
-        
-        #create_new_variation_button.setFlat(switcher1)
+    
         create_new_variation_button.setEnabled(switcher1)
-
-        #set_active_button.setFlat(switcher2)
         set_active_button.setEnabled(switcher2)
     
 
