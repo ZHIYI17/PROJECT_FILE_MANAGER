@@ -39,14 +39,6 @@ class CG_Project(object):
     - can dynamtically add new scene-shot folders for all the shot-based directories
     """
     def __init__(self, project_name, dict_amount):
-        self.project_name = project_name
-        self.project_directory = project_manager_gui.select_drive_combo_box.currentText() + self.project_name + '/'
-        self.dict_amount = dict_amount
-        self.make_folder_structure()
-        self.make_hidden_folders('backup') 
-        self.make_hidden_folders('script') 
-        self.get_directories_for_shots_attr = self.get_directories_for_shots()
-        self.get_directories_for_assets_attr = self.get_directories_for_assets()
 
         self.maya_asset_directories_dict = {    #geo assets:
                                                 'geo_hi_char':      'self.get_char_hiGeo_dir()',
@@ -72,16 +64,27 @@ class CG_Project(object):
                                                 # templates assets:
                                                 'ligtemp_char':     'self.get_char_light_template_dir()',
                                                 'ligtemp_env':      'self.get_env_light_template_dir()',
-                                                'render_template':  'self.get_render_template_dir()'}
-       
+                                                'render_template':  'self.get_render_template_dir()'}       
 
         self.maya_shot_directories_dict = {     'anim_':        'self.get_anim_shot_dir()',
                                                 'layout_':      'self.get_layout_shot_dir()',                                    
                                                 'vfx_':         'self.get_vfx_shot_dir()',
                                                 'light_':       'self.get_lighting_shot_dir()',
                                                 'render_':      'self.get_rendering_shot_dir()',
-                                                'geo_':         'self.get_geo_shot_dir()' }
+                                                'geo_':         'self.get_geo_shot_dir()',
+                                                'anim_cache_':  'self.get_anim_cache_shot_dir()',
+                                                'vfx_cache_':   'self.get_vfx_cache_shot_dir()' }   
 
+        self.project_name = project_name
+        self.project_directory = project_manager_gui.select_drive_combo_box.currentText() + self.project_name + '/'
+        self.dict_amount = dict_amount
+        self.make_folder_structure()
+        self.make_hidden_folders('backup') 
+        self.make_hidden_folders('script')        
+        self.get_directories_for_shots_attr = self.get_directories_for_shots()
+        self.get_directories_for_assets_attr = self.get_directories_for_assets()
+        # generates initial maya shot files
+        self.make_init_maya_shot_files(self.dict_amount)  
 
     def directories_for_shots(self):
         '''
@@ -168,7 +171,7 @@ class CG_Project(object):
         '''
         dirs_for_shots = self.directories_for_shots()
         for dir in dirs_for_shots:
-            self.__make_hierarchical_folders(dir,'SCENE_','__Shot_')
+            self.__make_hierarchical_folders(dir,'SCENE_','__Shot_')              
 
 
     def __make_dict_folders(self, parent_dir, folder_dict):
@@ -185,30 +188,33 @@ class CG_Project(object):
               c = {'cc':['c1','c2','c3']}
           make_dict_folders(dir,d) this will generate a folder structure like:
           a
-          ----a1
-          ----a2
-          ----a3
+          |----a1
+          |----a2
+          |----a3
+          
           b
-          ----b1
-          ----b2
-          ----b3
-          --------b3_1
-          --------b3_2
-          ----b4
-          --------b4_1
-          --------b4_1
-          ----b5
-          --------b5_5
-          --------------b5_1
-          --------------b5_2
+          |----b1
+          |----b2
+          |----b3
+                |----b3_1
+                |----b3_2
+          |----b4
+                |----b4_1
+                |---b4_1
+          |----b5
+                |----b5_5
+                        |----b5_1
+                        |----b5_2
+          
           c
-          ----cc
-          --------c1
-          --------c2
-          --------c3
+          |----cc
+                |----c1
+                |----c2
+                |----c3
+          
           z
-          ----av
-          --------az
+          |----av
+                |----az
         '''
         dir = unix_format(parent_dir) 
         # list all the folders in current parent_dir
@@ -252,8 +258,9 @@ class CG_Project(object):
         try:
             # create department folders        
             self.__make_dict_folders(self.project_directory,configuration.Departments)
-            # create scene-shots hierarchical folders
+            # creates scene-shots hierarchical folders
             self.generate_scene_shot_folders()
+
         except AttributeError:
             pass
 
@@ -271,9 +278,12 @@ class CG_Project(object):
             for dir in dirs_for_shots:
                 self.__make_hierarchical_folders(dir,'SCENE_','__Shot_')
 
-            self.make_backup_folders()
+            self.make_hidden_folders('backup') 
+            self.make_hidden_folders('script')  
+            
+            self.make_init_maya_shot_files(new_dict_amount)  
         except AttributeError:
-            pass 
+            pass            
 
 
     def exec_once_when_init(in_class_method):
@@ -817,27 +827,12 @@ class CG_Project(object):
             
         else:
             new_version = 0
-            return file_name + '_v-' + str(new_version)
-            
-    
-    def get_anim_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya animation file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Finals':
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir
+            return file_name + '_v-' + str(new_version)        
 
 
     def get_anim_shot_dir(self): 
         '''
-        - returns a directory for the Maya animation file
+        - returns a directory for the Maya animation files
         '''
         all_shots_dirs = self.get_directories_for_shots_attr
         
@@ -846,8 +841,9 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Finals':
                 shot_dir = dir
+                break
         
-        return shot_dir
+        return unix_format(shot_dir)
              
 
     def get_anim_playblast_dir(self):
@@ -861,6 +857,7 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Playblasts'and dir.split('/')[4] == 'Finals_MOV':
                 shot_dir = dir
+                break
         
         return shot_dir
 
@@ -876,23 +873,9 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Playblasts'and dir.split('/')[4] == 'Layouts_MOV':
                 shot_dir = dir
-        
+                break
+
         return shot_dir
-
-
-    def get_layout_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya layout file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Layouts':
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir 
 
 
     def get_layout_shot_dir(self): 
@@ -906,24 +889,10 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Layouts':
                 shot_dir += dir 
+                break
          
         return shot_dir         
          
-
-    def get_anim_cache_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya animation file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Cached':
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir
-
 
     def get_anim_cache_shot_dir(self): 
         '''
@@ -936,23 +905,9 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Cached':
                 shot_dir = dir
+                break
         
         return shot_dir
-
-
-    def get_lighting_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya lighting file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'LIGHTING' :
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir 
 
 
     def get_lighting_shot_dir(self): 
@@ -966,24 +921,10 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'LIGHTING' :
                 shot_dir += dir 
+                break
          
         return shot_dir         
          
-
-    def get_rendering_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya rendering file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'RENDERING' :
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir 
-
 
     def get_rendering_shot_dir(self): 
         '''
@@ -996,23 +937,9 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'RENDERING' :
                 shot_dir += dir
+                break
          
         return shot_dir 
-
-
-    def get_geo_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya model file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'MODEL' :
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir      
 
 
     def get_geo_shot_dir(self): 
@@ -1026,23 +953,9 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'MODEL' :
                 shot_dir += dir 
+                break
          
         return shot_dir            
-                       
-        
-    def get_vfx_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya vfx file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'SHOTS': 
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir 
 
 
     def get_vfx_shot_dir(self): 
@@ -1056,23 +969,9 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'SHOTS': 
                 shot_dir += dir 
+                break
          
         return shot_dir         
-
-
-    def get_vfx_cache_shot_file_dir(self, scn_number, shot_number): 
-        '''
-        - returns a directory for the given scene-shot Maya vfx file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'Cached': 
-                shot_dir += dir + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))
-         
-        return shot_dir 
 
 
     def get_vfx_cache_shot_dir(self): 
@@ -1086,42 +985,100 @@ class CG_Project(object):
         for dir in all_shots_dirs:
             if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'Cached': 
                 shot_dir += dir 
+                break
          
         return shot_dir   
 
-        
-    def make_maya_shot_file(self, type, scn_number, shot_number):
+
+    def get_shot_file_dir(self, type, scn_number, shot_number): 
         '''
-        - returns a proper Maya file name and directory for the given scene and shot number.
-        - type is string type, only accepts 'layout', 'anim', 'lighting', 'rendering', 'geo', 'vfx'
+        - returns a directory for the given scene-shot Maya animation file
+        - 'type' should be the keys of the self.maya_shot_directories_dict
+        '''
+        parent_directory = eval(self.maya_shot_directories_dict.get(type))
+      
+        shot_dir = parent_directory + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))        
+  
+        return unix_format(shot_dir)
+
+        
+    def make_maya_shot_file_strings(self, type, scn_number, shot_number):
+        '''
+        - returns a proper Maya file name and directory for the given type, scene and shot number.
+        - type is string type, only accepts keys of self.maya_shot_directories_dict
         - scn_number and shot_number are int type.
+        '''    
+        
+        # retrive the exact directory 
+
+        shot_dir = self.get_shot_file_dir(type, scn_number, shot_number)
+
+        shot = type + 'scene_{0}_shot_{1}.ma'.format(str(scn_number), str(shot_number))        
+        #shot_file_name = self.make_file_version(dir, shot)
+        
+        return windows_format(shot_dir + shot)
+        
+    
+    def make_init_maya_shot_files(self, dict_scene_shot):
         '''
-        dir = ''
-        # update the scene-shots dictionary self.dict_amount 
-        new_shot_dict = update_shot_dict(self.dict_amount, scn_number, shot_number)
-        # make new scene-shot folders for the given shot 
-        # no need to worry about whether the char folder is already existed or not 
-        self.add_scene_shot_folders(new_shot_dict)        
-        
-        # retrive the exact directory  
-        if type == 'anim':
-            dir += self.get_anim_shot_file_dir(scn_number, shot_number)
-        elif type == 'layout':
-            dir += self.get_layout_shot_file_dir(scn_number, shot_number)
-        elif type == 'lighting':
-            dir += self.get_lighting_shot_file_dir(scn_number, shot_number)
-        elif type == 'rendering':
-            dir += self.get_rendering_shot_file_dir(scn_number, shot_number)
-        elif type == 'geo':
-            dir += self.get_geo_shot_file_dir(scn_number, shot_number)
-        elif type == 'vfx':
-            dir += self.get_vfx_shot_file_dir(scn_number, shot_number)
-        
-        shot = type + '_scene_{0}_shot_{1}'.format(str(scn_number), str(shot_number))        
-        shot_file_name = self.make_file_version(dir, shot)
-        return dir + shot_file_name + '.ma'    
-        
-        
+        - this function generates empty maya files for all the shots based on the given dictionary of scene-shots
+        - 'dict_scene_shot' is an argument of dict type
+        '''
+        empty_maya_file = windows_format(current_python_file_directory + '/empty.ma')
+
+        for scn_number, shot_amount in dict_scene_shot.iteritems():          
+            
+            for shot_number in range(shot_amount):
+
+                anim_shot_file = self.make_maya_shot_file_strings('anim_', scn_number, (shot_number+1))
+                layout_shot_file = self.make_maya_shot_file_strings('layout_', scn_number, (shot_number+1))
+                vfx_shot_file = self.make_maya_shot_file_strings('vfx_', scn_number, (shot_number+1))
+                render_shot_file = self.make_maya_shot_file_strings('render_', scn_number, (shot_number+1))
+                light_shot_file = self.make_maya_shot_file_strings('light_', scn_number, (shot_number+1))
+                geo_shot_file = self.make_maya_shot_file_strings('geo_', scn_number, (shot_number+1))
+                anim_cache_shot_file = self.make_maya_shot_file_strings('anim_cache_', scn_number, (shot_number+1))
+                vfx_cache_shot_file = self.make_maya_shot_file_strings('vfx_cache_', scn_number, (shot_number+1))
+
+                if not os.path.isfile(anim_shot_file):
+                    shutil.copyfile(empty_maya_file, anim_shot_file)
+                else:
+                    pass
+
+                if not os.path.isfile(layout_shot_file):
+                    shutil.copyfile(empty_maya_file, layout_shot_file)
+                else:
+                    pass                    
+
+                if not os.path.isfile(vfx_shot_file):
+                    shutil.copyfile(empty_maya_file, vfx_shot_file)
+                else:
+                    pass                    
+
+                if not os.path.isfile(render_shot_file):
+                    shutil.copyfile(empty_maya_file, render_shot_file)      
+                else:
+                    pass                    
+                    
+                if not os.path.isfile(geo_shot_file):
+                    shutil.copyfile(empty_maya_file, geo_shot_file)
+                else:
+                    pass                    
+
+                if not os.path.isfile(anim_shot_file):
+                    shutil.copyfile(empty_maya_file, anim_shot_file)
+                else:
+                    pass                    
+
+                if not os.path.isfile(anim_cache_shot_file):
+                    shutil.copyfile(empty_maya_file, anim_cache_shot_file)
+                else:
+                    pass                    
+
+                if not os.path.isfile(vfx_cache_shot_file):
+                    shutil.copyfile(empty_maya_file, vfx_cache_shot_file)                                                         
+                else:
+                    pass
+
     def get_maya_file_dirs(self):
         '''
         - returns a list of all the paths that holding the Maya files
@@ -1304,7 +1261,7 @@ class CG_Project_Edit(CG_Project):
         self.project_name = project_name
         self.project_directory = unix_format(drive + self.project_name)   
         # override the original 'self.dict_amount'    
-        self.dict_amount = self.get_current_scene_shot_dict()
+        self.dict_amount = self.get_current_scene_shot_dict(True)
         # pass the newly overrided 'self.dict_amount' attribute to the parent class's '__init__'
         CG_Project.__init__(self, project_name, self.dict_amount)
         #self.get_directories_for_shots_attr = self.get_directories_for_shots()
@@ -1313,7 +1270,7 @@ class CG_Project_Edit(CG_Project):
 
     def get_current_scene_shot_dict(self, *get_dict): 
         if get_dict:
-            self.shot_dirs = self.get_directories_for_shots_attr
+            self.shot_dirs = self.get_directories_for_shots()
             if self.shot_dirs == []: 
                 return None
             else:
@@ -1837,7 +1794,7 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets['Animation_MOV_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'], False, self.create_shot_tab_widgets['Animation_MOV_button3'], False))
         self.create_shot_tab_widgets['Animation_MOV_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'], False, self.create_shot_tab_widgets['Animation_MOV_button3'], False))        
 
-        pprint(self.create_shot_tab_widgets)
+        #pprint(self.create_shot_tab_widgets)
 
         # show the version information 
         self.about_app_widget = QWidget()
@@ -2435,6 +2392,7 @@ class main_gui(QWidget):
         try:            
             self.current_project.add_scene_shot_folders(new_scene_shot_dict)
             self.current_project.dict_amount = new_scene_shot_dict
+
         except AttributeError:
             pass 
 
