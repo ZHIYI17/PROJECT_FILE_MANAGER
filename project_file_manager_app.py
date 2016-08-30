@@ -280,7 +280,7 @@ class CG_Project(object):
 
             self.make_hidden_folders('backup') 
             self.make_hidden_folders('script')  
-            
+
             self.make_init_maya_shot_files(new_dict_amount)  
         except AttributeError:
             pass            
@@ -1261,7 +1261,7 @@ class CG_Project_Edit(CG_Project):
         self.project_name = project_name
         self.project_directory = unix_format(drive + self.project_name)   
         # override the original 'self.dict_amount'    
-        self.dict_amount = self.get_current_scene_shot_dict(True)
+        self.dict_amount = self.get_current_scene_shot_dict()
         # pass the newly overrided 'self.dict_amount' attribute to the parent class's '__init__'
         CG_Project.__init__(self, project_name, self.dict_amount)
         #self.get_directories_for_shots_attr = self.get_directories_for_shots()
@@ -1700,7 +1700,7 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'].clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
         self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'].clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
         
-        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], True, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4', False]))
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], True, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'], False))
         self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'], False, self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'], True))
         self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView2'].clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'], True, self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4', False]))
         self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView3'].clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'], False,self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4'], True))
