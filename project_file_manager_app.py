@@ -31,6 +31,20 @@ vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 
 
 # =======================================================
+# ========= Set some MAYA Environment Variables =========
+# =======================================================
+
+# enable the crash log file, and the file will be saved in the directory of os.environ['TMP']
+os.environ['MAYA_ENABLE_MULTI_DRAW_CONSOLIDATION']      = "2"
+os.environ['MAYA_DEBUG_ENABLE_CRASH_REPORTING']         = "1"
+os.environ['MAYA_DISALLOW_DUPLICATE_ATTRIBUTE_NAMES']   = "1"
+os.environ['MAYA_USE_MALLOC']                           = "1"
+os.environ['MAYA_ENABLE_NG_CONSOLE_STATS']              = "1"
+os.environ['MAYA_ASCII_ENABLE_BULK_PARSING']            = "1"
+os.environ['MAYA_ASCII_SUPPORT_MAC_LINE_ENDINGS']       = "0"
+
+
+# =======================================================
 # ======= the implementation of Folder Structures =======
 # =======================================================
 class CG_Project(object):
@@ -1675,61 +1689,61 @@ class main_gui(QWidget):
 
         #pprint(self.create_asset_tab_widgets)
 
-        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1']                  .clicked.connect(lambda: self.create_folder_button('1_MODEL_CHARACTER',      self.create_asset_tab_widgets))
-        self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect(lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
-        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button1']                  .clicked.connect(lambda: self.create_folder_button('1_MODEL_COMPONENT',      self.create_asset_tab_widgets))
-        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button1']                .clicked.connect(lambda: self.create_folder_button('1_MODEL_ENVIRONMENT',    self.create_asset_tab_widgets))
+        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_CHARACTER',      self.create_asset_tab_widgets))
+        self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
+        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_COMPONENT',      self.create_asset_tab_widgets))
+        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button1']                .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_ENVIRONMENT',    self.create_asset_tab_widgets))
 
-        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2']                  .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',       'LOW-RESOLUTION_CHARACTER'))
-        self.create_asset_tab_widgets['1_MODEL_PROPS_button2']                      .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',           'LOW-RESOLUTION_PROPS'))
-        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2']                  .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_COMPONENT',       'LOW-RESOLUTION_COMPONENT'))
-        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2']                .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_ENVIRONMENT',     'LOW-RESOLUTION_ENVIRONMENT'))
-        self.create_asset_tab_widgets['2_RIG_CHARACTER_button2']                    .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'RIGGED_CHARACTER',                'DEFORMED_CHARACTER'))
-        self.create_asset_tab_widgets['2_RIG_PROPS_button2']                        .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'RIGGED_PROPS',                    'DEFORMED_PROPS'))
-        self.create_asset_tab_widgets['3_SURFACING_SHADER_button2']                 .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                'COMPONENT_SHADER',     'PROPS_SHADER'))
-        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2']              .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))
-        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2']            .clicked.connect(lambda: self.create_new_variation(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
+        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2']                  .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',       'LOW-RESOLUTION_CHARACTER'))
+        self.create_asset_tab_widgets['1_MODEL_PROPS_button2']                      .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',           'LOW-RESOLUTION_PROPS'))
+        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2']                  .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_COMPONENT',       'LOW-RESOLUTION_COMPONENT'))
+        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2']                .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_ENVIRONMENT',     'LOW-RESOLUTION_ENVIRONMENT'))
+        self.create_asset_tab_widgets['2_RIG_CHARACTER_button2']                    .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'RIGGED_CHARACTER',                'DEFORMED_CHARACTER'))
+        self.create_asset_tab_widgets['2_RIG_PROPS_button2']                        .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'RIGGED_PROPS',                    'DEFORMED_PROPS'))
+        self.create_asset_tab_widgets['3_SURFACING_SHADER_button2']                 .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                'COMPONENT_SHADER',     'PROPS_SHADER'))
+        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2']              .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))
+        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2']            .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
 
-        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4']                  .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',         'LOW-RESOLUTION_CHARACTER'))
-        self.create_asset_tab_widgets['1_MODEL_PROPS_button4']                      .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',             'LOW-RESOLUTION_PROPS'))
-        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4']                  .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_COMPONENT',         'LOW-RESOLUTION_COMPONENT'))
-        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4']                .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_ENVIRONMENT',       'LOW-RESOLUTION_ENVIRONMENT'))
-        self.create_asset_tab_widgets['2_RIG_CHARACTER_button4']                    .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'RIGGED_CHARACTER',                  'DEFORMED_CHARACTER'))
-        self.create_asset_tab_widgets['2_RIG_PROPS_button4']                        .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'RIGGED_PROPS',                      'DEFORMED_PROPS'))
-        self.create_asset_tab_widgets['3_SURFACING_SHADER_button4']                 .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                  'COMPONENT_SHADER',     'PROPS_SHADER'))
-        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4']              .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
-        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4']            .clicked.connect(lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
+        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4']                  .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',         'LOW-RESOLUTION_CHARACTER'))
+        self.create_asset_tab_widgets['1_MODEL_PROPS_button4']                      .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',             'LOW-RESOLUTION_PROPS'))
+        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4']                  .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_COMPONENT',         'LOW-RESOLUTION_COMPONENT'))
+        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4']                .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_ENVIRONMENT',       'LOW-RESOLUTION_ENVIRONMENT'))
+        self.create_asset_tab_widgets['2_RIG_CHARACTER_button4']                    .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'RIGGED_CHARACTER',                  'DEFORMED_CHARACTER'))
+        self.create_asset_tab_widgets['2_RIG_PROPS_button4']                        .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'RIGGED_PROPS',                      'DEFORMED_PROPS'))
+        self.create_asset_tab_widgets['3_SURFACING_SHADER_button4']                 .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                  'COMPONENT_SHADER',     'PROPS_SHADER'))
+        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4']              .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
+        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4']            .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
         
-        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2']                 .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       True,   self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        False))
-        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3']                 .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       False,  self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        True))
-        self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView2']                .clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'],     True,   self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4',        False]))
-        self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView3']                .clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'],     False,  self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4'],       True))
-        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView2']               .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_CHARACTER_button2'],          True,   self.create_asset_tab_widgets['2_RIG_CHARACTER_button4'],           False))
-        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView3']               .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_CHARACTER_button2'],          False,  self.create_asset_tab_widgets['2_RIG_CHARACTER_button4'],           True))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView2']        .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         False))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView3']        .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        False,  self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         True))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView2']        .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         False))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView3']        .clicked.connect(lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],       False,  self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         True))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView2']      .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      True,   self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       False))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView3']      .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      False,  self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       True))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView2']            .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            True,   self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             False))
-        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView3']            .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            False,  self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             True))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView2']         .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         False))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView3']         .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        False,  self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         True))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView2']         .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         False))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView3']         .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],        False,  self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         True))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView2']       .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      True,   self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       False))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView3']       .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      False,  self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       True))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView2']             .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            True,   self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             False))
-        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView3']             .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            False,  self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             True))
-        self.create_asset_tab_widgets['PROPS_SHADER_treeView2']                     .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       True,   self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        False))
-        self.create_asset_tab_widgets['PROPS_SHADER_treeView3']                     .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       False,  self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        True))
-        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView2']                 .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_PROPS_button2'],              True,   self.create_asset_tab_widgets['2_RIG_PROPS_button4'],               False))
-        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView3']                 .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_PROPS_button2'],              False,  self.create_asset_tab_widgets['2_RIG_PROPS_button4'],               True))
-        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView2']               .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2'],    True,   self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'],     False))
-        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView3']               .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2'],    False,  self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'],     True))
-        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView2']             .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'],  True,   self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'],   False))
-        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView3']             .clicked.connect(lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'],  False,  self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'],   True))
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       True,   self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        False))
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       False,  self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        True))
+        self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView2']                .clicked.connect    ( lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'],     True,   self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4',        False]))
+        self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView3']                .clicked.connect    ( lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'],     False,  self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4'],       True))
+        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView2']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_CHARACTER_button2'],          True,   self.create_asset_tab_widgets['2_RIG_CHARACTER_button4'],           False))
+        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView3']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_CHARACTER_button2'],          False,  self.create_asset_tab_widgets['2_RIG_CHARACTER_button4'],           True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView2']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView3']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        False,  self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView2']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView3']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],       False,  self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView2']      .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      True,   self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView3']      .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      False,  self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       True))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView2']            .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            True,   self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView3']            .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            False,  self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView2']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView3']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2'],        False,  self.create_asset_tab_widgets['1_MODEL_CHARACTER_button4'],         True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView2']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],        True,   self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView3']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_COMPONENT_button2'],        False,  self.create_asset_tab_widgets['1_MODEL_COMPONENT_button4'],         True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView2']       .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      True,   self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView3']       .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button2'],      False,  self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button4'],       True))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView2']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            True,   self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView3']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['1_MODEL_PROPS_button2'],            False,  self.create_asset_tab_widgets['1_MODEL_PROPS_button4'],             True))
+        self.create_asset_tab_widgets['PROPS_SHADER_treeView2']                     .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       True,   self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        False))
+        self.create_asset_tab_widgets['PROPS_SHADER_treeView3']                     .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       False,  self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        True))
+        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView2']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_PROPS_button2'],              True,   self.create_asset_tab_widgets['2_RIG_PROPS_button4'],               False))
+        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView3']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['2_RIG_PROPS_button2'],              False,  self.create_asset_tab_widgets['2_RIG_PROPS_button4'],               True))
+        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView2']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2'],    True,   self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'],     False))
+        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView3']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button2'],    False,  self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4'],     True))
+        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView2']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'],  True,   self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'],   False))
+        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView3']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'],  False,  self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'],   True))
 
 
         # create elements for SHOT section
@@ -1753,46 +1767,46 @@ class main_gui(QWidget):
         
         self.refresh_tabwidget(self.shot_widget)
 
-        self.create_shot_tab_widgets['Animation_button4']           .clicked.connect( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Animation'))
-        self.create_shot_tab_widgets['Layout_button4']              .clicked.connect( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Layout'))
-        self.create_shot_tab_widgets['Lighting_button4']            .clicked.connect( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Lighting'))
-        self.create_shot_tab_widgets['Model_button4']               .clicked.connect( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Model'))
-        self.create_shot_tab_widgets['Rendering_button4']           .clicked.connect( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Rendering'))
-        self.create_shot_tab_widgets['VFX_button4']                 .clicked.connect( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'VFX'))
+        self.create_shot_tab_widgets['Animation_button4']           .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Animation'))
+        self.create_shot_tab_widgets['Layout_button4']              .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Layout'))
+        self.create_shot_tab_widgets['Lighting_button4']            .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Lighting'))
+        self.create_shot_tab_widgets['Model_button4']               .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Model'))
+        self.create_shot_tab_widgets['Rendering_button4']           .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Rendering'))
+        self.create_shot_tab_widgets['VFX_button4']                 .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'VFX'))
 
-        self.create_shot_tab_widgets['Animation_button5']           .clicked.connect( lambda: self.set_active(self.create_shot_tab_widgets, 'Animation'))
-        self.create_shot_tab_widgets['Layout_button5']              .clicked.connect( lambda: self.set_active(self.create_shot_tab_widgets, 'Layout'))
-        self.create_shot_tab_widgets['Lighting_button5']            .clicked.connect( lambda: self.set_active(self.create_shot_tab_widgets, 'Lighting'))
-        self.create_shot_tab_widgets['Model_button5']               .clicked.connect( lambda: self.set_active(self.create_shot_tab_widgets, 'Model'))
-        self.create_shot_tab_widgets['Rendering_button5']           .clicked.connect( lambda: self.set_active(self.create_shot_tab_widgets, 'Rendering'))
-        self.create_shot_tab_widgets['VFX_button5']                 .clicked.connect( lambda: self.set_active(self.create_shot_tab_widgets, 'VFX'))
+        self.create_shot_tab_widgets['Animation_button5']           .clicked.connect    ( lambda: self.set_active(self.create_shot_tab_widgets, 'Animation'))
+        self.create_shot_tab_widgets['Layout_button5']              .clicked.connect    ( lambda: self.set_active(self.create_shot_tab_widgets, 'Layout'))
+        self.create_shot_tab_widgets['Lighting_button5']            .clicked.connect    ( lambda: self.set_active(self.create_shot_tab_widgets, 'Lighting'))
+        self.create_shot_tab_widgets['Model_button5']               .clicked.connect    ( lambda: self.set_active(self.create_shot_tab_widgets, 'Model'))
+        self.create_shot_tab_widgets['Rendering_button5']           .clicked.connect    ( lambda: self.set_active(self.create_shot_tab_widgets, 'Rendering'))
+        self.create_shot_tab_widgets['VFX_button5']                 .clicked.connect    ( lambda: self.set_active(self.create_shot_tab_widgets, 'VFX'))
 
-        self.create_shot_tab_widgets['Animation_treeView2']         .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'],         True,   self.create_shot_tab_widgets['Animation_button5'],      False))
-        self.create_shot_tab_widgets['Animation_treeView3']         .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'],         False,  self.create_shot_tab_widgets['Animation_button5'],      True))
-        self.create_shot_tab_widgets['Layout_MOV_treeView2']        .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button4'],        False,  self.create_shot_tab_widgets['Layout_MOV_button5'],     False))
-        self.create_shot_tab_widgets['Layout_MOV_treeView3']        .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button4'],        False,  self.create_shot_tab_widgets['Layout_MOV_button5'],     False))
-        self.create_shot_tab_widgets['Animation_MOV_treeView2']     .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button4'],     False,  self.create_shot_tab_widgets['Animation_MOV_button5'],  False))
-        self.create_shot_tab_widgets['Animation_MOV_treeView3']     .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button4'],     False,  self.create_shot_tab_widgets['Animation_MOV_button5'],  False))        
-        self.create_shot_tab_widgets['Layout_treeView2']            .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'],            True,   self.create_shot_tab_widgets['Layout_button5'],         False))
-        self.create_shot_tab_widgets['Layout_treeView3']            .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'],            False,  self.create_shot_tab_widgets['Layout_button5'],         True))
-        self.create_shot_tab_widgets['Lighting_treeView2']          .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'],          True,   self.create_shot_tab_widgets['Lighting_button5'],       False))
-        self.create_shot_tab_widgets['Lighting_treeView3']          .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'],          False,  self.create_shot_tab_widgets['Lighting_button5'],       True))
-        self.create_shot_tab_widgets['Model_treeView2']             .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Model_button4'],             True,   self.create_shot_tab_widgets['Model_button5'],          False))
-        self.create_shot_tab_widgets['Model_treeView3']             .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Model_button4'],             False,  self.create_shot_tab_widgets['Model_button5'],          True))
-        self.create_shot_tab_widgets['Rendering_treeView2']         .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'],         True,   self.create_shot_tab_widgets['Rendering_button5'],      False))
-        self.create_shot_tab_widgets['Rendering_treeView3']         .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'],         False,  self.create_shot_tab_widgets['Rendering_button5'],      True))
-        self.create_shot_tab_widgets['VFX_treeView2']               .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'],               True,   self.create_shot_tab_widgets['VFX_button5'],            False))
-        self.create_shot_tab_widgets['VFX_treeView3']               .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'],               False,  self.create_shot_tab_widgets['VFX_button5'],            True))
+        self.create_shot_tab_widgets['Animation_treeView2']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'],         True,   self.create_shot_tab_widgets['Animation_button5'],      False))
+        self.create_shot_tab_widgets['Animation_treeView3']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_button4'],         False,  self.create_shot_tab_widgets['Animation_button5'],      True))
+        self.create_shot_tab_widgets['Layout_MOV_treeView2']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button4'],        False,  self.create_shot_tab_widgets['Layout_MOV_button5'],     False))
+        self.create_shot_tab_widgets['Layout_MOV_treeView3']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button4'],        False,  self.create_shot_tab_widgets['Layout_MOV_button5'],     False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView2']     .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button4'],     False,  self.create_shot_tab_widgets['Animation_MOV_button5'],  False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView3']     .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button4'],     False,  self.create_shot_tab_widgets['Animation_MOV_button5'],  False))        
+        self.create_shot_tab_widgets['Layout_treeView2']            .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'],            True,   self.create_shot_tab_widgets['Layout_button5'],         False))
+        self.create_shot_tab_widgets['Layout_treeView3']            .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_button4'],            False,  self.create_shot_tab_widgets['Layout_button5'],         True))
+        self.create_shot_tab_widgets['Lighting_treeView2']          .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'],          True,   self.create_shot_tab_widgets['Lighting_button5'],       False))
+        self.create_shot_tab_widgets['Lighting_treeView3']          .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Lighting_button4'],          False,  self.create_shot_tab_widgets['Lighting_button5'],       True))
+        self.create_shot_tab_widgets['Model_treeView2']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Model_button4'],             True,   self.create_shot_tab_widgets['Model_button5'],          False))
+        self.create_shot_tab_widgets['Model_treeView3']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Model_button4'],             False,  self.create_shot_tab_widgets['Model_button5'],          True))
+        self.create_shot_tab_widgets['Rendering_treeView2']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'],         True,   self.create_shot_tab_widgets['Rendering_button5'],      False))
+        self.create_shot_tab_widgets['Rendering_treeView3']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'],         False,  self.create_shot_tab_widgets['Rendering_button5'],      True))
+        self.create_shot_tab_widgets['VFX_treeView2']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'],               True,   self.create_shot_tab_widgets['VFX_button5'],            False))
+        self.create_shot_tab_widgets['VFX_treeView3']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'],               False,  self.create_shot_tab_widgets['VFX_button5'],            True))
         
-        self.create_shot_tab_widgets['Anim_Cache_treeView2']        .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'],        False,  self.create_shot_tab_widgets['Anim_Cache_button5'],     False))
-        self.create_shot_tab_widgets['Anim_Cache_treeView3']        .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'],        False,  self.create_shot_tab_widgets['Anim_Cache_button5'],     False))
-        self.create_shot_tab_widgets['VFX_Cache_treeView2']         .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'],         False,  self.create_shot_tab_widgets['VFX_Cache_button5'],      False))
-        self.create_shot_tab_widgets['VFX_Cache_treeView3']         .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'],         False,  self.create_shot_tab_widgets['VFX_Cache_button5'],      False))
+        self.create_shot_tab_widgets['Anim_Cache_treeView2']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'],        False,  self.create_shot_tab_widgets['Anim_Cache_button5'],     False))
+        self.create_shot_tab_widgets['Anim_Cache_treeView3']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'],        False,  self.create_shot_tab_widgets['Anim_Cache_button5'],     False))
+        self.create_shot_tab_widgets['VFX_Cache_treeView2']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'],         False,  self.create_shot_tab_widgets['VFX_Cache_button5'],      False))
+        self.create_shot_tab_widgets['VFX_Cache_treeView3']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_Cache_button4'],         False,  self.create_shot_tab_widgets['VFX_Cache_button5'],      False))
 
-        self.create_shot_tab_widgets['Layout_MOV_treeView2']        .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button1'],        False,  self.create_shot_tab_widgets['Layout_MOV_button3'],     False))
-        self.create_shot_tab_widgets['Layout_MOV_treeView3']        .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button1'],        False,  self.create_shot_tab_widgets['Layout_MOV_button3'],     False))
-        self.create_shot_tab_widgets['Animation_MOV_treeView2']     .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'],     False,  self.create_shot_tab_widgets['Animation_MOV_button3'],  False))
-        self.create_shot_tab_widgets['Animation_MOV_treeView3']     .clicked.connect( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'],     False,  self.create_shot_tab_widgets['Animation_MOV_button3'],  False))        
+        self.create_shot_tab_widgets['Layout_MOV_treeView2']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button1'],        False,  self.create_shot_tab_widgets['Layout_MOV_button3'],     False))
+        self.create_shot_tab_widgets['Layout_MOV_treeView3']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Layout_MOV_button1'],        False,  self.create_shot_tab_widgets['Layout_MOV_button3'],     False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView2']     .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'],     False,  self.create_shot_tab_widgets['Animation_MOV_button3'],  False))
+        self.create_shot_tab_widgets['Animation_MOV_treeView3']     .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Animation_MOV_button1'],     False,  self.create_shot_tab_widgets['Animation_MOV_button3'],  False))        
 
         #pprint(self.create_shot_tab_widgets)
 
@@ -3140,7 +3154,21 @@ class main_gui(QWidget):
     
         create_new_variation_button.setEnabled(switcher1)
         set_active_button.setEnabled(switcher2)
-    
+
+
+    def reference_maya_file(self, maya_file, *batch_amount):
+        '''
+        - 'maya_file' is a string that indicates the full path of directory for the maya file
+        - 'batch_amount' is optional, which indicates the amount of given file to be referenced
+        '''
+        amount_of_referencing = 0
+
+        if batch_amount:
+            amount_of_referencing = batch_amount[0]
+        else:
+            amount_of_referencing = 0    
+
+
 
 # ======================================
 # ======= some backend functions =======
