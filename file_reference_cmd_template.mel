@@ -1,0 +1,1 @@
+file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "namespace_prefix" -options "v=0;" "maya_file_dir";
