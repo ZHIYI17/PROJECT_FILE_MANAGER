@@ -1687,7 +1687,7 @@ class main_gui(QWidget):
                     button6     = '4_TEMPLATES_' + sub_type + '_button6'
                     self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False)    
 
-        #pprint(self.create_asset_tab_widgets)
+        pprint(self.create_asset_tab_widgets)
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_CHARACTER',      self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
@@ -3039,7 +3039,7 @@ class main_gui(QWidget):
         '''
         for folder_type in folder_types:
             
-            temp_dir = (self.folder_type_directories_dict.get(folder_type))
+            temp_dir = self.folder_type_directories_dict.get(folder_type)
           
 
             sel_file_directory = self.get_selected_file_dir(folder_type, 'maya', widget_dict, eval(temp_dir))
@@ -3123,7 +3123,7 @@ class main_gui(QWidget):
         '''
         for folder_type in folder_types:
 
-            temp_dir = (self.folder_type_directories_dict.get(folder_type))        
+            temp_dir = self.folder_type_directories_dict.get(folder_type)       
 
             sel_file_directory = self.get_selected_file_dir( folder_type, 'history', widget_dict, eval(temp_dir) )
 
@@ -3158,7 +3158,7 @@ class main_gui(QWidget):
 
     def reference_maya_file(self, maya_file, *batch_amount):
         '''
-        - 'maya_file' is a string that indicates the full path of directory for the maya file
+        - 'maya_file' should be a complete path and file name with extension, which looks like 'c:\folder\mayafile.ma'
         - 'batch_amount' is optional, which indicates the amount of given file to be referenced
         '''
         amount_of_referencing = 0
@@ -3168,11 +3168,73 @@ class main_gui(QWidget):
         else:
             amount_of_referencing = 0    
 
+        script_path = windows_format(self.extract_directory_name_extension(maya_file, '0') + '___script')
+
+        mel_file_dir = script_path + 'referencing.mel'
+
+        mel_file_obj = open(mel_file_dir, 'w')
+        mel_file_obj.flush()
+        mel_file_obj.close()
+
+        if amount_of_referencing < 2:
+
+            namespace = self.extract_directory_name_extension(maya_file, '1') 
+
+            referencing_mel_strings = 'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "{0}" -options "v=0;" "{1}";\n'.format(namespace, maya_file)
+            
+            export_strings_to_file(referencing_mel_strings, mel_file_dir)
+
+        else: 
+
+            for i in range(amount_of_referencing):
+
+                namespace = self.extract_directory_name_extension(maya_file, '1') + str(i+1)
+
+                referencing_mel_strings = 'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "{0}" -options "v=0;" "{1}";\n'.format(namespace, maya_file)
+                
+                export_strings_to_file(referencing_mel_strings, mel_file_dir)
+
+        os.system('start maya.exe -script "{}"'.format(mel_file_dir) )
+
+
+    def reference_maya_file_button(self, widget_dict, *folder_types):
+
+        for folder_type in folder_types:
+            
+            temp_dir = self.folder_type_directories_dict.get(folder_type)          
+
+            sel_file_directory = ''
+
+            if '_v-' in sel_file_directory:
+
+                sel_file_directory += self.get_selected_file_dir( folder_type, 'history', widget_dict, eval(temp_dir) )
+
+            else: 
+
+                sel_file_directory += self.get_selected_file_dir(folder_type, 'maya', widget_dict, eval(temp_dir))
+
+            if str(widget_dict[folder_types + '_lineEdit2']) in locals() or str(widget_dict[folder_types + '_lineEdit2']) in globals():
+                amount = int(widget_dict[folder_types + '_lineEdit2'].text())
+                self.reference_maya_file( sel_file_directory, amount):
+            else:
+                self.reference_maya_file( sel_file_directory )
 
 
 # ======================================
 # ======= some backend functions =======
 # ======================================
+
+def export_strings_to_file(strings, dst_file_dir):
+    '''
+    - this function writes the given 'strings' to an exact file from the 'dst_file_dir'
+    - 'strings' should be something like 'abcdefghijk lmnopq rstuvxyz'
+    - 'dst_file_dir' should be a complete path and file name with extension, which looks like 'c:\folder\file.ext'
+    '''
+    import array 
+    file_object = open(dst_file_dir, 'w')
+    array.array('c', strings).tofile(file_object)
+    file_object.close()
+
 
 def unix_format(path_of_directory):
     '''
