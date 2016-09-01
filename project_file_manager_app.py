@@ -34,6 +34,18 @@ vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 # ========= Set some MAYA Environment Variables =========
 # =======================================================
 
+if os.environ['PATH'][-1] != ';':
+    os.environ['PATH'] += '; '
+
+#check if '...\maya\bin' is stored in system 'PATH' variable
+try:
+    os.environ['PATH'] += '; ' + os.environ['MAYA_LOCATION'] + '\\bin;'
+except KeyError: # when KeyError occurs, which means 'MAYA_LOCATION' is not in system's environment variables
+    maya_location_variable = 'c:\\program files\\autodesk\\maya2017'
+    os.environ['MAYA_LOCATION'] = maya_location_variable 
+
+    os.environ['PATH'] += os.environ['MAYA_LOCATION'] + '\\bin; '
+
 # enable the crash log file, and the file will be saved in the directory of os.environ['TMP']
 os.environ['MAYA_ENABLE_MULTI_DRAW_CONSOLIDATION']      = "2"
 os.environ['MAYA_DEBUG_ENABLE_CRASH_REPORTING']         = "1"
