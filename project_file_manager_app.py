@@ -3215,7 +3215,7 @@ class main_gui(QWidget):
 
             if str(widget_dict[folder_types + '_lineEdit2']) in locals() or str(widget_dict[folder_types + '_lineEdit2']) in globals():
                 amount = int(widget_dict[folder_types + '_lineEdit2'].text())
-                self.reference_maya_file( sel_file_directory, amount):
+                self.reference_maya_file( sel_file_directory, amount)
             else:
                 self.reference_maya_file( sel_file_directory )
 
