@@ -3188,7 +3188,7 @@ class main_gui(QWidget):
         if batch_amount:
             amount_of_referencing = batch_amount[0]
         else:
-            amount_of_referencing = 0    
+            amount_of_referencing = 1    
    
         script_path = windows_format(self.extract_directory_name_extension(maya_file, 0) + '___script')
 
@@ -3206,13 +3206,15 @@ class main_gui(QWidget):
             
             export_strings_to_file(referencing_mel_strings, mel_file_dir)
 
-        else: 
+        elif amount_of_referencing >= 2: 
+
+            referencing_mel_strings = ''
 
             for i in range(amount_of_referencing):
 
                 namespace = self.extract_directory_name_extension(maya_file, 1) + str(i+1)
 
-                referencing_mel_strings = 'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "{0}" -options "v=0;" "{1}";\n'.format(namespace, maya_file)
+                referencing_mel_strings += 'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "{0}" -options "v=0;" "{1}";\n'.format(namespace, maya_file)
                 
                 export_strings_to_file(referencing_mel_strings, mel_file_dir)
 
@@ -3228,7 +3230,7 @@ class main_gui(QWidget):
                 sel_file_directory = self.get_selected_file_dir( folder_type, 'maya', widget_dict, eval(temp_dir) )
 
                 amount = self.get_amount_of_referencing_from_lineEdit() 
-
+           
                 self.reference_maya_file( sel_file_directory, amount)
 
                 break
@@ -3241,16 +3243,14 @@ class main_gui(QWidget):
 
         for asset_type, sub_types in self.dict_asset.iteritems():
             for sub_type in sub_types:
+
                 button = self.create_asset_tab_widgets[asset_type + '_' + sub_type + '_lineEdit2']
-                if button.text() == '':
-                    return 1
-                else:
-                    try:
-                        return int(button.text())
-                        break
-                    except ValueError:
-                        return 1
-                        break
+    
+                try:
+                    return int(button.text())
+                    break
+                except ValueError:
+                    pass
 
 # ======================================
 # ======= some backend functions =======
