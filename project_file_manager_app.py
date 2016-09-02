@@ -1699,7 +1699,7 @@ class main_gui(QWidget):
                     button6     = '4_TEMPLATES_' + sub_type + '_button6'
                     self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False)    
 
-        pprint(self.create_asset_tab_widgets)
+        #pprint(self.create_asset_tab_widgets)
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_CHARACTER',      self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
@@ -1726,6 +1726,16 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button4']              .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
         self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4']            .clicked.connect    ( lambda: self.set_active(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
         
+        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button5']                  .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',         'LOW-RESOLUTION_CHARACTER'))
+        self.create_asset_tab_widgets['1_MODEL_PROPS_button5']                      .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',             'LOW-RESOLUTION_PROPS'))
+        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button5']                  .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_COMPONENT',         'LOW-RESOLUTION_COMPONENT'))
+        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button5']                .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_ENVIRONMENT',       'LOW-RESOLUTION_ENVIRONMENT'))
+        self.create_asset_tab_widgets['2_RIG_CHARACTER_button5']                    .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'RIGGED_CHARACTER',                  'DEFORMED_CHARACTER'))
+        self.create_asset_tab_widgets['2_RIG_PROPS_button5']                        .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'RIGGED_PROPS',                      'DEFORMED_PROPS'))
+        self.create_asset_tab_widgets['3_SURFACING_SHADER_button5']                 .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                  'COMPONENT_SHADER',     'PROPS_SHADER'))
+        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button5']              .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
+        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button5']            .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
+
         self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       True,   self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        False))
         self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       False,  self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        True))
         self.create_asset_tab_widgets['CHARACTER_TEXTURE_treeView2']                .clicked.connect    ( lambda: self.sel_file_activate_button_fx( self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button2'],     True,   self.create_asset_tab_widgets['3_SURFACING_TEXTURE_button4',        False]))
@@ -3083,7 +3093,7 @@ class main_gui(QWidget):
         '''
         try:
             file_name = sel_file_directory.split('/')[-1]
-            directory = sel_file_directory.replace(file_name , '')
+            directory = sel_file_directory.replace(file_name , '')  
             name = file_name.split('.')[0]
             extension = file_name.split('.')[1]
 
@@ -3179,10 +3189,10 @@ class main_gui(QWidget):
             amount_of_referencing = batch_amount[0]
         else:
             amount_of_referencing = 0    
+   
+        script_path = windows_format(self.extract_directory_name_extension(maya_file, 0) + '___script')
 
-        script_path = windows_format(self.extract_directory_name_extension(maya_file, '0') + '___script')
-
-        mel_file_dir = script_path + 'referencing.mel'
+        mel_file_dir = script_path + '\\referencing.mel'
 
         mel_file_obj = open(mel_file_dir, 'w')
         mel_file_obj.flush()
@@ -3190,7 +3200,7 @@ class main_gui(QWidget):
 
         if amount_of_referencing < 2:
 
-            namespace = self.extract_directory_name_extension(maya_file, '1') 
+            namespace = self.extract_directory_name_extension(maya_file, 1) 
 
             referencing_mel_strings = 'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "{0}" -options "v=0;" "{1}";\n'.format(namespace, maya_file)
             
@@ -3200,7 +3210,7 @@ class main_gui(QWidget):
 
             for i in range(amount_of_referencing):
 
-                namespace = self.extract_directory_name_extension(maya_file, '1') + str(i+1)
+                namespace = self.extract_directory_name_extension(maya_file, 1) + str(i+1)
 
                 referencing_mel_strings = 'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "{0}" -options "v=0;" "{1}";\n'.format(namespace, maya_file)
                 
@@ -3212,25 +3222,35 @@ class main_gui(QWidget):
     def reference_maya_file_button(self, widget_dict, *folder_types):
 
         for folder_type in folder_types:
-            
-            temp_dir = self.folder_type_directories_dict.get(folder_type)          
+            try:
+                temp_dir = self.folder_type_directories_dict.get(folder_type)          
 
-            sel_file_directory = ''
+                sel_file_directory = self.get_selected_file_dir( folder_type, 'maya', widget_dict, eval(temp_dir) )
 
-            if '_v-' in sel_file_directory:
+                amount = self.get_amount_of_referencing_from_lineEdit() 
 
-                sel_file_directory += self.get_selected_file_dir( folder_type, 'history', widget_dict, eval(temp_dir) )
-
-            else: 
-
-                sel_file_directory += self.get_selected_file_dir(folder_type, 'maya', widget_dict, eval(temp_dir))
-
-            if str(widget_dict[folder_types + '_lineEdit2']) in locals() or str(widget_dict[folder_types + '_lineEdit2']) in globals():
-                amount = int(widget_dict[folder_types + '_lineEdit2'].text())
                 self.reference_maya_file( sel_file_directory, amount)
-            else:
-                self.reference_maya_file( sel_file_directory )
 
+                break
+
+            except AttributeError:
+                pass
+
+
+    def get_amount_of_referencing_from_lineEdit(self):
+
+        for asset_type, sub_types in self.dict_asset.iteritems():
+            for sub_type in sub_types:
+                button = self.create_asset_tab_widgets[asset_type + '_' + sub_type + '_lineEdit2']
+                if button.text() == '':
+                    return 1
+                else:
+                    try:
+                        return int(button.text())
+                        break
+                    except ValueError:
+                        return 1
+                        break
 
 # ======================================
 # ======= some backend functions =======
