@@ -41,7 +41,7 @@ if os.environ['PATH'][-1] != ';':
 try:
     os.environ['PATH'] += '; ' + os.environ['MAYA_LOCATION'] + '\\bin;'
 except KeyError: # when KeyError occurs, which means 'MAYA_LOCATION' is not in system's environment variables
-    maya_location_variable = 'c:\\program files\\autodesk\\maya2017'
+    maya_location_variable = 'c:\\program files\\autodesk\\maya2018'
     os.environ['MAYA_LOCATION'] = maya_location_variable 
 
     os.environ['PATH'] += os.environ['MAYA_LOCATION'] + '\\bin; '
@@ -1620,7 +1620,7 @@ class main_gui(QWidget):
                     lineEdit2   = '1_MODEL_' + sub_type + '_lineEdit2'
                     button5     = '1_MODEL_' + sub_type + '_button5'
                     button6     = '1_MODEL_' + sub_type + '_button6'
-                    self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, True)
+                    self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, True, True)
 
             if asset_type == '2_RIG':
                 # self.dict_asset_file_utility_widgets[asset_type] is a sub-level dictionary
@@ -1645,7 +1645,7 @@ class main_gui(QWidget):
                     lineEdit2   = '2_RIG_' + sub_type + '_lineEdit2'
                     button5     = '2_RIG_' + sub_type + '_button5'
                     button6     = '2_RIG_' + sub_type + '_button6'
-                    self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False)                
+                    self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, False, True, True)                
 
             if asset_type == '3_SURFACING':
                 # self.dict_asset_file_utility_widgets[asset_type] is a sub-level dictionary
@@ -1671,9 +1671,9 @@ class main_gui(QWidget):
                     button6     = '3_SURFACING_' + sub_type + '_button6'
 
                     if sub_type != 'TEXTURE':
-                        self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False)
+                        self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, False, False, True)
                     else:
-                        self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, False, False)
+                        self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False, False)
 
             if asset_type == '4_TEMPLATES':
                 # self.dict_asset_file_utility_widgets[asset_type] is a sub-level dictionary
@@ -1697,14 +1697,15 @@ class main_gui(QWidget):
                     lineEdit2   = '4_TEMPLATES_' + sub_type + '_lineEdit2'
                     button5     = '4_TEMPLATES_' + sub_type + '_button5'
                     button6     = '4_TEMPLATES_' + sub_type + '_button6'
-                    self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False)    
+                    self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False, True)    
 
-        #pprint(self.create_asset_tab_widgets)
+        pprint(self.create_asset_tab_widgets)
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_CHARACTER',      self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_COMPONENT_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_COMPONENT',      self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button1']                .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_ENVIRONMENT',    self.create_asset_tab_widgets))
+        #self.create_asset_tab_widgets['4_TEMPLATES_RENDERING_button1']              .clicked.connect    ( lambda: self.create_folder_button('4_TEMPLATES_RENDERING',    self.create_asset_tab_widgets))
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2']                  .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',       'LOW-RESOLUTION_CHARACTER'))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button2']                      .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',           'LOW-RESOLUTION_PROPS'))
@@ -1735,6 +1736,16 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets['3_SURFACING_SHADER_button5']                 .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                  'COMPONENT_SHADER',     'PROPS_SHADER'))
         self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button5']              .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
         self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button5']            .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
+
+        self.create_asset_tab_widgets['1_MODEL_CHARACTER_button6']                  .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',         'LOW-RESOLUTION_CHARACTER'))
+        self.create_asset_tab_widgets['1_MODEL_PROPS_button6']                      .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',             'LOW-RESOLUTION_PROPS'))
+        self.create_asset_tab_widgets['1_MODEL_COMPONENT_button6']                  .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_COMPONENT',         'LOW-RESOLUTION_COMPONENT'))
+        self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button6']                .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_ENVIRONMENT',       'LOW-RESOLUTION_ENVIRONMENT'))
+        self.create_asset_tab_widgets['2_RIG_CHARACTER_button6']                    .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'RIGGED_CHARACTER',                  'DEFORMED_CHARACTER'))
+        self.create_asset_tab_widgets['2_RIG_PROPS_button6']                        .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'RIGGED_PROPS',                      'DEFORMED_PROPS'))
+        self.create_asset_tab_widgets['3_SURFACING_SHADER_button6']                 .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'CHARACTER_SHADER',                  'COMPONENT_SHADER',     'PROPS_SHADER'))
+        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button6']              .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'TEMPLATE_CHARACTER'))        
+        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button6']            .clicked.connect    ( lambda: self.open_maya_file_button(self.create_asset_tab_widgets, 'TEMPLATE_ENVIRONMENT'))
 
         self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       True,   self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        False))
         self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3']                 .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['3_SURFACING_SHADER_button2'],       False,  self.create_asset_tab_widgets['3_SURFACING_SHADER_button4'],        True))
@@ -1767,6 +1778,35 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView2']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'],  True,   self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'],   False))
         self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView3']             .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button2'],  False,  self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button4'],   True))
 
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView2']                 .clicked.connect    ( lambda: self.create_asset_tab_widgets['3_SURFACING_SHADER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['CHARACTER_SHADER_treeView3']                 .clicked.connect    ( lambda: self.create_asset_tab_widgets['3_SURFACING_SHADER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView2']               .clicked.connect    ( lambda: self.create_asset_tab_widgets['2_RIG_CHARACTER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['DEFORMED_CHARACTER_treeView3']               .clicked.connect    ( lambda: self.create_asset_tab_widgets['2_RIG_CHARACTER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView2']        .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_CHARACTER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_CHARACTER_treeView3']        .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_CHARACTER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView2']        .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_COMPONENT_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_COMPONENT_treeView3']        .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_COMPONENT_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView2']      .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_ENVIRONMENT_treeView3']      .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView2']            .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_PROPS_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['HIGH-RESOLUTION_PROPS_treeView3']            .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_PROPS_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView2']         .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_CHARACTER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['LOW-RESOLUTION_CHARACTER_treeView3']         .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_CHARACTER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView2']         .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_COMPONENT_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['LOW-RESOLUTION_COMPONENT_treeView3']         .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_COMPONENT_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView2']       .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['LOW-RESOLUTION_ENVIRONMENT_treeView3']       .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView2']             .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_PROPS_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['LOW-RESOLUTION_PROPS_treeView3']             .clicked.connect    ( lambda: self.create_asset_tab_widgets['1_MODEL_PROPS_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['PROPS_SHADER_treeView2']                     .clicked.connect    ( lambda: self.create_asset_tab_widgets['3_SURFACING_SHADER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['PROPS_SHADER_treeView3']                     .clicked.connect    ( lambda: self.create_asset_tab_widgets['3_SURFACING_SHADER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView2']                 .clicked.connect    ( lambda: self.create_asset_tab_widgets['2_RIG_CHARACTER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['RIGGED_CHARACTER_treeView3']                 .clicked.connect    ( lambda: self.create_asset_tab_widgets['2_RIG_CHARACTER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView2']               .clicked.connect    ( lambda: self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['TEMPLATE_CHARACTER_treeView3']               .clicked.connect    ( lambda: self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button5'].setEnabled(False))
+        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView2']             .clicked.connect    ( lambda: self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button5'].setEnabled(True) )
+        self.create_asset_tab_widgets['TEMPLATE_ENVIRONMENT_treeView3']             .clicked.connect    ( lambda: self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button5'].setEnabled(False))
+
 
         # create elements for SHOT section
         self.shot_categories = ['Model', 'Layout', 'Layout_MOV', 'Animation', 'Animation_MOV', 'Anim_Cache', 'Lighting', 'VFX', 'VFX_Cache', 'Rendering']
@@ -1788,6 +1828,20 @@ class main_gui(QWidget):
             self.create_shot_tab(single_shot_tab, self.shot_widget, treeView1, model1, treeView2, model2, treeView3, model3, line_edit1, line_edit2, button1, button2, button3, button4, button5)            
         
         self.refresh_tabwidget(self.shot_widget)
+
+        self.create_shot_tab_widgets['Animation_button2']           .clicked.connect    ( lambda: self.open_maya_file_button(self.create_shot_tab_widgets, 'Animation'))
+        self.create_shot_tab_widgets['Layout_button2']              .clicked.connect    ( lambda: self.open_maya_file_button(self.create_shot_tab_widgets, 'Layout'))
+        self.create_shot_tab_widgets['Lighting_button2']            .clicked.connect    ( lambda: self.open_maya_file_button(self.create_shot_tab_widgets, 'Lighting'))
+        self.create_shot_tab_widgets['Model_button2']               .clicked.connect    ( lambda: self.open_maya_file_button(self.create_shot_tab_widgets, 'Model'))
+        self.create_shot_tab_widgets['Rendering_button2']           .clicked.connect    ( lambda: self.open_maya_file_button(self.create_shot_tab_widgets, 'Rendering'))
+        self.create_shot_tab_widgets['VFX_button2']                 .clicked.connect    ( lambda: self.open_maya_file_button(self.create_shot_tab_widgets, 'VFX'))
+
+        self.create_shot_tab_widgets['Animation_button3']           .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_shot_tab_widgets, 'Animation'))
+        self.create_shot_tab_widgets['Layout_button3']              .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_shot_tab_widgets, 'Layout'))
+        self.create_shot_tab_widgets['Lighting_button3']            .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_shot_tab_widgets, 'Lighting'))
+        self.create_shot_tab_widgets['Model_button3']               .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_shot_tab_widgets, 'Model'))
+        self.create_shot_tab_widgets['Rendering_button3']           .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_shot_tab_widgets, 'Rendering'))
+        self.create_shot_tab_widgets['VFX_button3']                 .clicked.connect    ( lambda: self.reference_maya_file_button(self.create_shot_tab_widgets, 'VFX'))
 
         self.create_shot_tab_widgets['Animation_button4']           .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Animation'))
         self.create_shot_tab_widgets['Layout_button4']              .clicked.connect    ( lambda: self.create_new_variation(self.create_shot_tab_widgets, 'Layout'))
@@ -1819,6 +1873,19 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets['Rendering_treeView3']         .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Rendering_button4'],         False,  self.create_shot_tab_widgets['Rendering_button5'],      True))
         self.create_shot_tab_widgets['VFX_treeView2']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'],               True,   self.create_shot_tab_widgets['VFX_button5'],            False))
         self.create_shot_tab_widgets['VFX_treeView3']               .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['VFX_button4'],               False,  self.create_shot_tab_widgets['VFX_button5'],            True))
+
+        self.create_shot_tab_widgets['Animation_treeView2']         .clicked.connect    ( lambda: self.create_shot_tab_widgets['Animation_button3'].setEnabled(True) )
+        self.create_shot_tab_widgets['Animation_treeView3']         .clicked.connect    ( lambda: self.create_shot_tab_widgets['Animation_button3'].setEnabled(False) )
+        self.create_shot_tab_widgets['Layout_treeView2']            .clicked.connect    ( lambda: self.create_shot_tab_widgets['Layout_button3'].setEnabled(True) )
+        self.create_shot_tab_widgets['Layout_treeView3']            .clicked.connect    ( lambda: self.create_shot_tab_widgets['Layout_button3'].setEnabled(False) )
+        self.create_shot_tab_widgets['Lighting_treeView2']          .clicked.connect    ( lambda: self.create_shot_tab_widgets['Lighting_button3'].setEnabled(True) )
+        self.create_shot_tab_widgets['Lighting_treeView3']          .clicked.connect    ( lambda: self.create_shot_tab_widgets['Lighting_button3'].setEnabled(False) )
+        self.create_shot_tab_widgets['Model_treeView2']             .clicked.connect    ( lambda: self.create_shot_tab_widgets['Model_button3'].setEnabled(True) )
+        self.create_shot_tab_widgets['Model_treeView3']             .clicked.connect    ( lambda: self.create_shot_tab_widgets['Model_button3'].setEnabled(False) )
+        self.create_shot_tab_widgets['Rendering_treeView2']         .clicked.connect    ( lambda: self.create_shot_tab_widgets['Rendering_button3'].setEnabled(True) )
+        self.create_shot_tab_widgets['Rendering_treeView3']         .clicked.connect    ( lambda: self.create_shot_tab_widgets['Rendering_button3'].setEnabled(False) )
+        self.create_shot_tab_widgets['VFX_treeView2']               .clicked.connect    ( lambda: self.create_shot_tab_widgets['VFX_button3'].setEnabled(True) )
+        self.create_shot_tab_widgets['VFX_treeView3']               .clicked.connect    ( lambda: self.create_shot_tab_widgets['VFX_button3'].setEnabled(False) )
         
         self.create_shot_tab_widgets['Anim_Cache_treeView2']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'],        False,  self.create_shot_tab_widgets['Anim_Cache_button5'],     False))
         self.create_shot_tab_widgets['Anim_Cache_treeView3']        .clicked.connect    ( lambda: self.sel_file_activate_button_fx(self.create_shot_tab_widgets['Anim_Cache_button4'],        False,  self.create_shot_tab_widgets['Anim_Cache_button5'],     False))
@@ -2117,7 +2184,7 @@ class main_gui(QWidget):
         self.asset_utility_widget = QWidget()
         self.asset_utility_layout = QFormLayout(self.asset_utility_widget)
 
-        if extra_buttons[1]: # create asset folder button
+        if extra_buttons[0]: # create asset folder button
             self.create_asset_tab_widgets[lineEdit1] = QLineEdit()
             self.create_asset_tab_widgets[lineEdit1].setMinimumWidth(width_value)
             self.create_asset_tab_widgets[lineEdit1].setMaximumWidth(width_value)             
@@ -2151,13 +2218,16 @@ class main_gui(QWidget):
         self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button4])
         #self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button3])
   
-
-        if extra_buttons[0]: # create reference buttons
+        if extra_buttons[1]:
             self.create_asset_tab_widgets[lineEdit2] = QLineEdit()
             self.create_asset_tab_widgets[lineEdit2].setMinimumWidth(width_value)
             self.create_asset_tab_widgets[lineEdit2].setMaximumWidth(width_value)             
             self.create_asset_tab_widgets[lineEdit2].setPlaceholderText('Type an amount...')  
-            
+            self.create_asset_tab_widgets[lineEdit2].returnPressed.connect(lambda: self.select_texts(self.create_asset_tab_widgets[lineEdit2]))            
+
+            self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[lineEdit2])
+
+        if extra_buttons[2]: # create reference and open buttons            
             self.create_asset_tab_widgets[button5] = QPushButton('Reference')        
             self.create_asset_tab_widgets[button5].setMinimumWidth(width_value)
             self.create_asset_tab_widgets[button5].setMaximumWidth(width_value)           
@@ -2165,12 +2235,10 @@ class main_gui(QWidget):
             self.create_asset_tab_widgets[button6] = QPushButton('Open')
             self.create_asset_tab_widgets[button6].setMinimumWidth(width_value)
             self.create_asset_tab_widgets[button6].setMaximumWidth(width_value)   
-            
-            self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[lineEdit2])
+                        
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button5])
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button6])
 
-        
         parent_layout.addWidget(self.asset_utility_widget)
             
 
@@ -2622,10 +2690,10 @@ class main_gui(QWidget):
                         pass                  
 
                 widget_dict[treeView2].clicked.connect(lambda: self.clear_non_focus_qtreeview_selection(folder_type, widget_dict, 2))    
-                widget_dict[treeView2].clicked.connect(lambda: self.get_selected_file_dir(folder_type, 'maya', widget_dict, parent_directory))
+                #widget_dict[treeView2].clicked.connect(lambda: self.get_selected_file_dir(folder_type, 'maya', widget_dict, parent_directory))
                 try:
                     widget_dict[treeView3].clicked.connect(lambda: self.clear_non_focus_qtreeview_selection(folder_type, widget_dict, 3)) 
-                    widget_dict[treeView3].clicked.connect(lambda: self.get_selected_file_dir(folder_type, 'history', widget_dict, parent_directory))
+                    #widget_dict[treeView3].clicked.connect(lambda: self.get_selected_file_dir(folder_type, 'history', widget_dict, parent_directory))
                 except KeyError:
                     pass
 
@@ -3037,7 +3105,8 @@ class main_gui(QWidget):
                               '1_MODEL_CHARACTER':      'self.current_project.make_char_dirs',
                               '1_MODEL_PROPS':          'self.current_project.make_props_dirs',
                               '1_MODEL_COMPONENT':      'self.current_project.make_com_dirs',
-                              '1_MODEL_ENVIRONMENT':    'self.current_project.make_env_dirs' }
+                              '1_MODEL_ENVIRONMENT':    'self.current_project.make_env_dirs', 
+                              '4_TEMPLATES_RENDERING':  ''}
 
         folder_name = ui_widget[lineEdit].text()
 
@@ -3229,7 +3298,7 @@ class main_gui(QWidget):
 
                 sel_file_directory = self.get_selected_file_dir( folder_type, 'maya', widget_dict, eval(temp_dir) )
 
-                amount = self.get_amount_of_referencing_from_lineEdit() 
+                amount = self.get_amount_of_referencing(folder_type) 
            
                 self.reference_maya_file( sel_file_directory, amount)
 
@@ -3239,18 +3308,62 @@ class main_gui(QWidget):
                 pass
 
 
-    def get_amount_of_referencing_from_lineEdit(self):
+    def get_amount_of_referencing(self, folder_type):
 
-        for asset_type, sub_types in self.dict_asset.iteritems():
-            for sub_type in sub_types:
+        amount_of_file_type_dict = {    'CHARACTER_SHADER':             '1', 
+                                        'COMPONENT_SHADER':             '1', 
+                                        'PROPS_SHADER':                 '1', 
+                                        'HIGH-RESOLUTION_CHARACTER':    'self.create_asset_tab_widgets["1_MODEL_CHARACTER_lineEdit2"].text()', 
+                                        'HIGH-RESOLUTION_COMPONENT':    'self.create_asset_tab_widgets["1_MODEL_COMPONENT_lineEdit2"].text()', 
+                                        'HIGH-RESOLUTION_ENVIRONMENT':  'self.create_asset_tab_widgets["1_MODEL_ENVIRONMENT_lineEdit2"].text()', 
+                                        'HIGH-RESOLUTION_PROPS':        'self.create_asset_tab_widgets["1_MODEL_PROPS_lineEdit2"].text()', 
+                                        'LOW-RESOLUTION_CHARACTER':     'self.create_asset_tab_widgets["1_MODEL_CHARACTER_lineEdit2"].text()', 
+                                        'LOW-RESOLUTION_COMPONENT':     'self.create_asset_tab_widgets["1_MODEL_COMPONENT_lineEdit2"].text()', 
+                                        'LOW-RESOLUTION_ENVIRONMENT':   'self.create_asset_tab_widgets["1_MODEL_ENVIRONMENT_lineEdit2"].text()', 
+                                        'LOW-RESOLUTION_PROPS':         'self.create_asset_tab_widgets["1_MODEL_PROPS_lineEdit2"].text()',             
+                                        'RIGGED_CHARACTER':             'self.create_asset_tab_widgets["2_RIG_CHARACTER_lineEdit2"].text()', 
+                                        'RIGGED_PROPS':                 'self.create_asset_tab_widgets["2_RIG_PROPS_lineEdit2"].text()', 
+                                        'DEFORMED_CHARACTER':           'self.create_asset_tab_widgets["2_RIG_CHARACTER_lineEdit2"].text()', 
+                                        'DEFORMED_PROPS':               'self.create_asset_tab_widgets["2_RIG_PROPS_lineEdit2"].text()', 
+                                        'TEMPLATE_CHARACTER':           '1', 
+                                        'TEMPLATE_ENVIRONMENT':         '1',
+                                        'TEMPLATE_RENDERING':           '1', 
 
-                button = self.create_asset_tab_widgets[asset_type + '_' + sub_type + '_lineEdit2']
-    
-                try:
-                    return int(button.text())
+
+                                        'Model':                        '1',
+                                        'Layout':                       '1',
+                                        'Animation':                    '1',                         
+                                        'Anim_Cache':                   '1',
+                                        'Lighting':                     '1',
+                                        'VFX':                          '1',
+                                        'VFX_Cache':                    '1',
+                                        'Rendering':                    '1' }
+
+        amount = eval(amount_of_file_type_dict.get(folder_type))
+
+        if amount == '':
+            return 1
+        else: 
+            return int(amount)
+
+
+    def open_maya_file_button(self, widget_dict, *folder_types):
+
+        for folder_type in folder_types:
+            try:
+                temp_dir = self.folder_type_directories_dict.get(folder_type)          
+
+                sel_file_directory = self.get_selected_file_dir( folder_type, 'maya', widget_dict, eval(temp_dir) )                
+                
+                if sel_file_directory != None:
+                    os.system('start maya.exe "{}"'.format(sel_file_directory))
                     break
-                except ValueError:
-                    pass
+                else:
+                    pass 
+
+            except AttributeError:
+                pass    
+
 
 # ======================================
 # ======= some backend functions =======
