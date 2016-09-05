@@ -41,7 +41,7 @@ if os.environ['PATH'][-1] != ';':
 try:
     os.environ['PATH'] += '; ' + os.environ['MAYA_LOCATION'] + '\\bin;'
 except KeyError: # when KeyError occurs, which means 'MAYA_LOCATION' is not in system's environment variables
-    maya_location_variable = 'c:\\program files\\autodesk\\maya2018'
+    maya_location_variable = 'c:\\program files\\autodesk\\maya2017'
     os.environ['MAYA_LOCATION'] = maya_location_variable 
 
     os.environ['PATH'] += os.environ['MAYA_LOCATION'] + '\\bin; '
@@ -578,6 +578,57 @@ class CG_Project(object):
         for dir in all_asset_dirs:
             if dir.split('/')[2] == 'LIGHTING' and dir.split('/')[3] == 'Templates' and dir.split('/')[4] == 'Rendering':
                 return dir 
+
+
+    def make_render_template_dirs(self, *templates_name):
+        '''
+        - this function creates render template folders in all the associated directories
+        - can pass multiple names of characters
+        '''
+        all_render_template_dirs = self.get_render_template_dir()
+        if list(templates_name) != []:
+            for dir in all_render_template_dirs:
+                for template in templates_name:
+                    if template[:2] != '__':
+                        add_double_under_scores(template)
+                    template_dir = dir + template
+                    if not os.path.exists(template_dir) :
+                        os.mkdir(template_dir)
+                        self.add_hidden_folders(template_dir)
+
+
+    def make_char_template_dirs(self, *templates_name):
+        '''
+        - this function creates render template folders in all the associated directories
+        - can pass multiple names of characters
+        '''
+        all_render_template_dirs = self.get_char_light_template_dir()
+        if list(templates_name) != []:
+            for dir in all_render_template_dirs:
+                for template in templates_name:
+                    if template[:2] != '__':
+                        add_double_under_scores(template)
+                    template_dir = dir + template
+                    if not os.path.exists(template_dir) :
+                        os.mkdir(template_dir)
+                        self.add_hidden_folders(template_dir)
+
+
+    def make_env_template_dirs(self, *templates_name):
+        '''
+        - this function creates render template folders in all the associated directories
+        - can pass multiple names of characters
+        '''
+        all_render_template_dirs = self.get_env_light_template_dir()
+        if list(templates_name) != []:
+            for dir in all_render_template_dirs:
+                for template in templates_name:
+                    if template[:2] != '__':
+                        add_double_under_scores(template)
+                    template_dir = dir + template
+                    if not os.path.exists(template_dir) :
+                        os.mkdir(template_dir)
+                        self.add_hidden_folders(template_dir)
 
 
     def get_char_dirs(self, *char_name):
@@ -1673,7 +1724,7 @@ class main_gui(QWidget):
                     if sub_type != 'TEXTURE':
                         self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, False, False, True)
                     else:
-                        self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False, False)
+                        self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, False, False, False)
 
             if asset_type == '4_TEMPLATES':
                 # self.dict_asset_file_utility_widgets[asset_type] is a sub-level dictionary
@@ -1690,7 +1741,7 @@ class main_gui(QWidget):
                     model3      = sub_type + '_model3'     
                     self.asset_file_section(treeView1, model1, treeView2, model2, treeView3, model3, parent_layout, section_names, 670)
 
-                    lineEdit1   = '4_TEMPLATES_' + sub_type + '_lineEdit1'
+                    lineEdit1   = '4_TEMPLATES_' + sub_type + '_line_edit'
                     button1     = '4_TEMPLATES_' + sub_type + '_button1' 
                     button2     = '4_TEMPLATES_' + sub_type + '_button2' 
                     button4     = '4_TEMPLATES_' + sub_type + '_button4'
@@ -1705,7 +1756,10 @@ class main_gui(QWidget):
         self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_COMPONENT_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_COMPONENT',      self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_ENVIRONMENT_button1']                .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_ENVIRONMENT',    self.create_asset_tab_widgets))
-        #self.create_asset_tab_widgets['4_TEMPLATES_RENDERING_button1']              .clicked.connect    ( lambda: self.create_folder_button('4_TEMPLATES_RENDERING',    self.create_asset_tab_widgets))
+
+        self.create_asset_tab_widgets['4_TEMPLATES_RENDERING_button1']              .clicked.connect    ( lambda: self.create_folder_button('4_TEMPLATES_RENDERING',    self.create_asset_tab_widgets))
+        self.create_asset_tab_widgets['4_TEMPLATES_ENVIRONMENT_button1']            .clicked.connect    ( lambda: self.create_folder_button('4_TEMPLATES_ENVIRONMENT',    self.create_asset_tab_widgets))
+        self.create_asset_tab_widgets['4_TEMPLATES_CHARACTER_button1']              .clicked.connect    ( lambda: self.create_folder_button('4_TEMPLATES_CHARACTER',    self.create_asset_tab_widgets))
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button2']                  .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_CHARACTER',       'LOW-RESOLUTION_CHARACTER'))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button2']                      .clicked.connect    ( lambda: self.create_new_variation(self.create_asset_tab_widgets, 'HIGH-RESOLUTION_PROPS',           'LOW-RESOLUTION_PROPS'))
@@ -3094,34 +3148,37 @@ class main_gui(QWidget):
 
         if self.current_project == None:
             ui_widget[lineEdit].clear()
-            ui_widget[button1].setFlat(True)
+            ui_widget[button1].setEnabled(False)
             return
         
         # the keys of below dictionary are the 'folder_type'
-        make_folders_dict = { 'Character_Design':       'self.current_project.make_char_design_folder',
-                              'Props_Design':           'self.current_project.make_props_design_folder',
-                              'Environment_Design':     'self.current_project.make_environment_design_folder',
-                              '2D_Continuities':        'self.current_project.make_continuities_folder',
-                              '1_MODEL_CHARACTER':      'self.current_project.make_char_dirs',
-                              '1_MODEL_PROPS':          'self.current_project.make_props_dirs',
-                              '1_MODEL_COMPONENT':      'self.current_project.make_com_dirs',
-                              '1_MODEL_ENVIRONMENT':    'self.current_project.make_env_dirs', 
-                              '4_TEMPLATES_RENDERING':  ''}
+        make_folders_dict = { 'Character_Design':           'self.current_project.make_char_design_folder',
+                              'Props_Design':               'self.current_project.make_props_design_folder',
+                              'Environment_Design':         'self.current_project.make_environment_design_folder',
+                              '2D_Continuities':            'self.current_project.make_continuities_folder',
+                              '1_MODEL_CHARACTER':          'self.current_project.make_char_dirs',
+                              '1_MODEL_PROPS':              'self.current_project.make_props_dirs',
+                              '1_MODEL_COMPONENT':          'self.current_project.make_com_dirs',
+                              '1_MODEL_ENVIRONMENT':        'self.current_project.make_env_dirs', 
+                              '4_TEMPLATES_RENDERING':      'self.current_project.make_render_template_dirs',
+                              '4_TEMPLATES_ENVIRONMENT':    'self.current_project.make_char_template_dirs',
+                              '4_TEMPLATES_CHARACTER':      'self.current_project.make_env_template_dirs'}
 
         folder_name = ui_widget[lineEdit].text()
 
         if folder_name != '':
+            print folder_name
             try:
                 exec( make_folders_dict.get(folder_type) + '("__" + folder_name)' )                
                 ui_widget[lineEdit].clear()
                 self.refresh_current_ui()                
             except WindowsError:
                 ui_widget[lineEdit].clear()
-                ui_widget[button1].setFlat(True)
+                ui_widget[button1].setEnabled(False)
                 return
         else:
             ui_widget[lineEdit].clear()
-            ui_widget[button1].setFlat(True)
+            ui_widget[button1].setEnabled(False)
 
 
     def create_new_variation(self, widget_dict, *folder_types):
