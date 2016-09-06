@@ -580,55 +580,55 @@ class CG_Project(object):
                 return dir 
 
 
-    def make_render_template_dirs(self, *templates_name):
+    def make_render_template_dirs(self, template_name):
         '''
-        - this function creates render template folders in all the associated directories
-        - can pass multiple names of characters
+        - this function creates render template folders in the associated directories
+        - if the given 'template_name' is already existed in the directory, then the function skips creating folder
         '''
-        all_render_template_dirs = self.get_render_template_dir()
-        if list(templates_name) != []:
-            for dir in all_render_template_dirs:
-                for template in templates_name:
-                    if template[:2] != '__':
-                        add_double_under_scores(template)
-                    template_dir = dir + template
-                    if not os.path.exists(template_dir) :
-                        os.mkdir(template_dir)
-                        self.add_hidden_folders(template_dir)
+        parent_directory = self.get_render_template_dir()
+       
+        if template_name[:2] != '__':
+            add_double_under_scores(template_name)
+
+        template_dir = parent_directory + template_name
+                   
+        if not os.path.exists(template_dir):
+            os.mkdir(template_dir) 
+            self.add_hidden_folders(template_dir)
 
 
-    def make_char_template_dirs(self, *templates_name):
+    def make_char_template_dirs(self, template_name):
         '''
-        - this function creates render template folders in all the associated directories
-        - can pass multiple names of characters
+        - this function creates render template folders in the associated directories
+        - if the given 'template_name' is already existed in the directory, then the function skips creating folder
         '''
-        all_render_template_dirs = self.get_char_light_template_dir()
-        if list(templates_name) != []:
-            for dir in all_render_template_dirs:
-                for template in templates_name:
-                    if template[:2] != '__':
-                        add_double_under_scores(template)
-                    template_dir = dir + template
-                    if not os.path.exists(template_dir) :
-                        os.mkdir(template_dir)
-                        self.add_hidden_folders(template_dir)
+        parent_directory = self.get_char_light_template_dir()
+       
+        if template_name[:2] != '__':
+            add_double_under_scores(template_name)
+
+        template_dir = parent_directory + template_name
+                   
+        if not os.path.exists(template_dir):
+            os.mkdir(template_dir) 
+            self.add_hidden_folders(template_dir)
 
 
-    def make_env_template_dirs(self, *templates_name):
+    def make_env_template_dirs(self, template_name):
         '''
-        - this function creates render template folders in all the associated directories
-        - can pass multiple names of characters
+        - this function creates render template folders in the associated directories
+        - if the given 'template_name' is already existed in the directory, then the function skips creating folder
         '''
-        all_render_template_dirs = self.get_env_light_template_dir()
-        if list(templates_name) != []:
-            for dir in all_render_template_dirs:
-                for template in templates_name:
-                    if template[:2] != '__':
-                        add_double_under_scores(template)
-                    template_dir = dir + template
-                    if not os.path.exists(template_dir) :
-                        os.mkdir(template_dir)
-                        self.add_hidden_folders(template_dir)
+        parent_directory = self.get_env_light_template_dir()
+       
+        if template_name[:2] != '__':
+            add_double_under_scores(template_name)
+
+        template_dir = parent_directory + template_name
+                   
+        if not os.path.exists(template_dir):
+            os.mkdir(template_dir) 
+            self.add_hidden_folders(template_dir)                        
 
 
     def get_char_dirs(self, *char_name):
@@ -1750,7 +1750,7 @@ class main_gui(QWidget):
                     button6     = '4_TEMPLATES_' + sub_type + '_button6'
                     self.asset_utility_section(lineEdit1, button1, button2, button4, lineEdit2, button5, button6, parent_layout, 107, True, False, True)    
 
-        pprint(self.create_asset_tab_widgets)
+        #pprint(self.create_asset_tab_widgets)
 
         self.create_asset_tab_widgets['1_MODEL_CHARACTER_button1']                  .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_CHARACTER',      self.create_asset_tab_widgets))
         self.create_asset_tab_widgets['1_MODEL_PROPS_button1']                      .clicked.connect    ( lambda: self.create_folder_button('1_MODEL_PROPS',          self.create_asset_tab_widgets))
@@ -3161,13 +3161,13 @@ class main_gui(QWidget):
                               '1_MODEL_COMPONENT':          'self.current_project.make_com_dirs',
                               '1_MODEL_ENVIRONMENT':        'self.current_project.make_env_dirs', 
                               '4_TEMPLATES_RENDERING':      'self.current_project.make_render_template_dirs',
-                              '4_TEMPLATES_ENVIRONMENT':    'self.current_project.make_char_template_dirs',
-                              '4_TEMPLATES_CHARACTER':      'self.current_project.make_env_template_dirs'}
+                              '4_TEMPLATES_ENVIRONMENT':    'self.current_project.make_env_template_dirs',
+                              '4_TEMPLATES_CHARACTER':      'self.current_project.make_char_template_dirs'}
 
         folder_name = ui_widget[lineEdit].text()
 
         if folder_name != '':
-            print folder_name
+         
             try:
                 exec( make_folders_dict.get(folder_type) + '("__" + folder_name)' )                
                 ui_widget[lineEdit].clear()
