@@ -3404,6 +3404,7 @@ class main_gui(QWidget):
             return int(amount)
 
 
+<<<<<<< HEAD
     def open_maya_file_button(self, widget_dict, *folder_types):
 
         for folder_type in folder_types:
@@ -3420,6 +3421,13 @@ class main_gui(QWidget):
 
             except AttributeError:
                 pass    
+=======
+            if str(widget_dict[folder_types + '_lineEdit2']) in locals() or str(widget_dict[folder_types + '_lineEdit2']) in globals():
+                amount = int(widget_dict[folder_types + '_lineEdit2'].text())
+                self.reference_maya_file( sel_file_directory, amount):
+            else:
+                self.reference_maya_file( sel_file_directory )
+>>>>>>> parent of 2bbd7af... fixed typo
 
 
 # ======================================
