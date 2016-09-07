@@ -12,8 +12,8 @@ Playblasts = {'Playblasts':['Finals_MOV','Layouts_MOV']}
 Templates = {'Characters':destination_char,'Environments':destination_env, 'Rendering':destination_render}
 Templates = {'Templates':Templates}
 
-geo_blendShapes = {'Corrective_Shapes':destination_char,'Facial_Expressions':destination_char}
-geo_chars = {'High_Resolution':destination_char, 'Low_Resolution':destination_char, 'Blend_Shapes':geo_blendShapes}
+#geo_blendShapes = {'Corrective_Shapes':destination_char,'Facial_Expressions':destination_char}
+geo_chars = {'High_Resolution':destination_char, 'Low_Resolution':destination_char}#, 'Blend_Shapes':geo_blendShapes}
 geo_Characters = {'Characters':geo_chars}
 
 Assembled_Scenes = {'Assembled_Scenes':[destination_env]}
