@@ -438,18 +438,6 @@ class CG_Project(object):
                 return dir 
 
 
-    def get_char_bs_dir(self):
-        '''
-        - this function returns a list of directories for blend shapes.
-        '''
-        all_asset_dirs = self.get_directories_for_assets_attr
-        dirs = []
-        for dir in all_asset_dirs:
-            if dir.split('/')[2] == 'MODEL' and dir.split('/')[3] == 'Characters' and dir.split('/')[4] == 'Blend_Shapes':
-                dirs.append(dir)
-        return dirs # this returns a list 
-
-
     def get_env_hiGeo_dir(self):
         '''
         - this function returns a list of directories for hi-geo assembled-scenes.
