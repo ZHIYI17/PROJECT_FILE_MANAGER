@@ -1498,9 +1498,9 @@ class main_gui(QWidget):
         self.create_project_layout.addWidget(self.create_project_button)
         
         # set project section
-        self.set_project_label = QLabel('==== Select A Project ====')
-        self.set_project_label.setFixedHeight(17)
-        self.set_project_label.setAlignment(Qt.AlignLeft)
+        #self.set_project_label = QLabel('==== Select A Project ====')
+        #self.set_project_label.setFixedHeight(17)
+        #self.set_project_label.setAlignment(Qt.AlignLeft)
 
         self.current_project_combo_box = QComboBox()
         self.current_project_combo_box.setFixedWidth(170)
@@ -1521,7 +1521,7 @@ class main_gui(QWidget):
 
         self.track_button.clicked.connect(lambda: self.track_project())
 
-        self.set_project_layout.addWidget(self.set_project_label)
+        #self.set_project_layout.addWidget(self.set_project_label)
         self.set_project_layout.addWidget(self.current_project_combo_box)
         self.set_project_layout.addWidget(self.refresh_button) 
         self.set_project_layout.addWidget(self.track_button)        
@@ -2014,7 +2014,7 @@ class main_gui(QWidget):
         #===================================================
 
         self.files_changed = Queue.Queue()
-        self.track_project_directory = Track_Directory(self.current_project, self.files_changed)
+        self.track_project_directory = Track_Directory('need a valid directory here', self.files_changed)
         
 
     def track_project(self):
