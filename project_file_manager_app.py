@@ -7,6 +7,7 @@ import ctypes
 import win32api, win32con
 import win32file
 import shutil
+import Queue
 from pprint import pprint
 from functools import partial, wraps
 from PySide.QtCore import *
@@ -633,9 +634,6 @@ class CG_Project(object):
         all_char_dirs.append(self.get_char_shader_dir())
         all_char_dirs.append(self.get_char_light_template_dir())
         
-        for bs in self.get_char_bs_dir():
-            all_char_dirs.append(bs)
-        
         char_dir = []
         if list(char_name) != []:
             for dir in all_char_dirs:
@@ -1144,6 +1142,7 @@ class CG_Project(object):
                 else:
                     pass
 
+
     def get_maya_file_dirs(self):
         '''
         - returns a list of all the paths that holding the Maya files
@@ -1515,10 +1514,17 @@ class main_gui(QWidget):
         #self.refresh_button.clicked.connect(lambda: self.get_current_project())  
         self.refresh_button.clicked.connect(lambda: self.eval_get_current_project())
         self.refresh_button.clicked.connect(lambda: self.refresh_current_ui())
-        
+
+        self.track_button = QPushButton('TRACK DIRECTORY')
+        self.track_button.setFixedWidth(170)
+        self.track_button.setFixedHeight(24)
+
+        self.track_button.clicked.connect(lambda: self.track_project())
+
         self.set_project_layout.addWidget(self.set_project_label)
         self.set_project_layout.addWidget(self.current_project_combo_box)
-        self.set_project_layout.addWidget(self.refresh_button)        
+        self.set_project_layout.addWidget(self.refresh_button) 
+        self.set_project_layout.addWidget(self.track_button)        
         
         # scene-shot section         
         self.scene_shot_label = QLabel('==== Record Scene-Shot Folders ====')
@@ -2003,10 +2009,34 @@ class main_gui(QWidget):
 
         self.current_project = None
 
+        #===================================================
+        #==== tracking the changes of project directory ====
+        #===================================================
+
+        self.files_changed = Queue.Queue()
+        self.track_project_directory = Track_Directory(self.current_project, self.files_changed)
+        
+
+    def track_project(self):
+        try:
+            self.track_project_directory.start()
+        except TypeError:
+            pass
+
+        while 1:
+            try:
+                file_type, filename, action = self.files_changed.get_nowait()
+                print file_type, filename, action
+            except Queue.Empty:
+                pass
+            time.sleep(1)   
+
+
 
     def eval_get_current_project(self):        
         self.current_project = self.get_current_project()
         return self.current_project
+
 
 
     # ===============================================================
@@ -3408,6 +3438,67 @@ class main_gui(QWidget):
 
             except AttributeError:
                 pass    
+
+
+
+#========================================================
+#======= implement the watching directory feature =======
+#========================================================
+
+ACTIONS = {     1 : "Created",
+                2 : "Deleted",
+                3 : "Updated",
+                4 : "Renamed to something",
+                5 : "Renamed from something" }
+
+def watch_path(path_to_watch, include_subdirectories=True):
+
+    FILE_LIST_DIRECTORY = 0x0001
+    hDir = win32file.CreateFile (
+                                    path_to_watch,
+                                    FILE_LIST_DIRECTORY,
+                                    win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+                                    None,
+                                    win32con.OPEN_EXISTING,
+                                    win32con.FILE_FLAG_BACKUP_SEMANTICS,
+                                    None )
+
+    while 1:
+        
+        results = win32file.ReadDirectoryChangesW ( hDir,
+                                                    1024,
+                                                    include_subdirectories,
+                                                    win32con.FILE_NOTIFY_CHANGE_FILE_NAME | 
+                                                    win32con.FILE_NOTIFY_CHANGE_DIR_NAME |
+                                                    win32con.FILE_NOTIFY_CHANGE_ATTRIBUTES |
+                                                    win32con.FILE_NOTIFY_CHANGE_SIZE |
+                                                    win32con.FILE_NOTIFY_CHANGE_LAST_WRITE |
+                                                    win32con.FILE_NOTIFY_CHANGE_SECURITY,
+                                                    None,
+                                                    None )
+        for action, file in results:
+            full_filename = os.path.join (path_to_watch, file)
+            if not os.path.exists (full_filename):
+                file_type = "<deleted>"
+            elif os.path.isdir (full_filename):
+                file_type = 'folder'
+            else:
+                file_type = 'file'
+            yield (file_type, full_filename, ACTIONS.get (action, "Unknown"))
+
+
+class Track_Directory(QThread):
+    
+    def __init__(self, path_to_watch, results_queue, parent = None, **kwds):
+        super(Track_Directory, self).__init__(parent)
+        self.path_to_watch = path_to_watch
+        self.results_queue = results_queue
+        #self.start()
+
+    def run(self):
+        for result in watch_path(self.path_to_watch):
+            self.results_queue.put(result)        
+
 
 
 # ======================================
