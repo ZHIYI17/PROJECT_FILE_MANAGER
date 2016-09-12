@@ -2014,7 +2014,7 @@ class main_gui(QWidget):
         #===================================================
 
         self.files_changed = Queue.Queue()
-        self.track_project_directory = Track_Directory('need a valid directory here', self.files_changed)
+        self.track_project_directory = Track_Directory('z:\\zz', self.files_changed)
         
 
     def track_project(self):
@@ -2029,7 +2029,7 @@ class main_gui(QWidget):
                 print file_type, filename, action
             except Queue.Empty:
                 pass
-            time.sleep(1)   
+            time.sleep(10)   
 
 
 
@@ -3477,7 +3477,7 @@ def watch_path(path_to_watch, include_subdirectories=True):
                                                     None,
                                                     None )
         for action, file in results:
-            full_filename = os.path.join (path_to_watch, file)
+            full_filename = os.path.join(path_to_watch, file)
             if not os.path.exists (full_filename):
                 file_type = "<deleted>"
             elif os.path.isdir (full_filename):
@@ -3493,6 +3493,7 @@ class Track_Directory(QThread):
         super(Track_Directory, self).__init__(parent)
         self.path_to_watch = path_to_watch
         self.results_queue = results_queue
+
         #self.start()
 
     def run(self):
