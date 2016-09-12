@@ -1498,9 +1498,9 @@ class main_gui(QWidget):
         self.create_project_layout.addWidget(self.create_project_button)
         
         # set project section
-        #self.set_project_label = QLabel('==== Select A Project ====')
-        #self.set_project_label.setFixedHeight(17)
-        #self.set_project_label.setAlignment(Qt.AlignLeft)
+        self.set_project_label = QLabel('==== Select A Project ====')
+        self.set_project_label.setFixedHeight(17)
+        self.set_project_label.setAlignment(Qt.AlignLeft)
 
         self.current_project_combo_box = QComboBox()
         self.current_project_combo_box.setFixedWidth(170)
@@ -1515,16 +1515,14 @@ class main_gui(QWidget):
         self.refresh_button.clicked.connect(lambda: self.eval_get_current_project())
         self.refresh_button.clicked.connect(lambda: self.refresh_current_ui())
 
-        self.track_button = QPushButton('TRACK DIRECTORY')
-        self.track_button.setFixedWidth(170)
-        self.track_button.setFixedHeight(24)
+        #self.track_button = QPushButton('TRACK DIRECTORY')
+        #self.track_button.setFixedWidth(170)
+        #self.track_button.setFixedHeight(24)
 
-        self.track_button.clicked.connect(lambda: self.track_project_directory.start())
-
-        #self.set_project_layout.addWidget(self.set_project_label)
+        self.set_project_layout.addWidget(self.set_project_label)
         self.set_project_layout.addWidget(self.current_project_combo_box)
         self.set_project_layout.addWidget(self.refresh_button) 
-        self.set_project_layout.addWidget(self.track_button)        
+        #self.set_project_layout.addWidget(self.track_button)        
         
         # scene-shot section         
         self.scene_shot_label = QLabel('==== Record Scene-Shot Folders ====')
@@ -2009,8 +2007,9 @@ class main_gui(QWidget):
 
         self.current_project = None
 
-        self.track_project_directory = Track_Directory('z:\\zz')
-
+        self.track_project_directory = Track_Directory('Z:/zz/')
+        self.track_project_directory.start()
+        
 
     def eval_get_current_project(self):        
         self.current_project = self.get_current_project()
