@@ -1519,7 +1519,7 @@ class main_gui(QWidget):
         self.track_button.setFixedWidth(170)
         self.track_button.setFixedHeight(24)
 
-        self.track_button.clicked.connect(lambda: self.track_project())
+        self.track_button.clicked.connect(lambda: self.track_project_directory.start())
 
         #self.set_project_layout.addWidget(self.set_project_label)
         self.set_project_layout.addWidget(self.current_project_combo_box)
@@ -2009,28 +2009,7 @@ class main_gui(QWidget):
 
         self.current_project = None
 
-        #===================================================
-        #==== tracking the changes of project directory ====
-        #===================================================
-
-        self.files_changed = Queue.Queue()
-        self.track_project_directory = Track_Directory('z:\\zz', self.files_changed)
-        
-
-    def track_project(self):
-        try:
-            self.track_project_directory.start()
-        except TypeError:
-            pass
-
-        while 1:
-            try:
-                file_type, filename, action = self.files_changed.get_nowait()
-                print file_type, filename, action
-            except Queue.Empty:
-                pass
-            time.sleep(10)   
-
+        self.track_project_directory = Track_Directory('z:\\zz')
 
 
     def eval_get_current_project(self):        
@@ -3451,54 +3430,57 @@ ACTIONS = {     1 : "Created",
                 4 : "Renamed to something",
                 5 : "Renamed from something" }
 
-def watch_path(path_to_watch, include_subdirectories=True):
 
-    FILE_LIST_DIRECTORY = 0x0001
-    hDir = win32file.CreateFile (
-                                    path_to_watch,
-                                    FILE_LIST_DIRECTORY,
-                                    win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
-                                    None,
-                                    win32con.OPEN_EXISTING,
-                                    win32con.FILE_FLAG_BACKUP_SEMANTICS,
-                                    None )
-
-    while 1:
-        
-        results = win32file.ReadDirectoryChangesW ( hDir,
-                                                    1024,
-                                                    include_subdirectories,
-                                                    win32con.FILE_NOTIFY_CHANGE_FILE_NAME | 
-                                                    win32con.FILE_NOTIFY_CHANGE_DIR_NAME |
-                                                    win32con.FILE_NOTIFY_CHANGE_ATTRIBUTES |
-                                                    win32con.FILE_NOTIFY_CHANGE_SIZE |
-                                                    win32con.FILE_NOTIFY_CHANGE_LAST_WRITE |
-                                                    win32con.FILE_NOTIFY_CHANGE_SECURITY,
-                                                    None,
-                                                    None )
-        for action, file in results:
-            full_filename = os.path.join(path_to_watch, file)
-            if not os.path.exists (full_filename):
-                file_type = "<deleted>"
-            elif os.path.isdir (full_filename):
-                file_type = 'folder'
-            else:
-                file_type = 'file'
-            yield (file_type, full_filename, ACTIONS.get (action, "Unknown"))
 
 
 class Track_Directory(QThread):
     
-    def __init__(self, path_to_watch, results_queue, parent = None, **kwds):
-        super(Track_Directory, self).__init__(parent)
+    def __init__(self, path_to_watch):
+        super(Track_Directory, self).__init__()
         self.path_to_watch = path_to_watch
-        self.results_queue = results_queue
+        self.FILE_LIST_DIRECTORY = 0x0001
+        self.include_subdirectories = True
 
-        #self.start()
 
     def run(self):
-        for result in watch_path(self.path_to_watch):
-            self.results_queue.put(result)        
+   
+        for result in self.watch_path():
+            print result
+
+
+    def watch_path(self):
+        
+        hDir = win32file.CreateFile (   self.path_to_watch,
+                                        self.FILE_LIST_DIRECTORY,
+                                        win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE,
+                                        None,
+                                        win32con.OPEN_EXISTING,
+                                        win32con.FILE_FLAG_BACKUP_SEMANTICS,
+                                        None )
+
+        while 1:
+            
+            results = win32file.ReadDirectoryChangesW ( hDir,
+                                                        1024,
+                                                        self.include_subdirectories,
+                                                        win32con.FILE_NOTIFY_CHANGE_FILE_NAME | 
+                                                        win32con.FILE_NOTIFY_CHANGE_DIR_NAME |
+                                                        win32con.FILE_NOTIFY_CHANGE_ATTRIBUTES |
+                                                        win32con.FILE_NOTIFY_CHANGE_SIZE |
+                                                        win32con.FILE_NOTIFY_CHANGE_LAST_WRITE |
+                                                        win32con.FILE_NOTIFY_CHANGE_SECURITY,
+                                                        None,
+                                                        None )
+
+            for action, file in results:
+                full_filename = os.path.join(self.path_to_watch, file)
+                if not os.path.exists(full_filename):
+                    file_type = "<deleted>"
+                elif os.path.isdir(full_filename):
+                    file_type = 'folder'
+                else:
+                    file_type = 'file'
+                yield (file_type, full_filename, ACTIONS.get (action, "Unknown"))            
 
 
 
