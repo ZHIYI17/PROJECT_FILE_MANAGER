@@ -113,6 +113,7 @@ class CG_Project(object):
         # generates initial maya shot files
         self.make_init_maya_shot_files(self.dict_amount)  
 
+
     def directories_for_shots(self):
         '''
         - this function returns a list of directories that hold scene-shot hierarchical folders
@@ -2007,7 +2008,7 @@ class main_gui(QWidget):
 
         self.current_project = None
 
-        self.track_project_directory = Track_Directory('Z:/zz/')
+        self.track_project_directory = Track_Directory('D:/z_test_proj/')
         self.track_project_directory.start()
         
 
