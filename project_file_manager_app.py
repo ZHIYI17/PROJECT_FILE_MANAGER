@@ -12,7 +12,7 @@ from pprint import pprint
 from functools import partial, wraps
 from PySide.QtCore import *
 from PySide.QtGui import * 
-
+#help
 author_info = 'Designed and Implemented by PREDATOR'
 ver_info = '|   Build_At_ '
 for t in time.localtime()[:5]:
