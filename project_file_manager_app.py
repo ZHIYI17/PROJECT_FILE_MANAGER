@@ -2008,7 +2008,7 @@ class main_gui(QWidget):
 
         self.current_project = None
 
-        self.track_project_directory = Track_Directory('D:/z_test_proj/')
+        self.track_project_directory = Track_Directory('p:/mov/')
         self.track_project_directory.start()
         
 
