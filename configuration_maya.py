@@ -4,16 +4,13 @@ destination_env = {'__env_name':[]}
 destination_obj = {'__obj_name':[]}
 destination_render = {'__render_template':[]}
 
-design = {'Characters':destination_char,'Environments':destination_env,'Props':destination_props}
-concept_design = {'Concept_Design':design}
 
 Playblasts = {'Playblasts':['Finals_MOV','Layouts_MOV']}
 
 Templates = {'Characters':destination_char,'Environments':destination_env, 'Rendering':destination_render}
 Templates = {'Templates':Templates}
 
-geo_blendShapes = {'Corrective_Shapes':destination_char,'Facial_Expressions':destination_char}
-geo_chars = {'High_Resolution':destination_char, 'Low_Resolution':destination_char}#, 'Blend_Shapes':geo_blendShapes}
+geo_chars = {'High_Resolution':destination_char, 'Low_Resolution':destination_char}
 geo_Characters = {'Characters':geo_chars}
 
 Assembled_Scenes = {'Assembled_Scenes':[destination_env]}
@@ -36,16 +33,13 @@ rigged_props = {'Rigged':destination_props}
 character_setup = {'Characters':[deformed_char,rigged_char]}
 props_setup = {'Props':[deformed_props,rigged_props]}
 
-Departments = {'2D':[concept_design,'Continuities'],
-               'ANIMATION':['Cached','Finals','Layouts',Playblasts],
-               'COMPOSITION':['Comp_Files','Rendered'],
+Departments = {'ANIMATION':['Cached','Finals','Layouts',Playblasts],
                'LIGHTING':[Templates,'SHOTS'],
                'MODEL':[geo_Characters, geo_Environments, geo_Props,'SHOTS'],
                'RENDERING':[],
                'SETUP':[character_setup,props_setup],
                'SURFACING':[shaders,textures],
-               'VFX':['Cached','SHOTS'],
-               'RnD':['C++','Python']}
+               'VFX':['Cached','SHOTS']}
 
-no_shot_folders = ['C++','Python','Textures','Continuities','Comp_Files']
+no_shot_folders = ['Textures']
 asset_folders = ['MODEL','SETUP','SURFACING','LIGHTING']
