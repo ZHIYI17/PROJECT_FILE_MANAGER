@@ -8,6 +8,7 @@ import shutil
 import Queue
 from pprint import pprint
 from functools import partial, wraps
+
 try:
   from PySide2.QtCore import * 
   from PySide2.QtGui import * 
@@ -20,15 +21,13 @@ except ImportError:
   from PySide.QtUiTools import *
   from shiboken import wrapInstance 
 
+import maya.cmds as cmds
+import maya.mel as mel
+
 from maya import OpenMayaUI as omui   
 
 mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
 mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
-
-author_info = 'Designed and Implemented by PREDATOR'
-ver_info = '|   Build_At_ '
-for t in time.localtime()[:5]:
-    ver_info += str(t)
 
 
 VLC_PLAYER = r'C:/Applications/vlc-2.2.4-win64/vlc.exe'
@@ -38,7 +37,7 @@ vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 # =======================================================
 # ======= the implementation of Folder Structures =======
 # =======================================================
-class CG_Project(object):
+class Maya_Project(object):
     """
     - create structural folders for the project
     - can dynamtically add new scene-shot folders for all the shot-based directories
@@ -83,9 +82,7 @@ class CG_Project(object):
         self.project_name = project_name
         self.project_directory = project_manager_gui.select_drive_combo_box.currentText() + self.project_name + '/'
         self.dict_amount = dict_amount
-        self.make_folder_structure()
-        self.make_hidden_folders('backup') 
-        self.make_hidden_folders('script')        
+        self.make_folder_structure()      
         self.get_directories_for_shots_attr = self.get_directories_for_shots()
         self.get_directories_for_assets_attr = self.get_directories_for_assets()
         # generates initial maya shot files
@@ -97,7 +94,7 @@ class CG_Project(object):
         - this function returns a list of directories that hold scene-shot hierarchical folders
         - it only works for the first time when the whole project structure is created and there's no scene-shot folders 
         '''
-        no_shot_dirs = configuration.no_shot_folders
+        no_shot_dirs = configuration_maya.no_shot_folders
         directories = []
         for paths, dirs, files in os.walk(self.project_directory):
             paths = unix_format(paths)
@@ -206,7 +203,7 @@ class CG_Project(object):
                 |----b3_2
           |----b4
                 |----b4_1
-                |---b4_1
+                |----b4_2
           |----b5
                 |----b5_5
                         |----b5_1
@@ -255,7 +252,7 @@ class CG_Project(object):
 
 
     def make_folder_structure(self):
-        #root_directory = configuration.network_drive
+        
         root_directory = project_manager_gui.select_drive_combo_box.currentText()
         project_directory = self.project_directory
         # create the project root folder
@@ -263,12 +260,42 @@ class CG_Project(object):
             os.mkdir(self.project_directory)
         try:
             # create department folders        
-            self.__make_dict_folders(self.project_directory,configuration.Departments)
+            self.__make_dict_folders(self.project_directory,configuration_maya.Departments)
             # creates scene-shots hierarchical folders
             self.generate_scene_shot_folders()
 
         except AttributeError:
             pass
+
+
+    def make_hidden_folders(self, folder_name):
+        '''
+        - create a hidden folders for all the 3d assets and shot files
+        - useful for making '___backup' folder and '___script' folder 
+        - can pass 'backup' or 'script' for the 'folder_name'
+        '''
+        # collect the proper dirs for the 'backup' folder
+        dirs_for_hidden_folders = []
+
+        for path, dirs, files in os.walk(self.project_directory):
+            path = unix_format(path)
+            if path.split('/')[-2][:2] == '__' and path.split('/')[-2][:3] != '___':
+                dirs_for_hidden_folders.append(path) 
+        
+        # create the 'backup' folders in collected dirs above
+
+        for dir in dirs_for_hidden_folders:
+            folder_dir = unix_format(dir) + '___' + folder_name
+            try:
+                
+                os.mkdir(folder_dir)
+            except WindowsError:
+                pass 
+            # hide the folder 
+            if os.path.isdir(folder_dir):               
+                # SetFileAttributesW(unicode(folder_dir), 2) ----> hide the folder
+                # SetFileAttributesW(unicode(folder_dir), 1) ----> unhide the folder
+                ctypes.windll.kernel32.SetFileAttributesW(unicode(folder_dir), 2)
 
 
     def add_scene_shot_folders(self, new_dict_amount):
@@ -307,7 +334,7 @@ class CG_Project(object):
         - this function returns a list of directories that hold scene-shot hierarchical folders
         - it works for the project that parts of the scene-shot folders have been created
         '''
-        no_shot_dirs = configuration.no_shot_folders
+        no_shot_dirs = configuration_maya.no_shot_folders
         directories = []
 
         for paths, dirs, files in os.walk(self.project_directory):
@@ -327,11 +354,11 @@ class CG_Project(object):
         '''
         - this function returns a list of directories that hold project assets
         '''
-        asset_parent_folders = configuration.asset_folders
+        asset_parent_folders = configuration_maya.asset_folders
         asset_directories = []
         for paths, dirs, files in os.walk(self.project_directory):
             paths = unix_format(paths)
-            if len(paths.split('/')) > 4 and paths.split('/')[2] in configuration.asset_folders:
+            if len(paths.split('/')) > 4 and paths.split('/')[2] in configuration_maya.asset_folders:
                 if os.listdir(paths) != [] and paths.split('/')[-3] != 'SHOTS':
                     if os.listdir(paths)[0][:2] == '__':
                         asset_directories.append(paths)
@@ -1217,36 +1244,6 @@ class CG_Project(object):
         self.add_hidden_folders(unix_format(parent_dir) + folder_name)
 
 
-    def make_hidden_folders(self, folder_name):
-        '''
-        - create a hidden folders for all the 3d assets and shot files
-        - useful for making '___backup' folder and '___script' folder 
-        - can pass 'backup' or 'script' for the 'folder_name'
-        '''
-        # collect the proper dirs for the 'backup' folder
-        dirs_for_hidden_folders = []
-
-        for path, dirs, files in os.walk(self.project_directory):
-            path = unix_format(path)
-            if path.split('/')[-2][:2] == '__' and path.split('/')[-2][:3] != '___':
-                dirs_for_hidden_folders.append(path) 
-        
-        # create the 'backup' folders in collected dirs above
-
-        for dir in dirs_for_hidden_folders:
-            folder_dir = unix_format(dir) + '___' + folder_name
-            try:
-                
-                os.mkdir(folder_dir)
-            except WindowsError:
-                pass 
-            # hide the folder 
-            if os.path.isdir(folder_dir):               
-                # SetFileAttributesW(unicode(folder_dir), 2) ----> hide the folder
-                # SetFileAttributesW(unicode(folder_dir), 1) ----> unhide the folder
-                ctypes.windll.kernel32.SetFileAttributesW(unicode(folder_dir), 2)
-
-
     def add_hidden_folders(self, parent_directory):
         '''
         - this function adds the hidden '___backup' and '___script' folders to those newly created asset folder or shot folder
@@ -1295,9 +1292,9 @@ class CG_Project(object):
 
 
 
-class CG_Project_Edit(CG_Project):
+class Maya_Project_Edit(Maya_Project):
     """
-    - Edit projects that created by class CG_Project()
+    - Edit projects that created by class Maya_Project()
     - can dynamtically add new scene-shot folders for all the shot-based directories
     """
     def __init__(self, drive, project_name):        
@@ -1306,7 +1303,7 @@ class CG_Project_Edit(CG_Project):
         # override the original 'self.dict_amount'    
         self.dict_amount = self.get_current_scene_shot_dict()
         # pass the newly overrided 'self.dict_amount' attribute to the parent class's '__init__'
-        CG_Project.__init__(self, project_name, self.dict_amount)
+        Maya_Project.__init__(self, project_name, self.dict_amount)
         #self.get_directories_for_shots_attr = self.get_directories_for_shots()
         #self.get_directories_for_assets_attr = self.get_directories_for_assets()
                
@@ -1927,6 +1924,7 @@ class main_gui(QWidget):
         #pprint(self.create_shot_tab_widgets)
 
         # show the version information 
+        '''
         self.about_app_widget = QWidget()
         self.about_app_widget.setFixedHeight(30)
         self.about_app_widget.setFixedWidth(1077)
@@ -1943,7 +1941,8 @@ class main_gui(QWidget):
         self.about_app_layout.addWidget(self.ver_info_label)        
         
         self.main_layout.addWidget(self.about_app_widget)
-        
+        '''
+
         # set the miscellaneous attributes
         self.setFixedHeight(1007)
         self.setFixedWidth(1077)
@@ -2412,13 +2411,13 @@ class main_gui(QWidget):
             dict_scene_shot = initial_shot_dict()
             if dict_scene_shot == None:
                 dict_scene_shot = {1:1}
-            project = CG_Project(project_name, dict_scene_shot)
+            project = Maya_Project(project_name, dict_scene_shot)
             return project
 
 
     def list_available_projects(self):
         
-        self.list_to_verify = configuration.Departments.keys()
+        self.list_to_verify = configuration_maya.Departments.keys()
         self.list_to_verify.sort()
 
         self.drive = self.select_drive_combo_box.currentText() 
@@ -2475,7 +2474,7 @@ class main_gui(QWidget):
         project_name = self.current_project_combo_box.currentText()
         
         if project_name != '':
-            return CG_Project_Edit(drive, project_name)     
+            return Maya_Project_Edit(drive, project_name)     
         else:
             return None
         
