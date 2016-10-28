@@ -80,13 +80,26 @@ class Maya_Project(object):
                                                 'vfx_cache_':   'self.get_vfx_cache_shot_dir()' }   
 
         self.project_name = project_name
-        self.project_directory = project_manager_gui.select_drive_combo_box.currentText() + self.project_name + '/'
+        self.project_root_directory = project_manager_gui.select_drive_combo_box.currentText()
+        self.project_directory = self.project_root_directory + self.project_name + '/'
         self.dict_amount = dict_amount
         self.make_folder_structure()      
         self.get_directories_for_shots_attr = self.get_directories_for_shots()
         self.get_directories_for_assets_attr = self.get_directories_for_assets()
         # generates initial maya shot files
         self.make_init_maya_shot_files(self.dict_amount)  
+
+
+    def generate_maya_project(self):
+        '''
+        - get the drive letter and project name 
+        - use maya's commands to generate the project folder
+        '''
+        os.mkdir(self.project_directory)
+        cmds.workspace(directory = self.project_directory)
+        mel.eval('setProject "{}"'.format(self.project_directory))
+        mel.eval("projectWindow;")
+        mel.eval("np_editCurrentProjectCallback;")
 
 
     def directories_for_shots(self):
@@ -252,12 +265,11 @@ class Maya_Project(object):
 
 
     def make_folder_structure(self):
-        
-        root_directory = project_manager_gui.select_drive_combo_box.currentText()
-        project_directory = self.project_directory
-        # create the project root folder
-        if self.project_name not in os.listdir(root_directory) and self.project_name != '':
-            os.mkdir(self.project_directory)
+        '''
+        this function enhances the Maya-generated project folder by adding extra folders based on the configuration_maya.py
+        '''
+        self.generate_maya_project()
+
         try:
             # create department folders        
             self.__make_dict_folders(self.project_directory,configuration_maya.Departments)
