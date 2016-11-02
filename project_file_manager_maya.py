@@ -10,16 +10,16 @@ from pprint import pprint
 from functools import partial, wraps
 
 try:
-  from PySide2.QtCore import * 
-  from PySide2.QtGui import * 
-  from PySide2.QtWidgets import *
-  from PySide2.QtUiTools import *
-  from shiboken2 import wrapInstance 
+    from PySide2.QtCore import * 
+    from PySide2.QtGui import * 
+    from PySide2.QtWidgets import *
+    from PySide2.QtUiTools import *
+    from shiboken2 import wrapInstance 
 except ImportError:
-  from PySide.QtCore import * 
-  from PySide.QtGui import * 
-  from PySide.QtUiTools import *
-  from shiboken import wrapInstance 
+    from PySide.QtCore import * 
+    from PySide.QtGui import * 
+    from PySide.QtUiTools import *
+    from shiboken import wrapInstance 
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -83,9 +83,8 @@ class Maya_Project(object):
         self.project_root_directory = project_manager_gui.select_drive_combo_box.currentText()
         self.project_directory = self.project_root_directory + self.project_name + '/'
         self.dict_amount = dict_amount
-        self.make_folder_structure()      
-        self.get_directories_for_shots_attr = self.get_directories_for_shots()
-        self.get_directories_for_assets_attr = self.get_directories_for_assets()
+        self.make_folder_structure()    
+
         # generates initial maya shot files
         self.make_init_maya_shot_files(self.dict_amount)  
 
@@ -101,18 +100,29 @@ class Maya_Project(object):
         mel.eval("projectWindow;")
         mel.eval("np_editCurrentProjectCallback;")
 
+        #clean up some unuseful folders
+        shutil.rmtree(self.project_directory + 'Time Editor/Clip Exports/')
+        shutil.rmtree(self.project_directory + 'cache/bifrost/')
+        shutil.rmtree(self.project_directory + 'cache/nCache/')
+        shutil.rmtree(self.project_directory + 'cache/particles/')
+        shutil.rmtree(self.project_directory + 'sourceimages/3dPaintTextures/')
+        shutil.rmtree(self.project_directory + 'scenes/edits/')
+
 
     def directories_for_shots(self):
         '''
         - this function returns a list of directories that hold scene-shot hierarchical folders
         - it only works for the first time when the whole project structure is created and there's no scene-shot folders 
-        '''
-        no_shot_dirs = configuration_maya.no_shot_folders
-        directories = []
-        for paths, dirs, files in os.walk(self.project_directory):
-            paths = unix_format(paths)
-            if paths.split('/')[-2] not in no_shot_dirs and paths.split('/')[-2][:2] != '__' and os.listdir(paths) == [] :
-                directories.append(paths)
+        '''        
+        scenes_folder           = self.project_directory + 'scenes/'
+        images_folder           = self.project_directory + 'images/'
+        movies_folder           = self.project_directory + 'movies/'
+        sound_folder            = self.project_directory + 'sound/'
+        time_editor_folder      = self.project_directory + 'Time Editor/' 
+        cache_folder            = self.project_directory + 'cache/'
+
+        directories = [scenes_folder, images_folder, movies_folder, time_editor_folder, cache_folder, sound_folder]
+
         return directories    
 
 
@@ -270,9 +280,11 @@ class Maya_Project(object):
         '''
         self.generate_maya_project()
 
+        asset_directory = self.project_directory + r'assets/'
+
         try:
             # create department folders        
-            self.__make_dict_folders(self.project_directory,configuration_maya.Departments)
+            self.__make_dict_folders(asset_directory, configuration_maya.assets)
             # creates scene-shots hierarchical folders
             self.generate_scene_shot_folders()
 
@@ -338,43 +350,6 @@ class Maya_Project(object):
                 return in_class_method(*args, **kwargs)
         wrapper.called = False
         return wrapper
-
-
-    @exec_once_when_init 
-    def get_directories_for_shots(self):
-        '''
-        - this function returns a list of directories that hold scene-shot hierarchical folders
-        - it works for the project that parts of the scene-shot folders have been created
-        '''
-        no_shot_dirs = configuration_maya.no_shot_folders
-        directories = []
-
-        for paths, dirs, files in os.walk(self.project_directory):
-            paths = unix_format(paths)
-            
-            if paths.split('/')[-2] not in no_shot_dirs and paths.split('/')[-2][:2] != '__' :
-                
-                if os.listdir(paths) != [] and os.listdir(paths)[0][:6] == 'SCENE_' :
-                    
-                    directories.append(paths)
-        
-        return directories
-
-
-    @exec_once_when_init 
-    def get_directories_for_assets(self):
-        '''
-        - this function returns a list of directories that hold project assets
-        '''
-        asset_parent_folders = configuration_maya.asset_folders
-        asset_directories = []
-        for paths, dirs, files in os.walk(self.project_directory):
-            paths = unix_format(paths)
-            if len(paths.split('/')) > 4 and paths.split('/')[2] in configuration_maya.asset_folders:
-                if os.listdir(paths) != [] and paths.split('/')[-3] != 'SHOTS':
-                    if os.listdir(paths)[0][:2] == '__':
-                        asset_directories.append(paths)
-        return asset_directories
 
 
     def get_char_rig_dir(self):
@@ -911,172 +886,12 @@ class Maya_Project(object):
             return file_name + '_v-' + str(new_version)        
 
 
-    def get_anim_shot_dir(self): 
-        '''
-        - returns a directory for the Maya animation files
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Finals':
-                shot_dir = dir
-                break
-        
-        return unix_format(shot_dir)
-             
 
-    def get_anim_playblast_dir(self):
-        '''
-        - returns a directory for the Animation Playblasts movie file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Playblasts'and dir.split('/')[4] == 'Finals_MOV':
-                shot_dir = dir
-                break
-        
-        return shot_dir
-
-
-    def get_layout_playblast_dir(self):
-        '''
-        - returns a directory for the Animation Playblasts movie file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Playblasts'and dir.split('/')[4] == 'Layouts_MOV':
-                shot_dir = dir
-                break
-
-        return shot_dir
-
-
-    def get_layout_shot_dir(self): 
-        '''
-        - returns a directory for the Maya layout file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Layouts':
-                shot_dir += dir 
-                break
-         
-        return shot_dir         
-         
-
-    def get_anim_cache_shot_dir(self): 
-        '''
-        - returns a directory for the Maya animation file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'ANIMATION' and dir.split('/')[3] == 'Cached':
-                shot_dir = dir
-                break
-        
-        return shot_dir
-
-
-    def get_lighting_shot_dir(self): 
-        '''
-        - returns a directory for the Maya lighting file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'LIGHTING' :
-                shot_dir += dir 
-                break
-         
-        return shot_dir         
-         
-
-    def get_rendering_shot_dir(self): 
-        '''
-        - returns a directory for the Maya rendering file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'RENDERING' :
-                shot_dir += dir
-                break
-         
-        return shot_dir 
-
-
-    def get_geo_shot_dir(self): 
-        '''
-        - returns a directory for the shot-based Maya model file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'MODEL' :
-                shot_dir += dir 
-                break
-         
-        return shot_dir            
-
-
-    def get_vfx_shot_dir(self): 
-        '''
-        - returns a directory for the Maya vfx file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'SHOTS': 
-                shot_dir += dir 
-                break
-         
-        return shot_dir         
-
-
-    def get_vfx_cache_shot_dir(self): 
-        '''
-        - returns a directory for the Maya vfx file
-        '''
-        all_shots_dirs = self.get_directories_for_shots_attr
-        
-        shot_dir = ''
-        
-        for dir in all_shots_dirs:
-            if dir.split('/')[2] == 'VFX' and dir.split('/')[3] == 'Cached': 
-                shot_dir += dir 
-                break
-         
-        return shot_dir   
-
-
-    def get_shot_file_dir(self, type, scn_number, shot_number): 
+    def get_shot_file_dir(self, scn_number, shot_number): 
         '''
         - returns a directory for the given scene-shot Maya animation file
-        - 'type' should be the keys of the self.maya_shot_directories_dict
         '''
-        parent_directory = eval(self.maya_shot_directories_dict.get(type))
+        parent_directory = self.project_directory + 'scenes/'
       
         shot_dir = parent_directory + 'SCENE_{0}/__Shot_{1}/'.format(str(scn_number), str(shot_number))        
   
@@ -1092,7 +907,7 @@ class Maya_Project(object):
         
         # retrive the exact directory 
 
-        shot_dir = self.get_shot_file_dir(type, scn_number, shot_number)
+        shot_dir = self.get_shot_file_dir(scn_number, shot_number)
 
         shot = type + 'scene_{0}_shot_{1}.ma'.format(str(scn_number), str(shot_number))        
         #shot_file_name = self.make_file_version(dir, shot)
@@ -1117,9 +932,7 @@ class Maya_Project(object):
                 render_shot_file        =   self.make_maya_shot_file_strings('render_',     scn_number, (shot_number+1))
                 light_shot_file         =   self.make_maya_shot_file_strings('light_',      scn_number, (shot_number+1))
                 geo_shot_file           =   self.make_maya_shot_file_strings('geo_',        scn_number, (shot_number+1))
-                anim_cache_shot_file    =   self.make_maya_shot_file_strings('anim_cache_', scn_number, (shot_number+1))
-                vfx_cache_shot_file     =   self.make_maya_shot_file_strings('vfx_cache_',  scn_number, (shot_number+1))
-
+               
                 if not os.path.isfile(anim_shot_file):
                     shutil.copyfile(empty_maya_file, anim_shot_file)
                 else:
@@ -1149,16 +962,6 @@ class Maya_Project(object):
                     shutil.copyfile(empty_maya_file, anim_shot_file)
                 else:
                     pass                    
-
-                if not os.path.isfile(anim_cache_shot_file):
-                    shutil.copyfile(empty_maya_file, anim_cache_shot_file)
-                else:
-                    pass                    
-
-                if not os.path.isfile(vfx_cache_shot_file):
-                    shutil.copyfile(empty_maya_file, vfx_cache_shot_file)                                                         
-                else:
-                    pass
 
 
     def get_maya_file_dirs(self):
