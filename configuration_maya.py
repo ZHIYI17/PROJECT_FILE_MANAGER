@@ -2,21 +2,21 @@ design = {'CHARACTER':[], 'ENVIRONMENT':[], 'COMPONENT':[], 'PROPS':[], 'CONTINU
 
 miscellaneous       =   {'___backup':[], '___script': []}
 
-geo                 =   {'HIGH_RESOLUTION':miscellaneous, 'MIDDLE_RESOLUTION': miscellaneous, 'LOW_RESOLUTION':miscellaneous}
+geo                 =   {'__HIGH_RESOLUTION':miscellaneous, '__MIDDLE_RESOLUTION': miscellaneous, '__LOW_RESOLUTION':miscellaneous}
 geo_folders         =   {'GEOMETRY': geo}
 
-setup               =   {'DEFORMED': miscellaneous, 'RIGGED': miscellaneous}
+setup               =   {'__DEFORMED': miscellaneous, '__RIGGED': miscellaneous}
 setup_folders       =   {'SETUP': setup}
 
-surfacing           =   {'SHADER': miscellaneous, 'TEXTURE': miscellaneous}
+surfacing           =   {'__SHADER': miscellaneous, '__TEXTURE': miscellaneous}
 surfacing_folders   =   {'SURFACING': surfacing}
 
-template            =   {'LIGHTING': miscellaneous, 'RENDERING': miscellaneous}
+template            =   {'__LIGHTING': miscellaneous, '__RENDERING': miscellaneous}
 
-character           =   {'__char_name_place_holder':[geo_folders, setup_folders, surfacing_folders, 'GPU']}
-props               =   {'__props_name_place_holder':[geo_folders, setup_folders, surfacing_folders, 'GPU']}
-component           =   {'__com_name_place_holder':[geo_folders, surfacing_folders, 'GPU']}
-environment         =   {'__env_name_place_holder':[]}
+character           =   {'char_name_place_holder':[geo_folders, setup_folders, surfacing_folders, 'GPU']}
+props               =   {'props_name_place_holder':[geo_folders, setup_folders, surfacing_folders, 'GPU']}
+component           =   {'com_name_place_holder':[geo_folders, surfacing_folders, 'GPU']}
+environment         =   {'env_name_place_holder':[]}
 
 Playblasts          =   {'ANIMATION':[],'LAYOUT':[],}
 

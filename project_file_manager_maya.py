@@ -34,6 +34,8 @@ VLC_PLAYER = r'C:/Applications/vlc-2.2.4-win64/vlc.exe'
 img_exts = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp']
 vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 
+current_python_file_directory = r'D:/DEV/PROJECT_FILE_MANAGER/'
+
 # =======================================================
 # ======= the implementation of Folder Structures =======
 # =======================================================
@@ -43,42 +45,6 @@ class Maya_Project(object):
     - can dynamtically add new scene-shot folders for all the shot-based directories
     """
     def __init__(self, project_name, dict_amount):
-
-        self.maya_asset_directories_dict = {    #geo assets:
-                                                'geo_hi_char':      'self.get_char_hiGeo_dir()',
-                                                'geo_low_char':     'self.get_char_lowGeo_dir()',                                    
-                                                'geo_hi_props':     'self.get_props_hiGeo_dir()',
-                                                'geo_low_props':    'self.get_props_lowGeo_dir()',
-                                                'geo_hi_com':       'self.get_com_hiGeo_dir()',
-                                                'geo_low_com':      'self.get_com_lowGeo_dir()',
-                                                'geo_hi_env':       'self.get_env_hiGeo_dir()',
-                                                'geo_low_env':      'self.get_env_lowGeo_dir()',
-
-                                                # rig assets:
-                                                'rig_char':         'self.get_char_rig_dir()',
-                                                'def_char':         'self.get_char_def_dir()',
-                                                'rig_props':        'self.get_props_rig_dir()',
-                                                'def_props':        'self.get_props_def_dir()',
-
-                                                # surfacing assets:
-                                                'surf_char':        'self.get_char_shader_dir()',    
-                                                'surf_props':       'self.get_props_shader_dir()',
-                                                'surf_com':         'self.get_env_shader_dir()',
-
-                                                # templates assets:
-                                                'ligtemp_char':     'self.get_char_light_template_dir()',
-                                                'ligtemp_env':      'self.get_env_light_template_dir()',
-                                                'render_template':  'self.get_render_template_dir()'}       
-
-        self.maya_shot_directories_dict = {     'anim_':        'self.get_anim_shot_dir()',
-                                                'layout_':      'self.get_layout_shot_dir()',                                    
-                                                'vfx_':         'self.get_vfx_shot_dir()',
-                                                'light_':       'self.get_lighting_shot_dir()',
-                                                'render_':      'self.get_rendering_shot_dir()',
-                                                'geo_':         'self.get_geo_shot_dir()',
-                                                'anim_cache_':  'self.get_anim_cache_shot_dir()',
-                                                'vfx_cache_':   'self.get_vfx_cache_shot_dir()' }   
-
         self.project_name = project_name
         self.project_root_directory = project_manager_gui.select_drive_combo_box.currentText()
         self.project_directory = self.project_root_directory + self.project_name + '/'
@@ -94,7 +60,10 @@ class Maya_Project(object):
         - get the drive letter and project name 
         - use maya's commands to generate the project folder
         '''
-        os.mkdir(self.project_directory)
+        try:
+            os.mkdir(self.project_directory)
+        except WindowsError:
+            pass
         cmds.workspace(directory = self.project_directory)
         mel.eval('setProject "{}"'.format(self.project_directory))
         mel.eval("projectWindow;")
@@ -196,9 +165,15 @@ class Maya_Project(object):
         - dict_amount is a dictionary type, it looks like: {<scn_num>:<amount_of_shots>}, for example: {1:10,2:7,...}
         '''
         dirs_for_shots = self.directories_for_shots()
-        for dir in dirs_for_shots:
-            self.__make_hierarchical_folders(dir,'SCENE_','__Shot_')              
+        try:
+            for dir in dirs_for_shots:
+                self.__make_hierarchical_folders(dir,'SCENE_','__Shot_')    
 
+            self.make_hidden_folders('backup') 
+            self.make_hidden_folders('script')   
+                    
+        except WindowsError:
+            pass 
 
     def __make_dict_folders(self, parent_dir, folder_dict):
         '''
@@ -285,6 +260,8 @@ class Maya_Project(object):
         try:
             # create department folders        
             self.__make_dict_folders(asset_directory, configuration_maya.assets)
+            self.make_hidden_folders('backup') 
+            self.make_hidden_folders('script') 
             # creates scene-shots hierarchical folders
             self.generate_scene_shot_folders()
 
@@ -920,7 +897,7 @@ class Maya_Project(object):
         - this function generates empty maya files for all the shots based on the given dictionary of scene-shots
         - 'dict_scene_shot' is an argument of dict type
         '''
-        empty_maya_file = windows_format(current_python_file_directory + '/empty.ma')
+        empty_maya_file = windows_format(current_python_file_directory + 'empty.ma')
 
         for scn_number, shot_amount in dict_scene_shot.iteritems():          
             
