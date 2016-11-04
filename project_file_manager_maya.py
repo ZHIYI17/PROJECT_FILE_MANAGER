@@ -308,7 +308,7 @@ class Maya_Project(object):
         try:
             for k, v in new_dict_amount.iteritems():
                 update_shot_dict(self.dict_amount, k, v)
-            dirs_for_shots = self.get_directories_for_shots_attr
+            dirs_for_shots = self.directories_for_shots()
             for dir in dirs_for_shots:
                 self.__make_hierarchical_folders(dir,'SCENE_','__Shot_')
 
