@@ -1226,19 +1226,25 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         self.project_name_line_edit.setFixedHeight(24) 
         self.project_name_line_edit.setPlaceholderText('Please type project name here...')                        
         self.project_name_line_edit.returnPressed.connect(lambda: self.select_texts(self.project_name_line_edit))
+
+        self.select_drive_combo_box = QComboBox()
+        self.select_drive_combo_box.setFixedWidth(47)       
+
+        # clear and populate drive letters into the combox
+        self.select_drive_combo_box.clear()
+        self.drive_list = get_drives_letters()
+        self.select_drive_combo_box.addItems(self.drive_list)        
         
         self.create_project_button = QPushButton('Create Project')
         self.create_project_button.setFixedWidth(170)  
         self.create_project_button.setFixedHeight(24) 
         self.create_project_button.clicked.connect(lambda: self.create_project())
-        self.create_project_button.clicked.connect(lambda: self.set_to_newly_created_project())
-        self.create_project_button.clicked.connect(lambda: self.project_name_line_edit.clear())
-        self.create_project_button.clicked.connect(lambda: self.scene_line_edit.clear())
-        self.create_project_button.clicked.connect(lambda: self.shot_line_edit.clear())        
+        self.create_project_button.clicked.connect(lambda: self.project_name_line_edit.clear())      
 
         self.set_project_button = QPushButton('Set Project')
         self.set_project_button.setFixedWidth(170)
         self.set_project_button.setFixedHeight(24)
+        #self.set_project_button.clicked.connect(lambda: self.create_project())
 
         self.refresh_button = QPushButton('REFRESH')
         self.refresh_button.setFixedWidth(170)
@@ -1248,6 +1254,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
 
         self.current_project_label = QLabel('Current Project: ')
 
+        self.project_layout.addWidget(self.select_drive_combo_box)
         self.project_layout.addWidget(self.project_name_line_edit)
         self.project_layout.addWidget(self.create_project_button)
         self.project_layout.addWidget(self.set_project_button)        
@@ -1622,8 +1629,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
  
     # ======================================================
     # ======= some back-end functions for UI widgets =======
-    # ======================================================     
-
+    # ======================================================        
     def button_down_fx(self, current_button, buttons):
 
         current_button.setFlat(True)    
@@ -1659,18 +1665,8 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         if project_name == '':     
             return
         else:
-            dict_scene_shot = initial_shot_dict()
-            if dict_scene_shot == None:
-                dict_scene_shot = {1:1}
-            project = Maya_Project(project_name, dict_scene_shot)
-            return project        
-
-
-    def set_to_newly_created_project(self):
-        self.update_combo_box_list()
-        latest_index = self.current_project_combo_box.count() - 1
-
-        self.current_project_combo_box.setCurrentIndex(latest_index)
+            project = Maya_Project(project_name, {1:1})
+            return project       
 
 
     def get_current_project(self):
@@ -2603,6 +2599,14 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
 # ======================================
 # ======= some backend functions =======
 # ======================================
+
+def get_drives_letters():
+    physical_drives = []
+    from string import ascii_uppercase
+    for letter in ascii_uppercase[2:]:
+        if os.path.exists(letter + r':/'):
+            physical_drives.append(letter + r':/')
+    return physical_drives
 
 def export_strings_to_file(strings, dst_file_dir):
     '''
