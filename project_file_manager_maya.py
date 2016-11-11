@@ -27,6 +27,10 @@ import maya.mel as mel
 from maya import OpenMayaUI as omui   
 from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
+current_python_file_directory = r'D:/DEV/PROJECT_FILE_MANAGER/'
+sys.path.append(current_python_file_directory)
+import configuration_maya
+
 mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
 mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
 
