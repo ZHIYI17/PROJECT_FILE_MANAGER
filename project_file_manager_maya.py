@@ -25,6 +25,7 @@ import maya.cmds as cmds
 import maya.mel as mel
 
 from maya import OpenMayaUI as omui   
+from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
 mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
 mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
@@ -1146,7 +1147,7 @@ class Maya_Project_Edit(Maya_Project):
 # ======= the implementation of UI =======
 # ========================================
              
-class main_gui(QWidget):
+class main_gui(MayaQWidgetDockableMixin, QWidget):
     
     def __init__(self, parent = None):
         super(main_gui, self).__init__(parent)
@@ -1310,20 +1311,13 @@ class main_gui(QWidget):
             model1 = single_design_tab + '_model1'
             treeView2 = single_design_tab + '_treeView2'
             model2 = single_design_tab + '_model2'
-            lineEdit = single_design_tab + '_line_edit'            
-            button1 = single_design_tab + '_button1'
             button2 = single_design_tab + '_button2'            
-            self.create_design_tab(design_type, self.design_widget, treeView1, model1, treeView2, model2, lineEdit, button1, button2)            
+            self.create_design_tab(design_type, self.design_widget, treeView1, model1, treeView2, model2, button2)            
 
         self.create_design_tab_widgets['CHARACTER_treeView2']    .doubleClicked.connect  (lambda: self.open_file_in_design_tabs('Character_Design'))
         self.create_design_tab_widgets['PROPS_treeView2']        .doubleClicked.connect  (lambda: self.open_file_in_design_tabs('Props_Design'))
         self.create_design_tab_widgets['ENVIRONMENT_treeView2']  .doubleClicked.connect  (lambda: self.open_file_in_design_tabs('Environment_Design'))
-        self.create_design_tab_widgets['CONTINUITY_treeView2']     .doubleClicked.connect  (lambda: self.open_file_in_design_tabs('2D_Continuities'))
-
-        self.create_design_tab_widgets['CHARACTER_button1']      .clicked.connect        (lambda: self.create_folder_button('Character_Design',       self.create_design_tab_widgets))
-        self.create_design_tab_widgets['PROPS_button1']          .clicked.connect        (lambda: self.create_folder_button('Props_Design',           self.create_design_tab_widgets))
-        self.create_design_tab_widgets['ENVIRONMENT_button1']    .clicked.connect        (lambda: self.create_folder_button('Environment_Design',     self.create_design_tab_widgets))
-        self.create_design_tab_widgets['CONTINUITY_button1']       .clicked.connect        (lambda: self.create_folder_button('2D_Continuities',        self.create_design_tab_widgets))                        
+        self.create_design_tab_widgets['CONTINUITY_treeView2']     .doubleClicked.connect  (lambda: self.open_file_in_design_tabs('2D_Continuities'))                    
 
         self.create_design_tab_widgets['CHARACTER_button2']      .clicked.connect        (lambda: self.open_file_in_explorer_design_tabs('Character_Design'))
         self.create_design_tab_widgets['PROPS_button2']          .clicked.connect        (lambda: self.open_file_in_explorer_design_tabs('Props_Design'))
@@ -1412,7 +1406,7 @@ class main_gui(QWidget):
     # ======= implemment the 'template' of the 2D-Drawing Tab =======
     # ===============================================================
 
-    def create_design_tab(self, design_type, parent_tab_widget, treeView1, model1, treeView2, model2, lineEdit, button1, button2):    
+    def create_design_tab(self, design_type, parent_tab_widget, treeView1, model1, treeView2, model2, button2):    
         self.design_type_tab = QWidget()
         self.design_type_tab.setFixedHeight(750)
         self.design_type_tab_layout = QHBoxLayout(self.design_type_tab )
@@ -1446,19 +1440,6 @@ class main_gui(QWidget):
         self.create_design_tab_widgets[model2] = QStandardItemModel()
         self.create_design_tab_widgets[model2].setHorizontalHeaderLabels(['>>> FILE <<<'.upper()])   
         self.create_design_tab_widgets[treeView2].setModel(self.create_design_tab_widgets[model2])            
-        
-        self.create_design_tab_widgets[lineEdit] = QLineEdit()
-        self.create_design_tab_widgets[lineEdit].setMinimumWidth(177)
-        self.create_design_tab_widgets[lineEdit].setMaximumWidth(177)   
-        self.create_design_tab_widgets[lineEdit].setPlaceholderText('Type a new name here...')            
-        self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.select_texts(self.create_design_tab_widgets[lineEdit]))
-        self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.create_design_tab_widgets[button1].setEnabled(True))
-        
-        self.create_design_tab_widgets[button1] = QPushButton('Create {0} Folder'.format(design_type))
-        self.create_design_tab_widgets[button1].setMinimumWidth(177)
-        self.create_design_tab_widgets[button1].setMaximumWidth(177)  
-        self.create_design_tab_widgets[button1].setEnabled(False)        
-        #self.create_design_tab_widgets[button1].clicked.connect(lambda: self.create_design_tab_widgets[button1].setDown(True) )
 
         self.create_design_tab_widgets[button2] = QPushButton('Open in File Explorer')
         self.create_design_tab_widgets[button2].setMinimumWidth(177)
@@ -1466,11 +1447,7 @@ class main_gui(QWidget):
         
         self.design_type_tab_layout.addWidget(self.design_type_folder_widget )
         self.design_type_tab_layout.addWidget(self.design_type_file_widget )
-        
-        #self.design_splitter = QSplitter()
-        
-        self.design_type_utilities_layout.addWidget(self.create_design_tab_widgets[lineEdit])
-        self.design_type_utilities_layout.addWidget(self.create_design_tab_widgets[button1])
+    
         self.design_type_utilities_layout.addWidget(self.create_design_tab_widgets[button2])   
 
         self.design_type_tab_layout.addWidget(self.design_type_utilities_widget )  
@@ -2807,4 +2784,4 @@ def add_maya_reference_file_mel(src_file, dst_file):
 
 project_manager_gui = main_gui()   
 
-project_manager_gui.show()          
+project_manager_gui.show(dockable=True)          
