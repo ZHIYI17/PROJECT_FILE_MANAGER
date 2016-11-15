@@ -24,16 +24,9 @@ except ImportError:
 import maya.cmds as cmds
 import maya.mel as mel
 
-from maya import OpenMayaUI as omui   
-from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
-
 current_python_file_directory = r'D:/DEV/PROJECT_FILE_MANAGER/'
 sys.path.append(current_python_file_directory)
 import configuration_maya
-
-mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
-mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
-
 
 VLC_PLAYER = r'C:/Applications/vlc-2.2.4-win64/vlc.exe'
 img_exts = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp']
@@ -1150,7 +1143,12 @@ class Maya_Project_Edit(Maya_Project):
 # ========================================
 # ======= the implementation of UI =======
 # ========================================
-             
+from maya import OpenMayaUI as omui   
+from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
+
+mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
+mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
+
 class main_gui(MayaQWidgetDockableMixin, QWidget):
     
     def __init__(self, parent = None):
@@ -1248,7 +1246,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         self.set_project_button = QPushButton('Set Project')
         self.set_project_button.setFixedWidth(170)
         self.set_project_button.setFixedHeight(24)
-        #self.set_project_button.clicked.connect(lambda: self.create_project())
+        self.set_project_button.clicked.connect(lambda: self.set_project())
 
         self.refresh_button = QPushButton('REFRESH')
         self.refresh_button.setFixedWidth(170)
@@ -1671,6 +1669,14 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         else:
             project = Maya_Project(project_name, {1:1})
             return project       
+
+
+    def set_project(self):
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.Directory)
+        file_dialog.setOption(QFileDialog.ShowDirsOnly)
+        #file_dialog.exec_()
+        print file_dialog.getExistingDirectory()
 
 
     def get_current_project(self):
