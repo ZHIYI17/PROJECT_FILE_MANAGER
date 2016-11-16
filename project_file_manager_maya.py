@@ -1668,6 +1668,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
             return
         else:
             project = Maya_Project(project_name, {1:1})
+            self.current_project_label.setText('Current Project: [ {} ]'.format(project.project_directory))
             return project       
 
 
