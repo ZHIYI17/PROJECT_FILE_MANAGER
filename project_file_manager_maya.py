@@ -1676,8 +1676,13 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         file_dialog.setFileMode(QFileDialog.Directory)
         file_dialog.setOption(QFileDialog.ShowDirsOnly)
         #file_dialog.exec_()
-        print file_dialog.getExistingDirectory()
-
+        selected_directory = file_dialog.getExistingDirectory()
+        # verify the selected directory is a maya project folder or not
+        if os.path.isfile(selected_directory + '/workspace.mel'):
+            print selected_directory
+            self.current_project_label.setText('Current Project: [ {} ]'.format(selected_directory))
+        else:
+            return
 
     def get_current_project(self):
         self.current_project = None
