@@ -1187,12 +1187,12 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         self.top_buttons = [self.design_section_button, self.asset_section_button, self.shot_section_button]
                 
         self.design_section_button.clicked.connect(lambda: self.main_stacked_layout.setCurrentIndex(0))
-        #self.design_section_button.clicked.connect(lambda: self.refresh_current_ui())
+        self.design_section_button.clicked.connect(lambda: self.refresh_current_ui())
         self.design_section_button.clicked.connect(lambda: self.button_text_fx(self.design_section_button, self.top_buttons))
         self.design_section_button.clicked.connect(lambda: self.button_down_fx(self.design_section_button, self.top_buttons))
           
         self.asset_section_button.clicked.connect(lambda: self.main_stacked_layout.setCurrentIndex(1))
-        #self.asset_section_button.clicked.connect(lambda: self.refresh_current_ui())
+        self.asset_section_button.clicked.connect(lambda: self.refresh_current_ui())
         self.asset_section_button.clicked.connect(lambda: self.button_text_fx(self.asset_section_button, self.top_buttons))        
         self.asset_section_button.clicked.connect(lambda: self.button_down_fx(self.asset_section_button, self.top_buttons))
 
@@ -1399,7 +1399,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
                                           (3,2):    'self.populate_items_in_asset_tab("TEMPLATE_RENDERING")' }
 
         self.refresh_ui_dict = { 0: 'self.refresh_design_tabs_dict.get(self.get_design_tabs_current_index())',
-                                 1: 'self.refresh_asset_tabs_dict.get(self.get_asset_stacked_layout_current_index())' }        
+                                 1: 'self.refresh_asset_tabs_dict.get(self.get_asset_tabs_current_index())' }        
 
 
         self.current_project = None
@@ -2309,12 +2309,9 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         return int(self.design_widget.currentIndex())
 
     
-    def get_asset_stacked_layout_current_index(self):
-        asset_type_buttons_stacked_layout = self.asset_widget.findChild(QStackedLayout)
-        asset_type_index = asset_type_buttons_stacked_layout.currentIndex()
-        asset_sub_type_index = asset_type_buttons_stacked_layout.currentWidget().findChild(QStackedLayout).currentIndex()
+    def get_asset_tabs_current_index(self):
    
-        return (asset_type_index, asset_sub_type_index)
+        return int(self.asset_widget.currentIndex())
 
         
     def refresh_current_ui(self):   
@@ -2340,11 +2337,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
             return
         
         # the keys of below dictionary are the 'folder_type'
-        make_folders_dict = { 'Character_Design':           'self.current_project.make_char_design_folder',
-                              'Props_Design':               'self.current_project.make_props_design_folder',
-                              'Environment_Design':         'self.current_project.make_environment_design_folder',
-                              '2D_Continuities':            'self.current_project.make_continuities_folder',
-                              '1_MODEL_CHARACTER':          'self.current_project.make_char_dirs',
+        make_folders_dict = { '1_MODEL_CHARACTER':          'self.current_project.make_char_dirs',
                               '1_MODEL_PROPS':              'self.current_project.make_props_dirs',
                               '1_MODEL_COMPONENT':          'self.current_project.make_com_dirs',
                               '1_MODEL_ENVIRONMENT':        'self.current_project.make_env_dirs', 
