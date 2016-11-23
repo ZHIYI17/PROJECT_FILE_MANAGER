@@ -21,6 +21,12 @@ except ImportError:
     from PySide.QtUiTools import *
     from shiboken import wrapInstance 
 
+from maya import OpenMayaUI as omui   
+from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
+
+mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
+mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
+
 import maya.cmds as cmds
 import maya.mel as mel
 
@@ -939,63 +945,40 @@ class Maya_Project(object):
                     pass                    
 
 
-    def get_maya_file_dirs(self):
-        '''
-        - returns a list of all the paths that holding the Maya files
-        '''
-        maya_folders = []
-        all_folders = []
-        for paths, dirs, files in os.walk(self.project_directory):
-            all_folders.append(paths)
-        
-        for folder in all_folders:            
-            dir = unix_format(folder)
-            folder_name = dir.split('/')[-2]            
-            if '__' in folder_name:
-                maya_folders.append(dir)
-                
-        return maya_folders 
-                
-                
-    def get_maya_files(self):
-        '''
-        - returns a dictionary, which looks like {dir1:[maya_file1,maya_file2...], dir1:[maya_file1,maya_file2...]}
-        '''
-        maya_file_dirs = self.get_maya_file_dirs()
-        maya_files = {}
-        
-        for dir in maya_file_dirs:
-            files = os.listdir(dir)
-            maya_files[dir] = files
-        
-        return maya_files
-
     def get_char_design_dir(self):
         '''
         - return a paths for character design directory
         '''
-        return self.project_directory + '2D/Concept_Design/Characters/'
+        return self.project_directory + '/assets/2D_DESIGN/CHARACTER/'
 
 
     def get_props_design_dir(self):
         '''
         - return a paths for props design directory
         '''
-        return self.project_directory + '2D/Concept_Design/Props/'
+        return self.project_directory + '/assets/2D_DESIGN/PROPS/'
+
+
+
+    def get_com_design_dir(self):
+        '''
+        - return a paths for component design directory
+        '''
+        return self.project_directory + '/assets/2D_DESIGN/COMPONENT/'
 
 
     def get_env_design_dir(self):
         '''
         - return a paths for environment design directory
         '''
-        return self.project_directory + '2D/Concept_Design/Environments/'
+        return self.project_directory + '/assets/2D_DESIGN/ENVIRONMENT/'
 
 
     def get_2d_continuities_dir(self):
         '''
         - return a paths for 2D continuities directory
         '''
-        return self.project_directory + '2D/Continuities/'                
+        return self.project_directory + '/assets/2D_DESIGN/CONTINUITY/'                
 
 
     def make_char_design_folder(self, char_name):
@@ -1143,11 +1126,6 @@ class Maya_Project_Edit(Maya_Project):
 # ========================================
 # ======= the implementation of UI =======
 # ========================================
-from maya import OpenMayaUI as omui   
-from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
-
-mayaMainWindowPtr = omui.MQtUtil.mainWindow() 
-mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
 
 class main_gui(MayaQWidgetDockableMixin, QWidget):
     
@@ -1197,7 +1175,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         self.asset_section_button.clicked.connect(lambda: self.button_down_fx(self.asset_section_button, self.top_buttons))
 
         self.shot_section_button.clicked.connect(lambda: self.main_stacked_layout.setCurrentIndex(2))
-        #self.shot_section_button.clicked.connect(lambda: self.refresh_current_ui())
+        self.shot_section_button.clicked.connect(lambda: self.refresh_current_ui())
         self.shot_section_button.clicked.connect(lambda: self.button_text_fx(self.shot_section_button, self.top_buttons))          
         self.shot_section_button.clicked.connect(lambda: self.button_down_fx(self.shot_section_button, self.top_buttons))
 
@@ -1273,10 +1251,11 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         self.create_asset_tab_widgets = {}        
  
         
-        self.folder_type_directories_dict = {   'Character_Design':             'self.current_project.get_char_design_dir()',
-                                                'Props_Design':                 'self.current_project.get_props_design_dir()',
-                                                'Environment_Design':           'self.current_project.get_env_design_dir()',
-                                                '2D_Continuities':              'self.current_project.get_2d_continuities_dir()',
+        self.folder_type_directories_dict = {   'CHARACTER':                    'self.current_project.get_char_design_dir()',
+                                                'PROPS':                        'self.current_project.get_props_design_dir()',
+                                                'COMPONENT':                    'self.current_project.get_com_design_dir()',
+                                                'ENVIRONMENT':                  'self.current_project.get_env_design_dir()',
+                                                'CONTINUITY':                   'self.current_project.get_2d_continuities_dir()',
 
                                                 'Model':                        'self.current_project.get_geo_shot_dir()',
                                                 'Layout':                       'self.current_project.get_layout_shot_dir()',
@@ -1399,7 +1378,8 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
                                           (3,2):    'self.populate_items_in_asset_tab("TEMPLATE_RENDERING")' }
 
         self.refresh_ui_dict = { 0: 'self.refresh_design_tabs_dict.get(self.get_design_tabs_current_index())',
-                                 1: 'self.refresh_asset_tabs_dict.get(self.get_asset_tabs_current_index())' }        
+                                 1: 'self.refresh_asset_tabs_dict.get(self.get_asset_tabs_current_index())' ,
+                                 2: ''}        
 
 
         self.current_project = None
@@ -2124,7 +2104,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
                 self.populate_folders_into_qtreeview(design_type, self.create_design_tab_widgets, eval(parent_folder))
 
             except AttributeError, WindowsError:
-                pass  
+                pass
 
         else:
             return           
