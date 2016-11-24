@@ -1349,10 +1349,11 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         self.setWindowFlags(Qt.Dialog)
         self.setWindowTitle('PROJECT FILE MANAGER')
         
-        self.refresh_design_tabs_dict = { 0:        'self.populate_items_in_design_tab("Character_Design")', 
-                                          1:        'self.populate_items_in_design_tab("Props_Design")',
-                                          2:        'self.populate_items_in_design_tab("Environment_Design")',
-                                          3:        'self.populate_items_in_design_tab("2D_Continuities")' }        
+        self.refresh_design_tabs_dict = { 0:        'self.populate_items_in_focused_tab("CHARACTER", self.create_design_tab_widgets)', 
+                                          1:        'self.populate_items_in_focused_tab("PROPS", self.create_design_tab_widgets)',
+                                          2:        'self.populate_items_in_focused_tab("COMPONENT", self.create_design_tab_widgets)',
+                                          3:        'self.populate_items_in_focused_tab("ENVIRONMENT", self.create_design_tab_widgets)',
+                                          4:        'self.populate_items_in_focused_tab("CONTINUITY", self.create_design_tab_widgets)'}        
 
         self.refresh_shot_tabs_dict = {   0:        'self.populate_items_in_shot_tab("Model")',
                                           1:        'self.populate_items_in_shot_tab("Layout")',
@@ -2092,7 +2093,7 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
             pass
 
 
-    def populate_items_in_design_tab(self, design_type):
+    def populate_items_in_focused_tab(self, folder_type, ui_widget):
 
         #current_project = self.get_current_project()
         get_design_folders_dict = {}
@@ -2100,8 +2101,8 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
         if self.current_project != None:
 
             try:
-                parent_folder = self.folder_type_directories_dict.get(design_type)
-                self.populate_folders_into_qtreeview(design_type, self.create_design_tab_widgets, eval(parent_folder))
+                parent_folder = self.folder_type_directories_dict.get(folder_type)
+                self.populate_folders_into_qtreeview(folder_type, ui_widget, eval(parent_folder))
 
             except AttributeError, WindowsError:
                 pass
@@ -2111,10 +2112,11 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
 
 
     def populate_items_in_design_tabs(self):
-        self.populate_items_in_design_tab('Character_Design')
-        self.populate_items_in_design_tab('Props_Design')
-        self.populate_items_in_design_tab('Environment_Design')
-        self.populate_items_in_design_tab('2D_Continuities')
+        self.populate_items_in_focused_tab('CHARACTER', self.create_design_tab_widgets)
+        self.populate_items_in_focused_tab('PROPS', self.create_design_tab_widgets)
+        self.populate_items_in_focused_tab('COMPONENT', self.create_design_tab_widgets)
+        self.populate_items_in_focused_tab('ENVIRONMENT', self.create_design_tab_widgets)
+        self.populate_items_in_focused_tab('CONTINUITY', self.create_design_tab_widgets)
 
 
     def open_file_in_design_tab(self, design_category, parent_folder):
@@ -2134,10 +2136,11 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
 
     def open_file_in_design_tabs(self, design_category):        
 
-        design_categories_dict = {  'Character_Design': self.open_file_in_design_tab,
-                                    'Props_Design': self.open_file_in_design_tab,
-                                    'Environment_Design': self.open_file_in_design_tab,
-                                    '2D_Continuities': self.open_file_in_design_tab }
+        design_categories_dict = {  'CHARACTER':    self.open_file_in_design_tab,
+                                    'PROPS':        self.open_file_in_design_tab,
+                                    'COMPONENT':    self.open_file_in_design_tab,
+                                    'ENVIRONMENT':  self.open_file_in_design_tab,
+                                    'CONTINUITY':   self.open_file_in_design_tab  }
 
         
         open_image_file = design_categories_dict.get(design_category, 'none')
