@@ -2162,10 +2162,11 @@ class main_gui(MayaQWidgetDockableMixin, QWidget):
 
     def open_file_in_explorer_design_tabs(self, design_category):        
 
-        design_categories_dict = {  'Character_Design':     'self.open_file_in_explorer_design_tab',
-                                    'Props_Design':         'self.open_file_in_explorer_design_tab',
-                                    'Environment_Design':   'self.open_file_in_explorer_design_tab',
-                                    '2D_Continuities':      'self.open_file_in_explorer_design_tab' }
+        design_categories_dict = {  'CHARACTER':     'self.open_file_in_explorer_design_tab',
+                                    'PROPS':         'self.open_file_in_explorer_design_tab',
+                                    'COMPONENT':     'self.open_file_in_explorer_design_tab',
+                                    'ENVIRONMENT':   'self.open_file_in_explorer_design_tab',
+                                    'CONTINUITY':    'self.open_file_in_explorer_design_tab' }
 
         open_file_explorer = eval(design_categories_dict.get(design_category))
         try:
