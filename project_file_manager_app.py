@@ -30,6 +30,7 @@ VLC_PLAYER = r'C:/Applications/vlc-2.2.4-win64/vlc.exe'
 img_exts = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp']
 vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 
+desktop_scaled = 2.0
 
 # =======================================================
 # ========= Set some MAYA Environment Variables =========
@@ -1387,30 +1388,30 @@ class main_gui(QWidget):
         self.main_layout = QVBoxLayout()
         
         self.main_stacked_widget = QWidget()
-        self.main_stacked_widget.setFixedHeight(877)
+        self.main_stacked_widget.setFixedHeight(877*desktop_scaled)
         self.main_stacked_layout = QStackedLayout(self.main_stacked_widget)   
 
         self.project_widget= QWidget()
-        self.project_widget.setFixedHeight(110)
-        self.project_widget.setFixedWidth(1000)        
+        self.project_widget.setFixedHeight(110*desktop_scaled)
+        self.project_widget.setFixedWidth(1000*desktop_scaled)        
         
         # create widget for buttons
         self.category_buttons_widgets = QWidget()
         self.category_buttons_layout = QHBoxLayout(self.category_buttons_widgets)   
-        self.category_buttons_widgets.setFixedHeight(50)
+        self.category_buttons_widgets.setFixedHeight(50*desktop_scaled)
 
         self.design_section_button = QPushButton('2D DRAWINGS')
         self.design_widget = QTabWidget()
-        self.design_widget.setFixedHeight(870)
+        self.design_widget.setFixedHeight(870*desktop_scaled)
         
         self.asset_section_button = QPushButton('3D ASSETS')
         self.asset_widget = QWidget()
-        self.asset_widget.setFixedHeight(870)
+        self.asset_widget.setFixedHeight(870*desktop_scaled)
         #self.asset_main_layout = QVBoxLayout(self.asset_widget)
         
         self.shot_section_button= QPushButton('SHOTS')
         self.shot_widget = QTabWidget()
-        self.shot_widget.setFixedHeight(870)
+        self.shot_widget.setFixedHeight(870*desktop_scaled)
         
         self.top_buttons = [self.design_section_button, self.asset_section_button, self.shot_section_button]
                 
@@ -1464,11 +1465,11 @@ class main_gui(QWidget):
         
         # create project section
         self.create_project_label = QLabel('==== Create New Project ====')
-        self.create_project_label.setFixedHeight(17)
+        self.create_project_label.setFixedHeight(17*desktop_scaled)
         self.create_project_label.setAlignment(Qt.AlignLeft)
         
         self.select_drive_combo_box = QComboBox()
-        self.select_drive_combo_box.setFixedWidth(47)       
+        self.select_drive_combo_box.setFixedWidth(47*desktop_scaled)       
 
         # clear and populate drive letters into the combox
         self.select_drive_combo_box.clear()
@@ -1479,14 +1480,14 @@ class main_gui(QWidget):
         self.select_drive_combo_box.currentIndexChanged.connect(lambda:self.update_combo_box_list())
         
         self.project_name_line_edit = QLineEdit()
-        self.project_name_line_edit.setFixedWidth(170) 
-        self.project_name_line_edit.setFixedHeight(20) 
+        self.project_name_line_edit.setFixedWidth(170*desktop_scaled) 
+        self.project_name_line_edit.setFixedHeight(20*desktop_scaled) 
         self.project_name_line_edit.setPlaceholderText('Please type project name here...')                        
         self.project_name_line_edit.returnPressed.connect(lambda: self.select_texts(self.project_name_line_edit))
         
         self.create_project_button = QPushButton('Create Project')
-        self.create_project_button.setFixedWidth(171)  
-        self.create_project_button.setFixedHeight(24) 
+        self.create_project_button.setFixedWidth(171*desktop_scaled)  
+        self.create_project_button.setFixedHeight(24*desktop_scaled) 
         self.create_project_button.clicked.connect(lambda: self.create_project())
         self.create_project_button.clicked.connect(lambda: self.set_to_newly_created_project())
         self.create_project_button.clicked.connect(lambda: self.project_name_line_edit.clear())
@@ -1500,17 +1501,17 @@ class main_gui(QWidget):
         
         # set project section
         self.set_project_label = QLabel('==== Select A Project ====')
-        self.set_project_label.setFixedHeight(17)
+        self.set_project_label.setFixedHeight(17*desktop_scaled)
         self.set_project_label.setAlignment(Qt.AlignLeft)
 
         self.current_project_combo_box = QComboBox()
-        self.current_project_combo_box.setFixedWidth(170)
+        self.current_project_combo_box.setFixedWidth(170*desktop_scaled)
         self.current_project_combo_box.currentIndexChanged.connect(lambda: self.eval_get_current_project())
         self.current_project_combo_box.currentIndexChanged.connect(lambda: self.refresh_current_ui())
 
         self.refresh_button = QPushButton('REFRESH')
-        self.refresh_button.setFixedWidth(170)
-        self.refresh_button.setFixedHeight(24)
+        self.refresh_button.setFixedWidth(170*desktop_scaled)
+        self.refresh_button.setFixedHeight(24*desktop_scaled)
 
         #self.refresh_button.clicked.connect(lambda: self.get_current_project())  
         self.refresh_button.clicked.connect(lambda: self.eval_get_current_project())
@@ -1527,24 +1528,24 @@ class main_gui(QWidget):
         
         # scene-shot section         
         self.scene_shot_label = QLabel('==== Record Scene-Shot Folders ====')
-        self.scene_shot_label.setFixedHeight(17)
+        self.scene_shot_label.setFixedHeight(17*desktop_scaled)
         self.scene_shot_label.setAlignment(Qt.AlignLeft)
         
         self.scene_line_edit = QLineEdit()
-        self.scene_line_edit.setFixedWidth(177)  
-        self.scene_line_edit.setFixedHeight(20)             
+        self.scene_line_edit.setFixedWidth(177*desktop_scaled)  
+        self.scene_line_edit.setFixedHeight(20*desktop_scaled)             
         self.scene_line_edit .setPlaceholderText('Scene numbers...')    
         self.scene_line_edit.returnPressed.connect(lambda: self.select_texts(self.scene_line_edit))
         
         self.shot_line_edit = QLineEdit()
-        self.shot_line_edit.setFixedWidth(177)    
-        self.shot_line_edit.setFixedHeight(20)          
+        self.shot_line_edit.setFixedWidth(177*desktop_scaled)    
+        self.shot_line_edit.setFixedHeight(20*desktop_scaled)          
         self.shot_line_edit .setPlaceholderText('Shot amounts...')  
         self.shot_line_edit.returnPressed.connect(lambda: self.select_texts(self.shot_line_edit))
      
         self.record_button = QPushButton('Record Scene-Shot')        
-        self.record_button.setFixedWidth(178)
-        self.record_button.setFixedHeight(24)
+        self.record_button.setFixedWidth(178*desktop_scaled)
+        self.record_button.setFixedHeight(24*desktop_scaled)
         self.record_button.clicked.connect(lambda: initial_shot_dict())
  
         self.init_scene_layout.addWidget(self.scene_shot_label)
@@ -1948,8 +1949,8 @@ class main_gui(QWidget):
 
         # show the version information 
         self.about_app_widget = QWidget()
-        self.about_app_widget.setFixedHeight(30)
-        self.about_app_widget.setFixedWidth(1077)
+        self.about_app_widget.setFixedHeight(30*desktop_scaled)
+        self.about_app_widget.setFixedWidth(1077*desktop_scaled)
 
         self.about_app_layout = QHBoxLayout(self.about_app_widget)
         self.about_app_layout.setAlignment(Qt.AlignCenter)
@@ -1965,8 +1966,8 @@ class main_gui(QWidget):
         self.main_layout.addWidget(self.about_app_widget)
         
         # set the miscellaneous attributes
-        self.setFixedHeight(1007)
-        self.setFixedWidth(1077)
+        self.setFixedHeight(1007*desktop_scaled)
+        self.setFixedWidth(1077*desktop_scaled)
 
         self.setLayout(self.main_layout)
 
@@ -2024,7 +2025,7 @@ class main_gui(QWidget):
 
     def create_design_tab(self, design_type, parent_tab_widget, treeView1, model1, treeView2, model2, lineEdit, button1, button2):    
         self.design_type_tab = QWidget()
-        self.design_type_tab.setFixedHeight(770)
+        self.design_type_tab.setFixedHeight(770*desktop_scaled)
         self.design_type_tab_layout = QHBoxLayout(self.design_type_tab )
         parent_tab_widget.addTab(self.design_type_tab, design_type.upper())
                        
@@ -2032,11 +2033,11 @@ class main_gui(QWidget):
         self.design_type_utilities_layout = QFormLayout(self.design_type_utilities_widget)                   
         
         self.design_type_folder_widget = QTreeWidget()
-        self.design_type_folder_widget.setFixedHeight(730)
-        self.design_type_folder_widget.setFixedWidth(407)    
+        self.design_type_folder_widget.setFixedHeight(730*desktop_scaled)
+        self.design_type_folder_widget.setFixedWidth(407*desktop_scaled)    
         self.create_design_tab_widgets[treeView1] = QTreeView(self.design_type_folder_widget)
-        self.create_design_tab_widgets[treeView1].setFixedHeight(730)
-        self.create_design_tab_widgets[treeView1].setFixedWidth(407)   
+        self.create_design_tab_widgets[treeView1].setFixedHeight(730*desktop_scaled)
+        self.create_design_tab_widgets[treeView1].setFixedWidth(407*desktop_scaled)   
         self.create_design_tab_widgets[treeView1].setSelectionBehavior(QAbstractItemView.SelectRows)
         self.create_design_tab_widgets[treeView1].setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.create_design_tab_widgets[model1] = QStandardItemModel()
@@ -2046,11 +2047,11 @@ class main_gui(QWidget):
         #self.create_design_tab_widgets[treeView1].doubleClicked.connect(lambda: self.populate_items_in_design_tabs())
         
         self.design_type_file_widget = QTreeWidget()
-        self.design_type_file_widget.setFixedHeight(730)
-        self.design_type_file_widget.setFixedWidth(407)    
+        self.design_type_file_widget.setFixedHeight(730*desktop_scaled)
+        self.design_type_file_widget.setFixedWidth(407*desktop_scaled)    
         self.create_design_tab_widgets[treeView2] = QTreeView(self.design_type_file_widget)
-        self.create_design_tab_widgets[treeView2].setFixedHeight(730)
-        self.create_design_tab_widgets[treeView2].setFixedWidth(407)   
+        self.create_design_tab_widgets[treeView2].setFixedHeight(730*desktop_scaled)
+        self.create_design_tab_widgets[treeView2].setFixedWidth(407*desktop_scaled)   
         self.create_design_tab_widgets[treeView2].setSelectionBehavior(QAbstractItemView.SelectRows)
         self.create_design_tab_widgets[treeView2].setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.create_design_tab_widgets[model2] = QStandardItemModel()
@@ -2058,21 +2059,21 @@ class main_gui(QWidget):
         self.create_design_tab_widgets[treeView2].setModel(self.create_design_tab_widgets[model2])            
         
         self.create_design_tab_widgets[lineEdit] = QLineEdit()
-        self.create_design_tab_widgets[lineEdit].setMinimumWidth(177)
-        self.create_design_tab_widgets[lineEdit].setMaximumWidth(177)   
+        self.create_design_tab_widgets[lineEdit].setMinimumWidth(177*desktop_scaled)
+        self.create_design_tab_widgets[lineEdit].setMaximumWidth(177*desktop_scaled)   
         self.create_design_tab_widgets[lineEdit].setPlaceholderText('Type a new name here...')            
         self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.select_texts(self.create_design_tab_widgets[lineEdit]))
         self.create_design_tab_widgets[lineEdit].returnPressed.connect(lambda: self.create_design_tab_widgets[button1].setEnabled(True))
         
         self.create_design_tab_widgets[button1] = QPushButton('Create {0} Folder'.format(design_type))
-        self.create_design_tab_widgets[button1].setMinimumWidth(177)
-        self.create_design_tab_widgets[button1].setMaximumWidth(177)  
+        self.create_design_tab_widgets[button1].setMinimumWidth(177*desktop_scaled)
+        self.create_design_tab_widgets[button1].setMaximumWidth(177*desktop_scaled)  
         self.create_design_tab_widgets[button1].setEnabled(False)        
         #self.create_design_tab_widgets[button1].clicked.connect(lambda: self.create_design_tab_widgets[button1].setDown(True) )
 
         self.create_design_tab_widgets[button2] = QPushButton('Open in File Explorer')
-        self.create_design_tab_widgets[button2].setMinimumWidth(177)
-        self.create_design_tab_widgets[button2].setMaximumWidth(177)       
+        self.create_design_tab_widgets[button2].setMinimumWidth(177*desktop_scaled)
+        self.create_design_tab_widgets[button2].setMaximumWidth(177*desktop_scaled)       
         
         self.design_type_tab_layout.addWidget(self.design_type_folder_widget )
         self.design_type_tab_layout.addWidget(self.design_type_file_widget )
@@ -2094,12 +2095,12 @@ class main_gui(QWidget):
     
         # create layout for top butotns
         self.asset_type_buttons_widget = QWidget()
-        self.asset_type_buttons_widget.setFixedHeight(34)
+        self.asset_type_buttons_widget.setFixedHeight(34*desktop_scaled)
         self.asset_type_buttons_layout = QHBoxLayout(self.asset_type_buttons_widget)
         
         # create root level  stack layout  
         self.asset_stacked_widget = QWidget()
-        self.asset_stacked_widget.setFixedHeight(800) 
+        self.asset_stacked_widget.setFixedHeight(800*desktop_scaled) 
         self.asset_stacked_layout = QStackedLayout(self.asset_stacked_widget)
         
         if 'Widget' in str(parent_widget_layout):
@@ -2123,7 +2124,7 @@ class main_gui(QWidget):
                 index = asset_types.index(type)
 
                 self.type_button = QPushButton(type)
-                self.type_button.setFixedHeight(30)
+                self.type_button.setFixedHeight(30*desktop_scaled)
 
                 self.asset_type_buttons_layout.addWidget(self.type_button) 
 
@@ -2131,11 +2132,11 @@ class main_gui(QWidget):
                 
                 if type_layout == 'v':
                     self.type_layout = QVBoxLayout(self.type_widget)
-                    self.type_widget.setFixedHeight(800)
+                    self.type_widget.setFixedHeight(800*desktop_scaled)
 
                 if type_layout == 'h':
                     self.type_layout = QHBoxLayout(self.type_widget)
-                    self.type_widget.setFixedHeight(700)
+                    self.type_widget.setFixedHeight(700*desktop_scaled)
 
                 i = self.asset_stacked_layout.insertWidget(index, self.type_widget)       
 
@@ -2180,42 +2181,42 @@ class main_gui(QWidget):
     def asset_file_section(self, treeView1, model1, treeView2, model2, treeView3, model3, parent_layout, section_names, high_value):
     
         self.asset_file_widget = QWidget()
-        self.asset_file_widget.setFixedHeight(high_value)
+        self.asset_file_widget.setFixedHeight(high_value*desktop_scaled)
         self.asset_file_layout = QVBoxLayout(self.asset_file_widget)
 
         for section in section_names:
             self.sub_file_widget = QWidget()
-            self.sub_file_widget.setFixedHeight(high_value/len(section_names))
+            self.sub_file_widget.setFixedHeight(high_value/len(section_names)*desktop_scaled)
             self.sub_file_layout = QHBoxLayout(self.sub_file_widget)
       
             self.folder_widget = QTreeWidget()
-            self.folder_widget.setFixedHeight((high_value-30)/len(section_names))
-            self.folder_widget.setFixedWidth(277)        
+            self.folder_widget.setFixedHeight((high_value-30)/len(section_names)*desktop_scaled)
+            self.folder_widget.setFixedWidth(277*desktop_scaled)        
             self.create_asset_tab_widgets[section+'_'+treeView1] = QTreeView(self.folder_widget)
-            self.create_asset_tab_widgets[section+'_'+treeView1].setFixedHeight((high_value-30)/len(section_names))
-            self.create_asset_tab_widgets[section+'_'+treeView1].setFixedWidth(277)        
+            self.create_asset_tab_widgets[section+'_'+treeView1].setFixedHeight((high_value-30)/len(section_names)*desktop_scaled)
+            self.create_asset_tab_widgets[section+'_'+treeView1].setFixedWidth(277*desktop_scaled)        
             self.create_asset_tab_widgets[section+'_'+treeView1].setSelectionBehavior(QAbstractItemView.SelectRows)
             self.create_asset_tab_widgets[section+'_'+model1] = QStandardItemModel()
             self.create_asset_tab_widgets[section+'_'+model1].setHorizontalHeaderLabels(['>>> {} <<<'.format(section).upper()])
             self.create_asset_tab_widgets[section+'_'+treeView1].setModel(self.create_asset_tab_widgets[section+'_'+model1])
             
             self.file_widget = QTreeWidget()
-            self.file_widget.setFixedHeight((high_value-30)/len(section_names))
-            self.file_widget.setFixedWidth(277)    
+            self.file_widget.setFixedHeight((high_value-30)/len(section_names)*desktop_scaled)
+            self.file_widget.setFixedWidth(277*desktop_scaled)    
             self.create_asset_tab_widgets[section+'_'+treeView2] = QTreeView(self.file_widget)
-            self.create_asset_tab_widgets[section+'_'+treeView2].setFixedHeight((high_value-30)/len(section_names))
-            self.create_asset_tab_widgets[section+'_'+treeView2].setFixedWidth(277)   
+            self.create_asset_tab_widgets[section+'_'+treeView2].setFixedHeight((high_value-30)/len(section_names)*desktop_scaled)
+            self.create_asset_tab_widgets[section+'_'+treeView2].setFixedWidth(277*desktop_scaled)   
             self.create_asset_tab_widgets[section+'_'+treeView2].setSelectionBehavior(QAbstractItemView.SelectRows)
             self.create_asset_tab_widgets[section+'_'+model2] = QStandardItemModel()
             self.create_asset_tab_widgets[section+'_'+model2].setHorizontalHeaderLabels(['>>> File <<<'.upper()])
             self.create_asset_tab_widgets[section+'_'+treeView2].setModel(self.create_asset_tab_widgets[section+'_'+model2])             
 
             self.history_widget = QTreeWidget()
-            self.history_widget.setFixedHeight((high_value-30)/len(section_names))
-            self.history_widget.setFixedWidth(277)    
+            self.history_widget.setFixedHeight((high_value-30)/len(section_names)*desktop_scaled)
+            self.history_widget.setFixedWidth(277*desktop_scaled)    
             self.create_asset_tab_widgets[section+'_'+treeView3] = QTreeView(self.history_widget)
-            self.create_asset_tab_widgets[section+'_'+treeView3].setFixedHeight((high_value-30)/len(section_names))
-            self.create_asset_tab_widgets[section+'_'+treeView3].setFixedWidth(277)   
+            self.create_asset_tab_widgets[section+'_'+treeView3].setFixedHeight((high_value-30)/len(section_names)*desktop_scaled)
+            self.create_asset_tab_widgets[section+'_'+treeView3].setFixedWidth(277*desktop_scaled)   
             self.create_asset_tab_widgets[section+'_'+treeView3].setSelectionBehavior(QAbstractItemView.SelectRows)
             self.create_asset_tab_widgets[section+'_'+model3] = QStandardItemModel()
             self.create_asset_tab_widgets[section+'_'+model3].setHorizontalHeaderLabels(['>>> History <<<'.upper()])
@@ -2237,23 +2238,23 @@ class main_gui(QWidget):
 
         if extra_buttons[0]: # create asset folder button
             self.create_asset_tab_widgets[lineEdit1] = QLineEdit()
-            self.create_asset_tab_widgets[lineEdit1].setMinimumWidth(width_value)
-            self.create_asset_tab_widgets[lineEdit1].setMaximumWidth(width_value)             
+            self.create_asset_tab_widgets[lineEdit1].setMinimumWidth(width_value*desktop_scaled)
+            self.create_asset_tab_widgets[lineEdit1].setMaximumWidth(width_value*desktop_scaled)             
             self.create_asset_tab_widgets[lineEdit1].setPlaceholderText('Type a new name...')   
             self.create_asset_tab_widgets[lineEdit1].returnPressed.connect(lambda: self.select_texts(self.create_asset_tab_widgets[lineEdit1]))
             self.create_asset_tab_widgets[lineEdit1].returnPressed.connect(lambda: self.create_asset_tab_widgets[button1].setEnabled(True))         
             
             self.create_asset_tab_widgets[button1] = QPushButton('Create Folder')
-            self.create_asset_tab_widgets[button1].setMinimumWidth(width_value)
-            self.create_asset_tab_widgets[button1].setMaximumWidth(width_value) 
+            self.create_asset_tab_widgets[button1].setMinimumWidth(width_value*desktop_scaled)
+            self.create_asset_tab_widgets[button1].setMaximumWidth(width_value*desktop_scaled) 
             self.create_asset_tab_widgets[button1].setEnabled(False)      
 
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[lineEdit1])
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button1])                  
         
         self.create_asset_tab_widgets[button2] = QPushButton('Create New Variation')
-        self.create_asset_tab_widgets[button2].setMinimumWidth(width_value)
-        self.create_asset_tab_widgets[button2].setMaximumWidth(width_value)
+        self.create_asset_tab_widgets[button2].setMinimumWidth(width_value*desktop_scaled)
+        self.create_asset_tab_widgets[button2].setMaximumWidth(width_value*desktop_scaled)
         self.create_asset_tab_widgets[button2].setEnabled(False)       
 
         #self.create_asset_tab_widgets[button3] = QPushButton('Open in File Explorer')
@@ -2261,8 +2262,8 @@ class main_gui(QWidget):
         #self.create_asset_tab_widgets[button3].setMaximumWidth(width_value) 
 
         self.create_asset_tab_widgets[button4] = QPushButton('Set Active')
-        self.create_asset_tab_widgets[button4].setMinimumWidth(width_value)
-        self.create_asset_tab_widgets[button4].setMaximumWidth(width_value)  
+        self.create_asset_tab_widgets[button4].setMinimumWidth(width_value*desktop_scaled)
+        self.create_asset_tab_widgets[button4].setMaximumWidth(width_value*desktop_scaled)  
         self.create_asset_tab_widgets[button4].setEnabled(False)                 
         
         self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button2])
@@ -2271,8 +2272,8 @@ class main_gui(QWidget):
   
         if extra_buttons[1]:
             self.create_asset_tab_widgets[lineEdit2] = QLineEdit()
-            self.create_asset_tab_widgets[lineEdit2].setMinimumWidth(width_value)
-            self.create_asset_tab_widgets[lineEdit2].setMaximumWidth(width_value)             
+            self.create_asset_tab_widgets[lineEdit2].setMinimumWidth(width_value*desktop_scaled)
+            self.create_asset_tab_widgets[lineEdit2].setMaximumWidth(width_value*desktop_scaled)             
             self.create_asset_tab_widgets[lineEdit2].setPlaceholderText('Type an amount...')  
             self.create_asset_tab_widgets[lineEdit2].returnPressed.connect(lambda: self.select_texts(self.create_asset_tab_widgets[lineEdit2]))            
 
@@ -2280,12 +2281,12 @@ class main_gui(QWidget):
 
         if extra_buttons[2]: # create reference and open buttons            
             self.create_asset_tab_widgets[button5] = QPushButton('Reference')        
-            self.create_asset_tab_widgets[button5].setMinimumWidth(width_value)
+            self.create_asset_tab_widgets[button5].setMinimumWidth(width_value*desktop_scaled)
             self.create_asset_tab_widgets[button5].setMaximumWidth(width_value)           
             
             self.create_asset_tab_widgets[button6] = QPushButton('Open')
-            self.create_asset_tab_widgets[button6].setMinimumWidth(width_value)
-            self.create_asset_tab_widgets[button6].setMaximumWidth(width_value)   
+            self.create_asset_tab_widgets[button6].setMinimumWidth(width_value*desktop_scaled)
+            self.create_asset_tab_widgets[button6].setMaximumWidth(width_value*desktop_scaled)   
                         
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button5])
             self.asset_utility_layout.addWidget(self.create_asset_tab_widgets[button6])
@@ -2299,7 +2300,7 @@ class main_gui(QWidget):
 
     def create_shot_tab(self, shot_type, parent_tab_widget, treeView1, model1, treeView2, model2, treeView3, model3, line_edit1, line_edit2, button1, button2, button3, button4, button5):    
         self.shot_type_tab = QWidget()
-        self.shot_type_tab.setFixedHeight(770)
+        self.shot_type_tab.setFixedHeight(770*desktop_scaled)
         self.shot_type_tab_layout = QHBoxLayout(self.shot_type_tab )
         parent_tab_widget.addTab(self.shot_type_tab, shot_type.upper())
                        
@@ -2307,11 +2308,11 @@ class main_gui(QWidget):
         self.shot_type_utilities_layout = QFormLayout(self.shot_type_utilities_widget)
 
         self.shot_type_folder_widget = QTreeWidget()
-        self.shot_type_folder_widget.setFixedHeight(730)
-        self.shot_type_folder_widget.setFixedWidth(277)    
+        self.shot_type_folder_widget.setFixedHeight(730*desktop_scaled)
+        self.shot_type_folder_widget.setFixedWidth(277*desktop_scaled)    
         self.create_shot_tab_widgets[treeView1] = QTreeView(self.shot_type_folder_widget)
-        self.create_shot_tab_widgets[treeView1].setFixedHeight(730)
-        self.create_shot_tab_widgets[treeView1].setFixedWidth(277)   
+        self.create_shot_tab_widgets[treeView1].setFixedHeight(730*desktop_scaled)
+        self.create_shot_tab_widgets[treeView1].setFixedWidth(277*desktop_scaled)   
         self.create_shot_tab_widgets[treeView1].setSelectionBehavior(QAbstractItemView.SelectRows)
         self.create_shot_tab_widgets[treeView1].setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.create_shot_tab_widgets[model1] = QStandardItemModel()
@@ -2321,11 +2322,11 @@ class main_gui(QWidget):
         #self.create_shot_tab_widgets[treeView1].doubleClicked.connect(lambda: self.populate_items_in_shot_tabs())
 
         self.shot_type_file_widget = QTreeWidget()
-        self.shot_type_file_widget.setFixedHeight(730)
-        self.shot_type_file_widget.setFixedWidth(277)    
+        self.shot_type_file_widget.setFixedHeight(730*desktop_scaled)
+        self.shot_type_file_widget.setFixedWidth(277*desktop_scaled)    
         self.create_shot_tab_widgets[treeView2] = QTreeView(self.shot_type_file_widget)
-        self.create_shot_tab_widgets[treeView2].setFixedHeight(730)
-        self.create_shot_tab_widgets[treeView2].setFixedWidth(277)   
+        self.create_shot_tab_widgets[treeView2].setFixedHeight(730*desktop_scaled)
+        self.create_shot_tab_widgets[treeView2].setFixedWidth(277*desktop_scaled)   
         self.create_shot_tab_widgets[treeView2].setSelectionBehavior(QAbstractItemView.SelectRows)
         self.create_shot_tab_widgets[treeView2].setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.create_shot_tab_widgets[model2] = QStandardItemModel()
@@ -2333,11 +2334,11 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets[treeView2].setModel(self.create_shot_tab_widgets[model2])   
 
         self.shot_type_history_file_widget = QTreeWidget()
-        self.shot_type_history_file_widget.setFixedHeight(730)
-        self.shot_type_history_file_widget.setFixedWidth(277)    
+        self.shot_type_history_file_widget.setFixedHeight(730*desktop_scaled)
+        self.shot_type_history_file_widget.setFixedWidth(277*desktop_scaled)    
         self.create_shot_tab_widgets[treeView3] = QTreeView(self.shot_type_history_file_widget)
-        self.create_shot_tab_widgets[treeView3].setFixedHeight(730)
-        self.create_shot_tab_widgets[treeView3].setFixedWidth(277)   
+        self.create_shot_tab_widgets[treeView3].setFixedHeight(730*desktop_scaled)
+        self.create_shot_tab_widgets[treeView3].setFixedWidth(277*desktop_scaled)   
         self.create_shot_tab_widgets[treeView3].setSelectionBehavior(QAbstractItemView.SelectRows)
         self.create_shot_tab_widgets[treeView3].setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.create_shot_tab_widgets[model3] = QStandardItemModel()
@@ -2345,34 +2346,34 @@ class main_gui(QWidget):
         self.create_shot_tab_widgets[treeView3].setModel(self.create_shot_tab_widgets[model3])
 
         self.create_shot_tab_widgets[line_edit1] = QLineEdit()
-        self.create_shot_tab_widgets[line_edit1].setFixedWidth(170) 
+        self.create_shot_tab_widgets[line_edit1].setFixedWidth(170*desktop_scaled) 
         self.create_shot_tab_widgets[line_edit1].setPlaceholderText('Scene numbers....')  
         self.create_shot_tab_widgets[line_edit1].returnPressed.connect(lambda: self.select_texts(self.create_shot_tab_widgets[line_edit1] ))
 
         self.create_shot_tab_widgets[line_edit2] = QLineEdit()
-        self.create_shot_tab_widgets[line_edit2].setFixedWidth(170)
+        self.create_shot_tab_widgets[line_edit2].setFixedWidth(170*desktop_scaled)
         self.create_shot_tab_widgets[line_edit2].setPlaceholderText('Shot amounts...')   
         self.create_shot_tab_widgets[line_edit2].returnPressed.connect(lambda: self.select_texts(self.create_shot_tab_widgets[line_edit2] ))
         
         self.create_shot_tab_widgets[button1] = QPushButton('Generate Scene-Shot Folders')
-        self.create_shot_tab_widgets[button1].setFixedWidth(170)    
+        self.create_shot_tab_widgets[button1].setFixedWidth(170*desktop_scaled)    
         self.create_shot_tab_widgets[button1].clicked.connect(lambda: self.generate_new_scene_shot_folders())
         self.create_shot_tab_widgets[button1].clicked.connect(lambda: self.refresh_current_ui())
         self.create_shot_tab_widgets[button1].clicked.connect(lambda: self.create_shot_tab_widgets[line_edit1].clear())
         self.create_shot_tab_widgets[button1].clicked.connect(lambda: self.create_shot_tab_widgets[line_edit2].clear())
         
         self.create_shot_tab_widgets[button2] = QPushButton('Open')
-        self.create_shot_tab_widgets[button2].setFixedWidth(170)
+        self.create_shot_tab_widgets[button2].setFixedWidth(170*desktop_scaled)
              
         self.create_shot_tab_widgets[button3] = QPushButton('Reference')
-        self.create_shot_tab_widgets[button3].setFixedWidth(170)
+        self.create_shot_tab_widgets[button3].setFixedWidth(170*desktop_scaled)
 
         self.create_shot_tab_widgets[button4] = QPushButton('Create New Variation')
-        self.create_shot_tab_widgets[button4].setFixedWidth(170)
+        self.create_shot_tab_widgets[button4].setFixedWidth(170*desktop_scaled)
         self.create_shot_tab_widgets[button4].setEnabled(False)
              
         self.create_shot_tab_widgets[button5] = QPushButton('Set Active')
-        self.create_shot_tab_widgets[button5].setFixedWidth(170)   
+        self.create_shot_tab_widgets[button5].setFixedWidth(170*desktop_scaled)   
         self.create_shot_tab_widgets[button5].setEnabled(False)     
                  
         self.shot_type_tab_layout.addWidget(self.shot_type_folder_widget )
