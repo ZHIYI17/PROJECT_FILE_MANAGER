@@ -30,7 +30,7 @@ VLC_PLAYER = r'C:/Applications/vlc-2.2.4-win64/vlc.exe'
 img_exts = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp']
 vid_exts = ['mov', 'mpeg', 'avi', 'mp4', 'wmv']
 
-desktop_scaled = 2.0
+desktop_scaled = 1.5
 
 # =======================================================
 # ========= Set some MAYA Environment Variables =========
